@@ -165,9 +165,9 @@ class SteamService {
     return games;
   }
 
-  /// Gets list of installed compatibility tools from compatibilitytools.d.
-  List<String> getInstalledCompatTools() {
-    final ctDir = getCompatToolsDir();
+  /// Gets list of installed compatibility tools from a given directory (defaults to Steam's compatibilitytools.d).
+  List<String> getInstalledCompatTools({String? customDir}) {
+    final ctDir = customDir ?? getCompatToolsDir();
     if (ctDir == null) return [];
 
     final dir = Directory(ctDir);

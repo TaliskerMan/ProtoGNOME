@@ -41,6 +41,7 @@ dependencies:
   archive: ^4.0.9
   crypto: ^3.0.7
   google_fonts: ^6.3.0
+  path: ^1.9.0
 
 dev_dependencies:
   flutter_test:

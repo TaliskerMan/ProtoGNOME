@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import '../models/compat_tool.dart';
 import '../services/github_release_service.dart';
 import '../services/steam_service.dart';
+import '../services/install_location_service.dart';
 import '../widgets/tool_card.dart';
 
 class ToolManagerScreen extends StatefulWidget {
@@ -26,6 +27,8 @@ class _ToolManagerScreenState extends State<ToolManagerScreen> {
   String _selectedToolType = 'ge-proton';
   List<CompatTool> _availableTools = [];
   List<String> _installedToolNames = [];
+  List<InstallLocation> _availableLocations = [];
+  InstallLocation? _selectedLocation;
   bool _loading = false;
   String? _error;
 
@@ -41,10 +44,25 @@ class _ToolManagerScreenState extends State<ToolManagerScreen> {
       _error = null;
     });
     try {
+      final steamDir = widget.steamService.getCompatToolsDir();
+      _availableLocations = InstallLocationService().getAvailableLocations(steamDir);
+      
+      if (_selectedLocation == null && _availableLocations.isNotEmpty) {
+        _selectedLocation = _availableLocations.first;
+      }
+      // If selected location became invalid or not in the list, default to first
+      if (_selectedLocation != null && !_availableLocations.any((loc) => loc.path == _selectedLocation!.path)) {
+        _selectedLocation = _availableLocations.isNotEmpty ? _availableLocations.first : null;
+      }
+
       final tools = await widget.releaseService.fetchAvailableReleases(
           _selectedToolType,
           forceRefresh: forceRefresh);
-      final installed = widget.steamService.getInstalledCompatTools();
+          
+      final installed = _selectedLocation != null && !_selectedLocation!.name.contains('(Not Installed)')
+          ? widget.steamService.getInstalledCompatTools(customDir: _selectedLocation!.path)
+          : <String>[];
+          
       setState(() {
         _availableTools = tools;
         _installedToolNames = installed;
@@ -59,11 +77,11 @@ class _ToolManagerScreenState extends State<ToolManagerScreen> {
   }
 
   Future<void> _installTool(CompatTool tool) async {
-    final installDir = widget.steamService.getCompatToolsDir();
-    if (installDir == null) {
-      _showError('Could not determine Steam compatibility tools directory.');
+    if (_selectedLocation == null || _selectedLocation!.name.contains('(Not Installed)')) {
+      _showError('Selected target is not available or not installed.');
       return;
     }
+    final installDir = _selectedLocation!.path;
 
     // Show progress dialog
     showDialog(
@@ -92,8 +110,8 @@ class _ToolManagerScreenState extends State<ToolManagerScreen> {
   }
 
   Future<void> _removeTool(String toolName) async {
-    final installDir = widget.steamService.getCompatToolsDir();
-    if (installDir == null) return;
+    if (_selectedLocation == null || _selectedLocation!.name.contains('(Not Installed)')) return;
+    final installDir = _selectedLocation!.path;
 
     final confirmed = await showDialog<bool>(
       context: context,
@@ -165,6 +183,34 @@ class _ToolManagerScreenState extends State<ToolManagerScreen> {
                 ],
               ),
               const Spacer(),
+              if (_availableLocations.isNotEmpty)
+                DropdownButtonHideUnderline(
+                  child: DropdownButton<InstallLocation>(
+                    dropdownColor: const Color(0xFF2A2A4A),
+                    iconEnabledColor: const Color(0xFF8888AA),
+                    value: _selectedLocation,
+                    items: _availableLocations.map((loc) {
+                      return DropdownMenuItem(
+                        value: loc,
+                        child: Text(
+                          loc.name,
+                          style: TextStyle(
+                            color: loc.name.contains('(Not Installed)')
+                                ? const Color(0xFF555577)
+                                : Colors.white,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (newLoc) {
+                      if (newLoc != null && !newLoc.name.contains('(Not Installed)')) {
+                        setState(() => _selectedLocation = newLoc);
+                        _loadData(); // reload installed tools for the new selection
+                      }
+                    },
+                  ),
+                ),
+              const SizedBox(width: 8),
               IconButton(
                 onPressed: () => _loadData(forceRefresh: true),
                 icon: const Icon(Icons.refresh_rounded),
