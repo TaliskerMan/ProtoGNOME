@@ -1,0 +1,10 @@
+protognome (1.0.0-1) unstable; urgency=medium
+
+  * Initial release.
+  * Flutter-based GNOME-native Proton compatibility tool manager.
+  * Fork of ProtonUp-Qt with native GNOME UI (no KDE dependencies).
+  * SQLite backend for caching release lists and game data.
+  * New feature: Apply a single Proton version to ALL Steam games at once.
+  * Supports GE-Proton, Boxtron, Luxtorpeda, SteamTinkerLaunch.
+
+ -- ProtoGNOME Contributors <protognome@example.com>  Mon, 23 Feb 2026 21:00:00 +0000

@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=ProtoGNOME
+GenericName=Proton Manager
+Comment=Manage Proton compatibility tools for Steam on GNOME
+Exec=protognome
+Icon=protognome
+Terminal=false
+Type=Application
+Categories=Game;Utility;
+Keywords=steam;proton;compatibility;wine;gaming;ge-proton;
+StartupWMClass=protognome

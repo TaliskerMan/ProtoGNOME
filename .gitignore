@@ -1,0 +1,17 @@
+# Flutter
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+build/
+*.iml
+.idea/
+.vscode/
+
+# Debian packaging temp dir
+deb_pkg/
+
+# Downloaded tarball
+*.tar.xz
+
+# Secrets
+*.asc
