@@ -5,7 +5,7 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-VERSION="1.0.0"
+VERSION="1.0.1"
 PKG_NAME="protognome"
 FLUTTER="${HOME}/flutter/bin/flutter"
 ARTIFACTS="${SCRIPT_DIR}/artifacts"
@@ -61,7 +61,7 @@ Architecture: amd64
 Installed-Size: ${INSTALLED_SIZE}
 Depends: libgtk-3-0, libblkid1, liblzma5, libsecret-1-0
 Recommends: steam
-Maintainer: ProtoGNOME Contributors <protognome@example.com>
+Maintainer: Chuck Talk <chuck@nordheim.online>
 Homepage: https://github.com/ProtoGNOME/ProtoGNOME
 Description: Native GNOME Proton compatibility tool manager
  ProtoGNOME is a native GNOME application for managing Proton
@@ -92,7 +92,7 @@ sha512sum "${DEB_FILE}" > "${DEB_FILE}.sha512"
 
 echo "==> Signing .deb with GPG..."
 if command -v gpg > /dev/null 2>&1; then
-    gpg --detach-sign --armor "${DEB_FILE}"
+    gpg --local-user 1779CD0F50DBB64C187908264863C73517D810F8 --detach-sign --armor "${DEB_FILE}"
     echo "    Signed: ${DEB_FILE}.asc"
 else
     echo "    WARNING: gpg not found - package NOT signed!"
