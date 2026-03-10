@@ -5,7 +5,7 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-VERSION="1.0.1"
+VERSION="1.0.2"
 PKG_NAME="protognome"
 FLUTTER="${HOME}/flutter/bin/flutter"
 ARTIFACTS="${SCRIPT_DIR}/artifacts"
@@ -45,6 +45,10 @@ chmod +x "${DEB_ROOT}/usr/bin/protognome"
 # Desktop file
 cp "${SCRIPT_DIR}/share/applications/protognome.desktop" \
    "${DEB_ROOT}/usr/share/applications/"
+
+# Icon
+cp "${SCRIPT_DIR}/assets/icons/proto.png" \
+   "${DEB_ROOT}/usr/share/icons/hicolor/256x256/apps/protognome.png"
 
 # Copyright
 cp "${SCRIPT_DIR}/LICENSE" \
