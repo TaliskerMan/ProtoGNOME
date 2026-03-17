@@ -5,7 +5,7 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-VERSION="1.0.2"
+VERSION="1.0.3"
 PKG_NAME="protognome"
 FLUTTER="${HOME}/flutter/bin/flutter"
 ARTIFACTS="${SCRIPT_DIR}/artifacts"
@@ -96,7 +96,7 @@ sha512sum "${DEB_FILE}" > "${DEB_FILE}.sha512"
 
 echo "==> Signing .deb with GPG..."
 if command -v gpg > /dev/null 2>&1; then
-    gpg --local-user 1779CD0F50DBB64C187908264863C73517D810F8 --detach-sign --armor "${DEB_FILE}"
+    gpg --local-user chuck@nordheim.online --detach-sign --armor "${DEB_FILE}"
     echo "    Signed: ${DEB_FILE}.asc"
 else
     echo "    WARNING: gpg not found - package NOT signed!"

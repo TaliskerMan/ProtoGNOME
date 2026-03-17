@@ -1,3 +1,12 @@
+protognome (1.0.3-1) unstable; urgency=medium
+
+  * Removed "Apply to ALL" functionality as it could corrupt config.vdf.
+  * Added per-game compatibility tool selection dropdowns.
+  * Added warning banner to ensure Steam is not running before applying changes.
+  * Auto-incremented build number.
+
+ -- Chuck Talk <chuck@nordheim.online>  Tue, 17 Mar 2026 06:40:00 -0500
+
 protognome (1.0.2-1) unstable; urgency=medium
 
   * Fix missing proto.png icon in packaged deb file.
