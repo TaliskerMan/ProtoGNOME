@@ -17,15 +17,9 @@ class GameManagerScreen extends StatefulWidget {
 
 class _GameManagerScreenState extends State<GameManagerScreen> {
   List<SteamGame> _games = [];
-  List<String> _installedTools = [];
   bool _loading = false;
   String? _error;
   String _searchQuery = '';
-  bool _applying = false;
-  bool _isSteamRunning = false;
-
-  // Map of appId to selected tool name (or null for default)
-  final Map<int, String?> _selectedTools = {};
 
   final _db = DatabaseService();
 
@@ -41,24 +35,13 @@ class _GameManagerScreenState extends State<GameManagerScreen> {
       _error = null;
     });
     try {
-      final isRunning = widget.steamService.isSteamRunning();
       final games = await widget.steamService.getInstalledGames();
-      final tools = widget.steamService.getInstalledCompatTools();
 
       // Cache to DB
       await _db.cacheGames(games);
 
-      final Map<int, String?> initialSelections = {};
-      for (final game in games) {
-        initialSelections[game.appId] = game.compatTool;
-      }
-
       setState(() {
-        _isSteamRunning = isRunning;
         _games = games;
-        _installedTools = tools;
-        _selectedTools.clear();
-        _selectedTools.addAll(initialSelections);
         _loading = false;
       });
     } catch (e) {
@@ -77,110 +60,12 @@ class _GameManagerScreenState extends State<GameManagerScreen> {
         .toList();
   }
 
-  Map<int, String?> get _pendingChanges {
-    final Map<int, String?> changes = {};
-    for (final game in _games) {
-      final selected = _selectedTools[game.appId];
-      if (selected != game.compatTool) {
-        changes[game.appId] = selected;
-      }
-    }
-    return changes;
-  }
-
-  Future<void> _applyChanges() async {
-    final changes = _pendingChanges;
-    if (changes.isEmpty) {
-      _showSnack('No changes to apply.');
-      return;
-    }
-
-    // Re-check Steam status just in case
-    final isRunningNow = widget.steamService.isSteamRunning();
-    if (isRunningNow) {
-      setState(() => _isSteamRunning = true);
-      _showSnack('Steam is running. Please close Steam before applying changes.', error: true);
-      return;
-    }
-
-    setState(() => _applying = true);
-
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: const Color(0xFF1E1E3A),
-        title: const Text('Apply Changes',
-            style: TextStyle(color: Colors.white)),
-        content: Text(
-          'Apply compatibility tool changes to ${changes.length} game(s)?\n\n'
-          'IMPORTANT: Steam must not be running. You will need to start Steam afterward to see the changes.',
-          style: const TextStyle(color: Color(0xFFB0B0D0)),
-        ),
-        actions: [
-          TextButton(
-              onPressed: () => Navigator.of(ctx).pop(false),
-              child: const Text('Cancel')),
-          ElevatedButton(
-            onPressed: () => Navigator.of(ctx).pop(true),
-            style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF7C3AED)),
-            child: const Text('Apply'),
-          ),
-        ],
-      ),
-    );
-
-    if (confirmed == true) {
-      final success = await widget.steamService.updateCompatTools(changes);
-      if (success) {
-        _showSnack('Tools updated for ${changes.length} game(s)!');
-        await _loadGames();
-      } else {
-        _showSnack('Failed to apply changes. config.vdf may be locked or corrupted.', error: true);
-      }
-    }
-
-    setState(() => _applying = false);
-  }
-
-  void _showSnack(String msg, {bool error = false}) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(msg),
-        backgroundColor: error
-            ? const Color(0xFF7F1D1D)
-            : const Color(0xFF065F46),
-        duration: const Duration(seconds: 4),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final filtered = _filteredGames;
-    final changesCount = _pendingChanges.length;
 
     return Column(
       children: [
-        // Steam running warning
-        if (_isSteamRunning)
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-            color: const Color(0xFF7F1D1D),
-            child: const Row(
-              children: [
-                Icon(Icons.warning_amber_rounded, color: Colors.white, size: 20),
-                SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    'Steam is currently running. You must close Steam before applying changes.',
-                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13),
-                  ),
-                ),
-              ],
-            ),
-          ),
         // Header
         Padding(
           padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
@@ -213,58 +98,9 @@ class _GameManagerScreenState extends State<GameManagerScreen> {
             ],
           ),
         ),
-        // Action bar
-        Container(
-          margin: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: const Color(0xFF1E1E3A),
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: const Color(0xFF3A3A5A), width: 1),
-          ),
-          child: Row(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Pending Changes',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    '$changesCount game(s) modified',
-                    style: const TextStyle(color: Color(0xFF8888AA), fontSize: 13),
-                  ),
-                ],
-              ),
-              const Spacer(),
-              ElevatedButton.icon(
-                onPressed: (changesCount > 0 && !_applying && !_isSteamRunning) ? _applyChanges : null,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF7C3AED),
-                  disabledBackgroundColor: const Color(0xFF4A3A5A),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
-                ),
-                icon: _applying
-                    ? const SizedBox(
-                        width: 14,
-                        height: 14,
-                        child: CircularProgressIndicator(
-                            strokeWidth: 2, color: Colors.white))
-                    : const Icon(Icons.check_circle_outline, size: 16),
-                label: const Text('Apply Changes', style: TextStyle(fontSize: 13)),
-              ),
-            ],
-          ),
-        ),
         // Search bar
         Padding(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
           child: TextField(
             decoration: InputDecoration(
               hintText: 'Search games...',
@@ -332,17 +168,7 @@ class _GameManagerScreenState extends State<GameManagerScreen> {
                           itemCount: filtered.length,
                           itemBuilder: (ctx, i) {
                             final game = filtered[i];
-                            return _GameListTile(
-                              game: game,
-                              installedTools: _installedTools,
-                              selectedTool: _selectedTools[game.appId],
-                              isChanged: _selectedTools[game.appId] != game.compatTool,
-                              onToolChanged: (val) {
-                                setState(() {
-                                  _selectedTools[game.appId] = val;
-                                });
-                              },
-                            );
+                            return _GameListTile(game: game);
                           },
                         ),
         ),
@@ -353,33 +179,19 @@ class _GameManagerScreenState extends State<GameManagerScreen> {
 
 class _GameListTile extends StatelessWidget {
   final SteamGame game;
-  final List<String> installedTools;
-  final String? selectedTool;
-  final bool isChanged;
-  final void Function(String?) onToolChanged;
 
   const _GameListTile({
     required this.game,
-    required this.installedTools,
-    required this.selectedTool,
-    required this.isChanged,
-    required this.onToolChanged,
   });
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: isChanged
-          ? const Color(0xFF2A1E4A)
-          : const Color(0xFF1A1A2E),
+      color: const Color(0xFF1A1A2E),
       margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
-        side: BorderSide(
-          color: isChanged
-              ? const Color(0xFF7C3AED).withOpacity(0.5)
-              : Colors.transparent,
-        ),
+        side: const BorderSide(color: Colors.transparent),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -413,43 +225,10 @@ class _GameListTile extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(width: 16),
-            SizedBox(
-              width: 220,
-              child: DropdownButtonFormField<String?>(
-                value: selectedTool,
-                dropdownColor: const Color(0xFF2A2A4A),
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: const Color(0xFF1E1E3A),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: const Color(0xFF3A3A5A), width: 1),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: const Color(0xFF3A3A5A), width: 1),
-                  ),
-                ),
-                style: const TextStyle(color: Colors.white, fontSize: 12),
-                isExpanded: true,
-                items: [
-                  const DropdownMenuItem<String?>(
-                    value: null,
-                    child: Text('Default (Steam Runtime)'),
-                  ),
-                  ...installedTools.map((t) => DropdownMenuItem<String?>(
-                        value: t,
-                        child: Text(t, overflow: TextOverflow.ellipsis),
-                      )),
-                ],
-                onChanged: onToolChanged,
-              ),
-            ),
           ],
         ),
       ),
     );
   }
 }
+

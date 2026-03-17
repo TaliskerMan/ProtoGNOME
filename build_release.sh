@@ -5,7 +5,7 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-VERSION="1.0.5"
+VERSION="1.0.6"
 PKG_NAME="protognome"
 FLUTTER="${HOME}/flutter/bin/flutter"
 ARTIFACTS="${SCRIPT_DIR}/artifacts"
@@ -70,7 +70,7 @@ Homepage: https://github.com/ProtoGNOME/ProtoGNOME
 Description: Native GNOME Proton compatibility tool manager
  ProtoGNOME is a native GNOME application for managing Proton
  compatibility tools for Steam on Linux. Fork of ProtonUp-Qt with
- no KDE/Qt dependencies. Adds batch-apply Proton version to all games.
+ no KDE/Qt dependencies. Safe read-only viewer for game settings.
 CONTROL
 
 echo "==> Writing DEBIAN/postinst..."

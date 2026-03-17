@@ -1,3 +1,10 @@
+protognome (1.0.6-1) unstable; urgency=medium
+
+  * Made game manager screen a safe, read-only viewer.
+  * Completely removed VDF modification logic to prevent Steam logouts.
+
+ -- Chuck Talk <chuck@nordheim.online>  Tue, 17 Mar 2026 10:45:00 -0500
+
 protognome (1.0.5-1) unstable; urgency=medium
 
   * Fixed missing icon bug in the application UI view.

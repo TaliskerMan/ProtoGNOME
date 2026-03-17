@@ -7,10 +7,10 @@ ProtoGNOME is a **fork of [ProtonUp-Qt](https://github.com/DavidoTek/ProtonUp-Qt
 ## Features
 
 - 🚀 **Install/remove** GE-Proton, Boxtron, Luxtorpeda, SteamTinkerLaunch, and more
-- ⚡ **Per-game Proton compatibility tool assignment**
+- ⚡ **Read-only per-game Proton compatibility tool viewer**
 - 🗄️ **SQLite backend** for caching release lists and preferences
 - 🎨 **Native GNOME UI** built with Flutter (no KDE/Qt/Flatpak required)
-- 🔍 **Game search** and per-game Proton override management
+- 🔍 **Game search** and per-game assigned tool list
 
 ## Installation
 
