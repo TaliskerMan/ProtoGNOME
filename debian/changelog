@@ -1,3 +1,10 @@
+protognome (1.0.5-1) unstable; urgency=medium
+
+  * Fixed missing icon bug in the application UI view.
+  * Added dynamic version tracking to the About page.
+
+ -- Chuck Talk <chuck@nordheim.online>  Tue, 17 Mar 2026 06:55:00 -0500
+
 protognome (1.0.4-1) unstable; urgency=medium
 
   * Rebuilt release with corrected application icon.

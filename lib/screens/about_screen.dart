@@ -2,9 +2,36 @@
 // Copyright (C) 2024 ProtoGNOME Contributors
 
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
-class AboutScreen extends StatelessWidget {
+class AboutScreen extends StatefulWidget {
   const AboutScreen({super.key});
+
+  @override
+  State<AboutScreen> createState() => _AboutScreenState();
+}
+
+class _AboutScreenState extends State<AboutScreen> {
+  String _version = 'Loading...';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadVersion();
+  }
+
+  Future<void> _loadVersion() async {
+    try {
+      final info = await PackageInfo.fromPlatform();
+      setState(() {
+        _version = 'Version ${info.version}';
+      });
+    } catch (_) {
+      setState(() {
+        _version = 'Version Unknown';
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,11 +53,6 @@ class AboutScreen extends StatelessWidget {
                   width: 96,
                   height: 96,
                   decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFF7C3AED), Color(0xFF4F46E5)],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
                     borderRadius: BorderRadius.circular(24),
                     boxShadow: [
                       BoxShadow(
@@ -40,8 +62,11 @@ class AboutScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: const Icon(Icons.layers_rounded,
-                      color: Colors.white, size: 52),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(24),
+                    child: Image.asset('assets/icons/proto.png',
+                        width: 96, height: 96, fit: BoxFit.cover),
+                  ),
                 ),
                 const SizedBox(height: 20),
                 const Text(
@@ -52,9 +77,9 @@ class AboutScreen extends StatelessWidget {
                       color: Colors.white,
                       letterSpacing: -0.5),
                 ),
-                const Text(
-                  'Version 1.0.0',
-                  style: TextStyle(color: Color(0xFF8888AA), fontSize: 15),
+                Text(
+                  _version,
+                  style: const TextStyle(color: Color(0xFF8888AA), fontSize: 15),
                 ),
                 const SizedBox(height: 8),
                 const Text(

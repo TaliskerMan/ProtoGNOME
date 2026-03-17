@@ -83,15 +83,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     width: 44,
                     height: 44,
                     decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [Color(0xFF7C3AED), Color(0xFF4F46E5)],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: const Icon(Icons.layers_rounded,
-                        color: Colors.white, size: 26),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Image.asset('assets/icons/proto.png',
+                          width: 44, height: 44, fit: BoxFit.cover),
+                    ),
                   ),
                 ],
               ),

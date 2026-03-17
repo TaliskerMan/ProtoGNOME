@@ -5,7 +5,7 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-VERSION="1.0.4"
+VERSION="1.0.5"
 PKG_NAME="protognome"
 FLUTTER="${HOME}/flutter/bin/flutter"
 ARTIFACTS="${SCRIPT_DIR}/artifacts"
