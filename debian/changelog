@@ -1,3 +1,9 @@
+protognome (1.0.4-1) unstable; urgency=medium
+
+  * Rebuilt release with corrected application icon.
+
+ -- Chuck Talk <chuck@nordheim.online>  Tue, 17 Mar 2026 06:44:00 -0500
+
 protognome (1.0.3-1) unstable; urgency=medium
 
   * Removed "Apply to ALL" functionality as it could corrupt config.vdf.
