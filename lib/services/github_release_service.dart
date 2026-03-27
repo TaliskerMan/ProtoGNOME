@@ -8,6 +8,7 @@ import 'package:archive/archive.dart';
 import 'package:path/path.dart' as p;
 import '../models/compat_tool.dart';
 import 'database_service.dart';
+import 'logger_service.dart';
 
 /// Tool source definitions ported from ProtonUp-Qt's ctloader.py / ctmods.
 const List<Map<String, dynamic>> kToolSources = [
@@ -95,7 +96,7 @@ class GitHubReleaseService {
     try {
       final response = await http.get(url, headers: _headers);
       if (response.statusCode == 403 || response.statusCode == 429) {
-        print('Warning: GitHub API rate limit exceeded for $repo');
+        LoggerService().log('Warning: GitHub API rate limit exceeded for $repo');
         return await _db.getCachedTools(toolType); // Fall back to cache
       }
       if (response.statusCode != 200) return [];
@@ -145,7 +146,7 @@ class GitHubReleaseService {
       await _db.cacheTools(tools);
       return tools;
     } catch (e) {
-      print('Error fetching releases for $toolType: $e');
+      LoggerService().logError('Fetching releases for $toolType', e);
       return await _db.getCachedTools(toolType);
     }
   }
@@ -202,7 +203,7 @@ class GitHubReleaseService {
 
       return true;
     } catch (e) {
-      print('Error downloading ${tool.name}: $e');
+      LoggerService().logError('Downloading ${tool.name}', e);
       return false;
     } finally {
       try {
@@ -224,8 +225,15 @@ class GitHubReleaseService {
     } else if (path.endsWith('.tar.xz')) {
       await Process.run('tar', ['-xJf', path, '-C', installDir]);
     } else if (path.endsWith('.tar.zst')) {
-      await Process.run(
-          'bash', ['-c', 'zstd -d "${archiveFile.path}" -o /tmp/tmp.tar && tar -xf /tmp/tmp.tar -C "$installDir"']);
+      final safeTempDir = Directory.systemTemp.createTempSync('zst_extract_');
+      final safeTarPath = p.join(safeTempDir.path, 'tmp.tar');
+      final zstdResult = await Process.run('zstd', ['-d', archiveFile.path, '-o', safeTarPath]);
+      if (zstdResult.exitCode == 0) {
+        await Process.run('tar', ['-xf', safeTarPath, '-C', installDir]);
+      } else {
+        LoggerService().logError('Zstd Extraction', 'Exit code ${zstdResult.exitCode}: ${zstdResult.stderr}');
+      }
+      try { safeTempDir.deleteSync(recursive: true); } catch (_) {}
     } else if (path.endsWith('.zip')) {
       final bytes = archiveFile.readAsBytesSync();
       final archive = ZipDecoder().decodeBytes(bytes);
@@ -251,7 +259,7 @@ class GitHubReleaseService {
       _db.deleteTool(toolName);
       return true;
     } catch (e) {
-      print('Error removing $toolName: $e');
+      LoggerService().logError('Removing $toolName', e);
       return false;
     }
   }

@@ -9,8 +9,16 @@ ProtoGNOME is a **fork of [ProtonUp-Qt](https://github.com/DavidoTek/ProtonUp-Qt
 - 🚀 **Install/remove** GE-Proton, Boxtron, Luxtorpeda, SteamTinkerLaunch, and more
 - ⚡ **Read-only per-game Proton compatibility tool viewer**
 - 🗄️ **SQLite backend** for caching release lists and preferences
-- 🎨 **Native GNOME UI** built with Flutter (no KDE/Qt/Flatpak required)
 - 🔍 **Game search** and per-game assigned tool list
+
+## Security Hardening (v1.0.7+)
+
+> [!IMPORTANT]
+> **Why was this version rebuilt?**
+> ProtoGNOME v1.0.7 includes critical security patches to protect users from malicious local exploits and injection attacks.
+> - **Command Injection Protection**: The `.tar.zst` extraction mechanism was rewritten to explicitly rely on secure, native Dart subprocess routing instead of unsafe `bash -c` string wrapper logic.
+> - **Insecure Space Protection**: Sandbox environments explicitly manage and lock all intermediate `/tmp/` staging files rather than resolving shared directories.
+> - **Audit Trails**: ProtoGNOME now ships with a localized system tracer tracking behaviors to `~/.local/state/protognome/app.log`.
 
 ## Installation
 

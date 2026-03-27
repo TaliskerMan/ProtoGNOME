@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:path/path.dart' as p;
 import '../models/steam_game.dart';
 import 'vdf_parser.dart';
+import 'logger_service.dart';
 
 /// Handles reading and writing Steam configuration files.
 /// Ports the logic from ProtonUp-Qt's steamutil.py to Dart.
@@ -96,7 +97,7 @@ class SteamService {
       return (valve['Steam'] as Map<String, dynamic>?)?['CompatToolMapping']
           as Map<String, dynamic>?;
     } catch (e) {
-      print('Error reading config.vdf: $e');
+      LoggerService().logError('Reading config.vdf', e);
       return null;
     }
   }
@@ -159,7 +160,7 @@ class SteamService {
         }
       }
     } catch (e) {
-      print('Error getting installed games: $e');
+      LoggerService().logError('Getting installed games', e);
     }
 
     return games;

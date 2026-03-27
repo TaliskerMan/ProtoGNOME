@@ -100,8 +100,8 @@ class _AboutScreenState extends State<AboutScreen> {
                 value: 'SQLite via sqflite_common_ffi'),
             const _AboutRow(icon: Icons.gavel_outlined, label: 'License',
                 value: 'GNU General Public License v3.0'),
-            const _AboutRow(icon: Icons.people_outline, label: 'Authors',
-                value: 'ProtoGNOME Contributors'),
+            const _AboutRow(icon: Icons.people_outline, label: 'Maintainer',
+                value: 'Chuck Talk <chuck@nordheim.online>'),
           ]),
           const SizedBox(height: 16),
           _buildCard(children: [
