@@ -238,7 +238,11 @@ class GitHubReleaseService {
       final bytes = archiveFile.readAsBytesSync();
       final archive = ZipDecoder().decodeBytes(bytes);
       for (final file in archive) {
-        final outPath = p.join(installDir, file.name);
+        final outPath = p.normalize(p.join(installDir, file.name));
+        if (!p.isWithin(p.normalize(installDir), outPath)) {
+          LoggerService().logError('Zip Extraction', 'Path traversal attempt blocked: ${file.name}');
+          continue;
+        }
         if (file.isFile) {
           File(outPath)
             ..createSync(recursive: true)
@@ -252,7 +256,14 @@ class GitHubReleaseService {
 
   /// Remove a compatibility tool from the install directory.
   bool removeTool(String toolName, String installDir) {
-    final toolPath = Directory(p.join(installDir, toolName));
+    final cleanToolName = p.basename(toolName);
+    final toolPath = Directory(p.join(installDir, cleanToolName));
+    
+    // Strict bounds check to prevent directory deletion exploits
+    if (!p.isWithin(p.normalize(installDir), p.normalize(toolPath.path))) {
+      return false;
+    }
+    
     if (!toolPath.existsSync()) return false;
     try {
       toolPath.deleteSync(recursive: true);
