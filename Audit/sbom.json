@@ -1,1 +1,1253 @@
-{"$schema":"http://cyclonedx.org/schema/bom-1.6.schema.json","bomFormat":"CycloneDX","specVersion":"1.6","serialNumber":"urn:uuid:8d8c2f7c-aeb9-4d46-b145-9e0ad3bc6ab7","version":1,"metadata":{"timestamp":"2026-04-06T12:57:28-05:00","tools":{"components":[{"type":"application","author":"anchore","name":"syft","version":"1.42.3"}]},"component":{"bom-ref":"ee3e815ef09a0836","type":"file","name":"./ProtoGNOME"}},"components":[{"bom-ref":"pkg:pub/archive@4.0.9?hosted_url=pub.dev&package-id=133a3f93fae965d1","type":"library","name":"archive","version":"4.0.9","cpe":"cpe:2.3:a:archive:archive:4.0.9:*:*:*:*:*:*:*","purl":"pkg:pub/archive@4.0.9?hosted_url=pub.dev","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:pub/async@2.11.0?hosted_url=pub.dev&package-id=7701a64e56d26f7e","type":"library","name":"async","version":"2.11.0","cpe":"cpe:2.3:a:async:async:2.11.0:*:*:*:*:*:*:*","purl":"pkg:pub/async@2.11.0?hosted_url=pub.dev","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:pub/boolean_selector@2.1.1?hosted_url=pub.dev&package-id=4b234109a3ebb6c8","type":"library","name":"boolean_selector","version":"2.1.1","cpe":"cpe:2.3:a:boolean-selector:boolean-selector:2.1.1:*:*:*:*:*:*:*","purl":"pkg:pub/boolean_selector@2.1.1?hosted_url=pub.dev","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:cpe23","value":"cpe:2.3:a:boolean-selector:boolean_selector:2.1.1:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:boolean_selector:boolean-selector:2.1.1:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:boolean_selector:boolean_selector:2.1.1:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:boolean:boolean-selector:2.1.1:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:boolean:boolean_selector:2.1.1:*:*:*:*:*:*:*"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:pub/characters@1.4.1?hosted_url=pub.dev&package-id=91685bf964b83fe0","type":"library","name":"characters","version":"1.4.1","cpe":"cpe:2.3:a:characters:characters:1.4.1:*:*:*:*:*:*:*","purl":"pkg:pub/characters@1.4.1?hosted_url=pub.dev","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:pub/clock@1.1.2?hosted_url=pub.dev&package-id=01f97811e771f167","type":"library","name":"clock","version":"1.1.2","cpe":"cpe:2.3:a:clock:clock:1.1.2:*:*:*:*:*:*:*","purl":"pkg:pub/clock@1.1.2?hosted_url=pub.dev","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:pub/collection@1.19.1?hosted_url=pub.dev&package-id=1eb6723c175dfc0a","type":"library","name":"collection","version":"1.19.1","cpe":"cpe:2.3:a:collection:collection:1.19.1:*:*:*:*:*:*:*","purl":"pkg:pub/collection@1.19.1?hosted_url=pub.dev","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:pub/crypto@3.0.7?hosted_url=pub.dev&package-id=aa29ccb915b357c1","type":"library","name":"crypto","version":"3.0.7","cpe":"cpe:2.3:a:crypto:crypto:3.0.7:*:*:*:*:*:*:*","purl":"pkg:pub/crypto@3.0.7?hosted_url=pub.dev","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:pub/cupertino_icons@1.0.8?hosted_url=pub.dev&package-id=4fb7a763c855f9d2","type":"library","name":"cupertino_icons","version":"1.0.8","cpe":"cpe:2.3:a:cupertino-icons:cupertino-icons:1.0.8:*:*:*:*:*:*:*","purl":"pkg:pub/cupertino_icons@1.0.8?hosted_url=pub.dev","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:cpe23","value":"cpe:2.3:a:cupertino-icons:cupertino_icons:1.0.8:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:cupertino_icons:cupertino-icons:1.0.8:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:cupertino_icons:cupertino_icons:1.0.8:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:cupertino:cupertino-icons:1.0.8:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:cupertino:cupertino_icons:1.0.8:*:*:*:*:*:*:*"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:pub/fake_async@1.3.3?hosted_url=pub.dev&package-id=5c6a1bce6ff9e36f","type":"library","name":"fake_async","version":"1.3.3","cpe":"cpe:2.3:a:fake-async:fake-async:1.3.3:*:*:*:*:*:*:*","purl":"pkg:pub/fake_async@1.3.3?hosted_url=pub.dev","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:cpe23","value":"cpe:2.3:a:fake-async:fake_async:1.3.3:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:fake_async:fake-async:1.3.3:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:fake_async:fake_async:1.3.3:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:fake:fake-async:1.3.3:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:fake:fake_async:1.3.3:*:*:*:*:*:*:*"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:pub/ffi@2.1.3?hosted_url=pub.dev&package-id=307b586495bccd2e","type":"library","name":"ffi","version":"2.1.3","cpe":"cpe:2.3:a:ffi:ffi:2.1.3:*:*:*:*:*:*:*","purl":"pkg:pub/ffi@2.1.3?hosted_url=pub.dev","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:pub/flutter@3.35.0?package-id=86145ac235e24ebb","type":"library","name":"flutter","version":"3.35.0","cpe":"cpe:2.3:a:flutter:flutter:3.35.0:*:*:*:*:*:*:*","purl":"pkg:pub/flutter@3.35.0","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:pub/flutter_lints@4.0.0?hosted_url=pub.dev&package-id=2d4d7ae357a23bc3","type":"library","name":"flutter_lints","version":"4.0.0","cpe":"cpe:2.3:a:flutter-lints:flutter-lints:4.0.0:*:*:*:*:*:*:*","purl":"pkg:pub/flutter_lints@4.0.0?hosted_url=pub.dev","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:cpe23","value":"cpe:2.3:a:flutter-lints:flutter_lints:4.0.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:flutter_lints:flutter-lints:4.0.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:flutter_lints:flutter_lints:4.0.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:flutter:flutter-lints:4.0.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:flutter:flutter_lints:4.0.0:*:*:*:*:*:*:*"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:pub/flutter_test@3.35.0?package-id=9b16f41e7eec89ee","type":"library","name":"flutter_test","version":"3.35.0","cpe":"cpe:2.3:a:flutter-test:flutter-test:3.35.0:*:*:*:*:*:*:*","purl":"pkg:pub/flutter_test@3.35.0","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:cpe23","value":"cpe:2.3:a:flutter-test:flutter_test:3.35.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:flutter_test:flutter-test:3.35.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:flutter_test:flutter_test:3.35.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:flutter:flutter-test:3.35.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:flutter:flutter_test:3.35.0:*:*:*:*:*:*:*"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:pub/flutter_web_plugins@3.35.0?package-id=966b49bf50131b72","type":"library","name":"flutter_web_plugins","version":"3.35.0","cpe":"cpe:2.3:a:flutter-web-plugins:flutter-web-plugins:3.35.0:*:*:*:*:*:*:*","purl":"pkg:pub/flutter_web_plugins@3.35.0","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:cpe23","value":"cpe:2.3:a:flutter-web-plugins:flutter_web_plugins:3.35.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:flutter_web_plugins:flutter-web-plugins:3.35.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:flutter_web_plugins:flutter_web_plugins:3.35.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:flutter-web:flutter-web-plugins:3.35.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:flutter-web:flutter_web_plugins:3.35.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:flutter_web:flutter-web-plugins:3.35.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:flutter_web:flutter_web_plugins:3.35.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:flutter:flutter-web-plugins:3.35.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:flutter:flutter_web_plugins:3.35.0:*:*:*:*:*:*:*"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:pub/google_fonts@8.0.2?hosted_url=pub.dev&package-id=c12fc6dfb1f3f849","type":"library","name":"google_fonts","version":"8.0.2","cpe":"cpe:2.3:a:google-fonts:google-fonts:8.0.2:*:*:*:*:*:*:*","purl":"pkg:pub/google_fonts@8.0.2?hosted_url=pub.dev","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:cpe23","value":"cpe:2.3:a:google-fonts:google_fonts:8.0.2:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:google_fonts:google-fonts:8.0.2:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:google_fonts:google_fonts:8.0.2:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:google:google-fonts:8.0.2:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:google:google_fonts:8.0.2:*:*:*:*:*:*:*"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:pub/http@1.6.0?hosted_url=pub.dev&package-id=5f420154e06ba2da","type":"library","name":"http","version":"1.6.0","cpe":"cpe:2.3:a:http:http:1.6.0:*:*:*:*:*:*:*","purl":"pkg:pub/http@1.6.0?hosted_url=pub.dev","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:pub/http_parser@4.0.2?hosted_url=pub.dev&package-id=599041ba464da8ee","type":"library","name":"http_parser","version":"4.0.2","cpe":"cpe:2.3:a:http-parser:http-parser:4.0.2:*:*:*:*:*:*:*","purl":"pkg:pub/http_parser@4.0.2?hosted_url=pub.dev","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:cpe23","value":"cpe:2.3:a:http-parser:http_parser:4.0.2:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:http_parser:http-parser:4.0.2:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:http_parser:http_parser:4.0.2:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:http:http-parser:4.0.2:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:http:http_parser:4.0.2:*:*:*:*:*:*:*"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:pub/leak_tracker@11.0.2?hosted_url=pub.dev&package-id=90746caecd06da5e","type":"library","name":"leak_tracker","version":"11.0.2","cpe":"cpe:2.3:a:leak-tracker:leak-tracker:11.0.2:*:*:*:*:*:*:*","purl":"pkg:pub/leak_tracker@11.0.2?hosted_url=pub.dev","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:cpe23","value":"cpe:2.3:a:leak-tracker:leak_tracker:11.0.2:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:leak_tracker:leak-tracker:11.0.2:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:leak_tracker:leak_tracker:11.0.2:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:leak:leak-tracker:11.0.2:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:leak:leak_tracker:11.0.2:*:*:*:*:*:*:*"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:pub/leak_tracker_flutter_testing@3.0.10?hosted_url=pub.dev&package-id=3af93c7ab981dfef","type":"library","name":"leak_tracker_flutter_testing","version":"3.0.10","cpe":"cpe:2.3:a:leak-tracker-flutter-testing:leak-tracker-flutter-testing:3.0.10:*:*:*:*:*:*:*","purl":"pkg:pub/leak_tracker_flutter_testing@3.0.10?hosted_url=pub.dev","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:cpe23","value":"cpe:2.3:a:leak-tracker-flutter-testing:leak_tracker_flutter_testing:3.0.10:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:leak_tracker_flutter_testing:leak-tracker-flutter-testing:3.0.10:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:leak_tracker_flutter_testing:leak_tracker_flutter_testing:3.0.10:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:leak-tracker-flutter:leak-tracker-flutter-testing:3.0.10:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:leak-tracker-flutter:leak_tracker_flutter_testing:3.0.10:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:leak_tracker_flutter:leak-tracker-flutter-testing:3.0.10:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:leak_tracker_flutter:leak_tracker_flutter_testing:3.0.10:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:leak-tracker:leak-tracker-flutter-testing:3.0.10:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:leak-tracker:leak_tracker_flutter_testing:3.0.10:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:leak_tracker:leak-tracker-flutter-testing:3.0.10:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:leak_tracker:leak_tracker_flutter_testing:3.0.10:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:leak:leak-tracker-flutter-testing:3.0.10:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:leak:leak_tracker_flutter_testing:3.0.10:*:*:*:*:*:*:*"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:pub/leak_tracker_testing@3.0.2?hosted_url=pub.dev&package-id=df3c6db79bbc60dc","type":"library","name":"leak_tracker_testing","version":"3.0.2","cpe":"cpe:2.3:a:leak-tracker-testing:leak-tracker-testing:3.0.2:*:*:*:*:*:*:*","purl":"pkg:pub/leak_tracker_testing@3.0.2?hosted_url=pub.dev","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:cpe23","value":"cpe:2.3:a:leak-tracker-testing:leak_tracker_testing:3.0.2:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:leak_tracker_testing:leak-tracker-testing:3.0.2:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:leak_tracker_testing:leak_tracker_testing:3.0.2:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:leak-tracker:leak-tracker-testing:3.0.2:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:leak-tracker:leak_tracker_testing:3.0.2:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:leak_tracker:leak-tracker-testing:3.0.2:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:leak_tracker:leak_tracker_testing:3.0.2:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:leak:leak-tracker-testing:3.0.2:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:leak:leak_tracker_testing:3.0.2:*:*:*:*:*:*:*"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:pub/lints@4.0.0?hosted_url=pub.dev&package-id=74044250660a7757","type":"library","name":"lints","version":"4.0.0","cpe":"cpe:2.3:a:lints:lints:4.0.0:*:*:*:*:*:*:*","purl":"pkg:pub/lints@4.0.0?hosted_url=pub.dev","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:pub/matcher@0.12.19?hosted_url=pub.dev&package-id=2a5c1090036ef2b3","type":"library","name":"matcher","version":"0.12.19","cpe":"cpe:2.3:a:matcher:matcher:0.12.19:*:*:*:*:*:*:*","purl":"pkg:pub/matcher@0.12.19?hosted_url=pub.dev","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:pub/material_color_utilities@0.13.0?hosted_url=pub.dev&package-id=1bd18b2326bbf16d","type":"library","name":"material_color_utilities","version":"0.13.0","cpe":"cpe:2.3:a:material-color-utilities:material-color-utilities:0.13.0:*:*:*:*:*:*:*","purl":"pkg:pub/material_color_utilities@0.13.0?hosted_url=pub.dev","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:cpe23","value":"cpe:2.3:a:material-color-utilities:material_color_utilities:0.13.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:material_color_utilities:material-color-utilities:0.13.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:material_color_utilities:material_color_utilities:0.13.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:material-color:material-color-utilities:0.13.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:material-color:material_color_utilities:0.13.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:material_color:material-color-utilities:0.13.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:material_color:material_color_utilities:0.13.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:material:material-color-utilities:0.13.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:material:material_color_utilities:0.13.0:*:*:*:*:*:*:*"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:pub/meta@1.17.0?hosted_url=pub.dev&package-id=a330183fcb800052","type":"library","name":"meta","version":"1.17.0","cpe":"cpe:2.3:a:meta:meta:1.17.0:*:*:*:*:*:*:*","purl":"pkg:pub/meta@1.17.0?hosted_url=pub.dev","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:pub/package_info_plus@9.0.0?hosted_url=pub.dev&package-id=c78a56f1ad96a17d","type":"library","name":"package_info_plus","version":"9.0.0","cpe":"cpe:2.3:a:package-info-plus:package-info-plus:9.0.0:*:*:*:*:*:*:*","purl":"pkg:pub/package_info_plus@9.0.0?hosted_url=pub.dev","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:cpe23","value":"cpe:2.3:a:package-info-plus:package_info_plus:9.0.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:package_info_plus:package-info-plus:9.0.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:package_info_plus:package_info_plus:9.0.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:package-info:package-info-plus:9.0.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:package-info:package_info_plus:9.0.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:package_info:package-info-plus:9.0.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:package_info:package_info_plus:9.0.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:package:package-info-plus:9.0.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:package:package_info_plus:9.0.0:*:*:*:*:*:*:*"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:pub/package_info_plus_platform_interface@3.2.1?hosted_url=pub.dev&package-id=c22b14e1747c3790","type":"library","name":"package_info_plus_platform_interface","version":"3.2.1","cpe":"cpe:2.3:a:package-info-plus-platform-interface:package-info-plus-platform-interface:3.2.1:*:*:*:*:*:*:*","purl":"pkg:pub/package_info_plus_platform_interface@3.2.1?hosted_url=pub.dev","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:cpe23","value":"cpe:2.3:a:package-info-plus-platform-interface:package_info_plus_platform_interface:3.2.1:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:package_info_plus_platform_interface:package-info-plus-platform-interface:3.2.1:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:package_info_plus_platform_interface:package_info_plus_platform_interface:3.2.1:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:package-info-plus-platform:package-info-plus-platform-interface:3.2.1:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:package-info-plus-platform:package_info_plus_platform_interface:3.2.1:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:package_info_plus_platform:package-info-plus-platform-interface:3.2.1:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:package_info_plus_platform:package_info_plus_platform_interface:3.2.1:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:package-info-plus:package-info-plus-platform-interface:3.2.1:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:package-info-plus:package_info_plus_platform_interface:3.2.1:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:package_info_plus:package-info-plus-platform-interface:3.2.1:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:package_info_plus:package_info_plus_platform_interface:3.2.1:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:package-info:package-info-plus-platform-interface:3.2.1:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:package-info:package_info_plus_platform_interface:3.2.1:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:package_info:package-info-plus-platform-interface:3.2.1:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:package_info:package_info_plus_platform_interface:3.2.1:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:package:package-info-plus-platform-interface:3.2.1:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:package:package_info_plus_platform_interface:3.2.1:*:*:*:*:*:*:*"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:pub/path@1.9.1?hosted_url=pub.dev&package-id=944a7f02daddf574","type":"library","name":"path","version":"1.9.1","cpe":"cpe:2.3:a:path:path:1.9.1:*:*:*:*:*:*:*","purl":"pkg:pub/path@1.9.1?hosted_url=pub.dev","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:pub/path_provider@2.1.5?hosted_url=pub.dev&package-id=3c5c4b1270e4f9e8","type":"library","name":"path_provider","version":"2.1.5","cpe":"cpe:2.3:a:path-provider:path-provider:2.1.5:*:*:*:*:*:*:*","purl":"pkg:pub/path_provider@2.1.5?hosted_url=pub.dev","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:cpe23","value":"cpe:2.3:a:path-provider:path_provider:2.1.5:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:path_provider:path-provider:2.1.5:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:path_provider:path_provider:2.1.5:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:path:path-provider:2.1.5:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:path:path_provider:2.1.5:*:*:*:*:*:*:*"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:pub/path_provider_android@2.2.15?hosted_url=pub.dev&package-id=452b11ea9f8fb83f","type":"library","name":"path_provider_android","version":"2.2.15","cpe":"cpe:2.3:a:path-provider-android:path-provider-android:2.2.15:*:*:*:*:*:*:*","purl":"pkg:pub/path_provider_android@2.2.15?hosted_url=pub.dev","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:cpe23","value":"cpe:2.3:a:path-provider-android:path_provider_android:2.2.15:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:path_provider_android:path-provider-android:2.2.15:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:path_provider_android:path_provider_android:2.2.15:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:path-provider:path-provider-android:2.2.15:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:path-provider:path_provider_android:2.2.15:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:path_provider:path-provider-android:2.2.15:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:path_provider:path_provider_android:2.2.15:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:path:path-provider-android:2.2.15:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:path:path_provider_android:2.2.15:*:*:*:*:*:*:*"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:pub/path_provider_foundation@2.4.1?hosted_url=pub.dev&package-id=6a3cecdd44a8bb9b","type":"library","name":"path_provider_foundation","version":"2.4.1","cpe":"cpe:2.3:a:path-provider-foundation:path-provider-foundation:2.4.1:*:*:*:*:*:*:*","purl":"pkg:pub/path_provider_foundation@2.4.1?hosted_url=pub.dev","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:cpe23","value":"cpe:2.3:a:path-provider-foundation:path_provider_foundation:2.4.1:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:path_provider_foundation:path-provider-foundation:2.4.1:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:path_provider_foundation:path_provider_foundation:2.4.1:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:path-provider:path-provider-foundation:2.4.1:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:path-provider:path_provider_foundation:2.4.1:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:path_provider:path-provider-foundation:2.4.1:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:path_provider:path_provider_foundation:2.4.1:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:path:path-provider-foundation:2.4.1:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:path:path_provider_foundation:2.4.1:*:*:*:*:*:*:*"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:pub/path_provider_linux@2.2.1?hosted_url=pub.dev&package-id=b76f722d1a501059","type":"library","name":"path_provider_linux","version":"2.2.1","cpe":"cpe:2.3:a:path-provider-linux:path-provider-linux:2.2.1:*:*:*:*:*:*:*","purl":"pkg:pub/path_provider_linux@2.2.1?hosted_url=pub.dev","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:cpe23","value":"cpe:2.3:a:path-provider-linux:path_provider_linux:2.2.1:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:path_provider_linux:path-provider-linux:2.2.1:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:path_provider_linux:path_provider_linux:2.2.1:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:path-provider:path-provider-linux:2.2.1:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:path-provider:path_provider_linux:2.2.1:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:path_provider:path-provider-linux:2.2.1:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:path_provider:path_provider_linux:2.2.1:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:path:path-provider-linux:2.2.1:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:path:path_provider_linux:2.2.1:*:*:*:*:*:*:*"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:pub/path_provider_platform_interface@2.1.2?hosted_url=pub.dev&package-id=c4dbcd4663c1de34","type":"library","name":"path_provider_platform_interface","version":"2.1.2","cpe":"cpe:2.3:a:path-provider-platform-interface:path-provider-platform-interface:2.1.2:*:*:*:*:*:*:*","purl":"pkg:pub/path_provider_platform_interface@2.1.2?hosted_url=pub.dev","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:cpe23","value":"cpe:2.3:a:path-provider-platform-interface:path_provider_platform_interface:2.1.2:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:path_provider_platform_interface:path-provider-platform-interface:2.1.2:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:path_provider_platform_interface:path_provider_platform_interface:2.1.2:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:path-provider-platform:path-provider-platform-interface:2.1.2:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:path-provider-platform:path_provider_platform_interface:2.1.2:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:path_provider_platform:path-provider-platform-interface:2.1.2:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:path_provider_platform:path_provider_platform_interface:2.1.2:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:path-provider:path-provider-platform-interface:2.1.2:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:path-provider:path_provider_platform_interface:2.1.2:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:path_provider:path-provider-platform-interface:2.1.2:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:path_provider:path_provider_platform_interface:2.1.2:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:path:path-provider-platform-interface:2.1.2:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:path:path_provider_platform_interface:2.1.2:*:*:*:*:*:*:*"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:pub/path_provider_windows@2.3.0?hosted_url=pub.dev&package-id=0818821152580462","type":"library","name":"path_provider_windows","version":"2.3.0","cpe":"cpe:2.3:a:path-provider-windows:path-provider-windows:2.3.0:*:*:*:*:*:*:*","purl":"pkg:pub/path_provider_windows@2.3.0?hosted_url=pub.dev","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:cpe23","value":"cpe:2.3:a:path-provider-windows:path_provider_windows:2.3.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:path_provider_windows:path-provider-windows:2.3.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:path_provider_windows:path_provider_windows:2.3.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:path-provider:path-provider-windows:2.3.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:path-provider:path_provider_windows:2.3.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:path_provider:path-provider-windows:2.3.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:path_provider:path_provider_windows:2.3.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:path:path-provider-windows:2.3.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:path:path_provider_windows:2.3.0:*:*:*:*:*:*:*"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:pub/platform@3.1.6?hosted_url=pub.dev&package-id=403e517356f7d775","type":"library","name":"platform","version":"3.1.6","cpe":"cpe:2.3:a:platform:platform:3.1.6:*:*:*:*:*:*:*","purl":"pkg:pub/platform@3.1.6?hosted_url=pub.dev","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:pub/plugin_platform_interface@2.1.8?hosted_url=pub.dev&package-id=562879c18e7422b4","type":"library","name":"plugin_platform_interface","version":"2.1.8","cpe":"cpe:2.3:a:plugin-platform-interface:plugin-platform-interface:2.1.8:*:*:*:*:*:*:*","purl":"pkg:pub/plugin_platform_interface@2.1.8?hosted_url=pub.dev","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:cpe23","value":"cpe:2.3:a:plugin-platform-interface:plugin_platform_interface:2.1.8:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:plugin_platform_interface:plugin-platform-interface:2.1.8:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:plugin_platform_interface:plugin_platform_interface:2.1.8:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:plugin-platform:plugin-platform-interface:2.1.8:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:plugin-platform:plugin_platform_interface:2.1.8:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:plugin_platform:plugin-platform-interface:2.1.8:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:plugin_platform:plugin_platform_interface:2.1.8:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:plugin:plugin-platform-interface:2.1.8:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:plugin:plugin_platform_interface:2.1.8:*:*:*:*:*:*:*"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:pub/posix@6.5.0?hosted_url=pub.dev&package-id=30df1bcad2f9b03c","type":"library","name":"posix","version":"6.5.0","cpe":"cpe:2.3:a:posix:posix:6.5.0:*:*:*:*:*:*:*","purl":"pkg:pub/posix@6.5.0?hosted_url=pub.dev","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:deb/protognome@1.0.0-1?arch=amd64&package-id=e658044737fc9520","type":"library","name":"protognome","version":"1.0.0-1","cpe":"cpe:2.3:a:protognome:protognome:1.0.0-1:*:*:*:*:*:*:*","purl":"pkg:deb/protognome@1.0.0-1?arch=amd64","properties":[{"name":"syft:package:foundBy","value":"deb-archive-cataloger"},{"name":"syft:package:type","value":"deb"},{"name":"syft:package:metadataType","value":"dpkg-archive-entry"},{"name":"syft:location:0:path","value":"/artifacts/protognome_1.0.0-1_amd64.deb"},{"name":"syft:metadata:installedSize","value":"23596"}]},{"bom-ref":"pkg:deb/protognome@1.0.1-1?arch=amd64&package-id=9d3270d958696d9b","type":"library","name":"protognome","version":"1.0.1-1","cpe":"cpe:2.3:a:protognome:protognome:1.0.1-1:*:*:*:*:*:*:*","purl":"pkg:deb/protognome@1.0.1-1?arch=amd64","properties":[{"name":"syft:package:foundBy","value":"deb-archive-cataloger"},{"name":"syft:package:type","value":"deb"},{"name":"syft:package:metadataType","value":"dpkg-archive-entry"},{"name":"syft:location:0:path","value":"/artifacts/protognome_1.0.1-1_amd64.deb"},{"name":"syft:metadata:installedSize","value":"23596"}]},{"bom-ref":"pkg:deb/protognome@1.0.3-1?arch=amd64&package-id=cbf1b04ccf81a056","type":"library","name":"protognome","version":"1.0.3-1","cpe":"cpe:2.3:a:protognome:protognome:1.0.3-1:*:*:*:*:*:*:*","purl":"pkg:deb/protognome@1.0.3-1?arch=amd64","properties":[{"name":"syft:package:foundBy","value":"deb-archive-cataloger"},{"name":"syft:package:type","value":"deb"},{"name":"syft:package:metadataType","value":"dpkg-archive-entry"},{"name":"syft:location:0:path","value":"/artifacts/protognome_1.0.3-1_amd64.deb"},{"name":"syft:metadata:installedSize","value":"53472"}]},{"bom-ref":"pkg:deb/protognome@1.0.4-1?arch=amd64&package-id=703d60dc788327f7","type":"library","name":"protognome","version":"1.0.4-1","cpe":"cpe:2.3:a:protognome:protognome:1.0.4-1:*:*:*:*:*:*:*","purl":"pkg:deb/protognome@1.0.4-1?arch=amd64","properties":[{"name":"syft:package:foundBy","value":"deb-archive-cataloger"},{"name":"syft:package:type","value":"deb"},{"name":"syft:package:metadataType","value":"dpkg-archive-entry"},{"name":"syft:location:0:path","value":"/artifacts/protognome_1.0.4-1_amd64.deb"},{"name":"syft:metadata:installedSize","value":"55904"}]},{"bom-ref":"pkg:deb/protognome@1.0.5-1?arch=amd64&package-id=03e31903da9e1866","type":"library","name":"protognome","version":"1.0.5-1","cpe":"cpe:2.3:a:protognome:protognome:1.0.5-1:*:*:*:*:*:*:*","purl":"pkg:deb/protognome@1.0.5-1?arch=amd64","properties":[{"name":"syft:package:foundBy","value":"deb-archive-cataloger"},{"name":"syft:package:type","value":"deb"},{"name":"syft:package:metadataType","value":"dpkg-archive-entry"},{"name":"syft:location:0:path","value":"/artifacts/protognome_1.0.5-1_amd64.deb"},{"name":"syft:metadata:installedSize","value":"56000"}]},{"bom-ref":"pkg:deb/protognome@1.0.6-1?arch=amd64&package-id=c951aa6a85770092","type":"library","name":"protognome","version":"1.0.6-1","cpe":"cpe:2.3:a:protognome:protognome:1.0.6-1:*:*:*:*:*:*:*","purl":"pkg:deb/protognome@1.0.6-1?arch=amd64","properties":[{"name":"syft:package:foundBy","value":"deb-archive-cataloger"},{"name":"syft:package:type","value":"deb"},{"name":"syft:package:metadataType","value":"dpkg-archive-entry"},{"name":"syft:location:0:path","value":"/artifacts/protognome_1.0.6-1_amd64.deb"},{"name":"syft:metadata:installedSize","value":"55968"}]},{"bom-ref":"pkg:pub/protognome@1.0.7%2B2?package-id=45b316d5483b5e35","type":"library","name":"protognome","version":"1.0.7+2","licenses":[{"license":{"id":"GPL-3.0-only"}}],"cpe":"cpe:2.3:a:protognome:protognome:1.0.7\\+2:*:*:*:*:*:*:*","purl":"pkg:pub/protognome@1.0.7%2B2","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec"},{"name":"syft:location:0:path","value":"/pubspec.yaml"}]},{"bom-ref":"pkg:deb/protognome@1.0.7-1?arch=amd64&package-id=dba5c436cecaf205","type":"library","name":"protognome","version":"1.0.7-1","cpe":"cpe:2.3:a:protognome:protognome:1.0.7-1:*:*:*:*:*:*:*","purl":"pkg:deb/protognome@1.0.7-1?arch=amd64","properties":[{"name":"syft:package:foundBy","value":"deb-archive-cataloger"},{"name":"syft:package:type","value":"deb"},{"name":"syft:package:metadataType","value":"dpkg-archive-entry"},{"name":"syft:location:0:path","value":"/artifacts/protognome_1.0.7-1_amd64.deb"},{"name":"syft:metadata:installedSize","value":"55968"}]},{"bom-ref":"pkg:pub/sky_engine@3.35.0?package-id=84cb943bdbe3d163","type":"library","name":"sky_engine","version":"3.35.0","cpe":"cpe:2.3:a:sky-engine:sky-engine:3.35.0:*:*:*:*:*:*:*","purl":"pkg:pub/sky_engine@3.35.0","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:cpe23","value":"cpe:2.3:a:sky-engine:sky_engine:3.35.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:sky_engine:sky-engine:3.35.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:sky_engine:sky_engine:3.35.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:sky:sky-engine:3.35.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:sky:sky_engine:3.35.0:*:*:*:*:*:*:*"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:pub/source_span@1.10.0?hosted_url=pub.dev&package-id=f081b27fe731fba7","type":"library","name":"source_span","version":"1.10.0","cpe":"cpe:2.3:a:source-span:source-span:1.10.0:*:*:*:*:*:*:*","purl":"pkg:pub/source_span@1.10.0?hosted_url=pub.dev","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:cpe23","value":"cpe:2.3:a:source-span:source_span:1.10.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:source_span:source-span:1.10.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:source_span:source_span:1.10.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:source:source-span:1.10.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:source:source_span:1.10.0:*:*:*:*:*:*:*"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:pub/sqflite_common@2.5.4%2B6?hosted_url=pub.dev&package-id=d85068d442a1d235","type":"library","name":"sqflite_common","version":"2.5.4+6","cpe":"cpe:2.3:a:sqflite-common:sqflite-common:2.5.4\\+6:*:*:*:*:*:*:*","purl":"pkg:pub/sqflite_common@2.5.4%2B6?hosted_url=pub.dev","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:cpe23","value":"cpe:2.3:a:sqflite-common:sqflite_common:2.5.4\\+6:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:sqflite_common:sqflite-common:2.5.4\\+6:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:sqflite_common:sqflite_common:2.5.4\\+6:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:sqflite:sqflite-common:2.5.4\\+6:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:sqflite:sqflite_common:2.5.4\\+6:*:*:*:*:*:*:*"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:pub/sqflite_common_ffi@2.3.4%2B4?hosted_url=pub.dev&package-id=504824847a91808a","type":"library","name":"sqflite_common_ffi","version":"2.3.4+4","cpe":"cpe:2.3:a:sqflite-common-ffi:sqflite-common-ffi:2.3.4\\+4:*:*:*:*:*:*:*","purl":"pkg:pub/sqflite_common_ffi@2.3.4%2B4?hosted_url=pub.dev","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:cpe23","value":"cpe:2.3:a:sqflite-common-ffi:sqflite_common_ffi:2.3.4\\+4:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:sqflite_common_ffi:sqflite-common-ffi:2.3.4\\+4:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:sqflite_common_ffi:sqflite_common_ffi:2.3.4\\+4:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:sqflite-common:sqflite-common-ffi:2.3.4\\+4:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:sqflite-common:sqflite_common_ffi:2.3.4\\+4:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:sqflite_common:sqflite-common-ffi:2.3.4\\+4:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:sqflite_common:sqflite_common_ffi:2.3.4\\+4:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:sqflite:sqflite-common-ffi:2.3.4\\+4:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:sqflite:sqflite_common_ffi:2.3.4\\+4:*:*:*:*:*:*:*"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:pub/sqlite3@2.9.4?hosted_url=pub.dev&package-id=77b405c50e471879","type":"library","name":"sqlite3","version":"2.9.4","cpe":"cpe:2.3:a:sqlite3:sqlite3:2.9.4:*:*:*:*:*:*:*","purl":"pkg:pub/sqlite3@2.9.4?hosted_url=pub.dev","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:pub/sqlite3_flutter_libs@0.5.42?hosted_url=pub.dev&package-id=7a0995b581e1b984","type":"library","name":"sqlite3_flutter_libs","version":"0.5.42","cpe":"cpe:2.3:a:sqlite3-flutter-libs:sqlite3-flutter-libs:0.5.42:*:*:*:*:*:*:*","purl":"pkg:pub/sqlite3_flutter_libs@0.5.42?hosted_url=pub.dev","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:cpe23","value":"cpe:2.3:a:sqlite3-flutter-libs:sqlite3_flutter_libs:0.5.42:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:sqlite3_flutter_libs:sqlite3-flutter-libs:0.5.42:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:sqlite3_flutter_libs:sqlite3_flutter_libs:0.5.42:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:sqlite3-flutter:sqlite3-flutter-libs:0.5.42:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:sqlite3-flutter:sqlite3_flutter_libs:0.5.42:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:sqlite3_flutter:sqlite3-flutter-libs:0.5.42:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:sqlite3_flutter:sqlite3_flutter_libs:0.5.42:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:sqlite3:sqlite3-flutter-libs:0.5.42:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:sqlite3:sqlite3_flutter_libs:0.5.42:*:*:*:*:*:*:*"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:pub/stack_trace@1.12.1?hosted_url=pub.dev&package-id=2e6c6f162a065854","type":"library","name":"stack_trace","version":"1.12.1","cpe":"cpe:2.3:a:stack-trace:stack-trace:1.12.1:*:*:*:*:*:*:*","purl":"pkg:pub/stack_trace@1.12.1?hosted_url=pub.dev","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:cpe23","value":"cpe:2.3:a:stack-trace:stack_trace:1.12.1:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:stack_trace:stack-trace:1.12.1:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:stack_trace:stack_trace:1.12.1:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:stack:stack-trace:1.12.1:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:stack:stack_trace:1.12.1:*:*:*:*:*:*:*"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:pub/stream_channel@2.1.4?hosted_url=pub.dev&package-id=1939c76002676643","type":"library","name":"stream_channel","version":"2.1.4","cpe":"cpe:2.3:a:stream-channel:stream-channel:2.1.4:*:*:*:*:*:*:*","purl":"pkg:pub/stream_channel@2.1.4?hosted_url=pub.dev","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:cpe23","value":"cpe:2.3:a:stream-channel:stream_channel:2.1.4:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:stream_channel:stream-channel:2.1.4:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:stream_channel:stream_channel:2.1.4:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:stream:stream-channel:2.1.4:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:stream:stream_channel:2.1.4:*:*:*:*:*:*:*"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:pub/string_scanner@1.2.0?hosted_url=pub.dev&package-id=e36582e8b81bae79","type":"library","name":"string_scanner","version":"1.2.0","cpe":"cpe:2.3:a:string-scanner:string-scanner:1.2.0:*:*:*:*:*:*:*","purl":"pkg:pub/string_scanner@1.2.0?hosted_url=pub.dev","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:cpe23","value":"cpe:2.3:a:string-scanner:string_scanner:1.2.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:string_scanner:string-scanner:1.2.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:string_scanner:string_scanner:1.2.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:string:string-scanner:1.2.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:string:string_scanner:1.2.0:*:*:*:*:*:*:*"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:pub/synchronized@3.3.0%2B3?hosted_url=pub.dev&package-id=e26dfbeea2ec924c","type":"library","name":"synchronized","version":"3.3.0+3","cpe":"cpe:2.3:a:synchronized:synchronized:3.3.0\\+3:*:*:*:*:*:*:*","purl":"pkg:pub/synchronized@3.3.0%2B3?hosted_url=pub.dev","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:pub/term_glyph@1.2.1?hosted_url=pub.dev&package-id=f2ae29b2ac3680b1","type":"library","name":"term_glyph","version":"1.2.1","cpe":"cpe:2.3:a:term-glyph:term-glyph:1.2.1:*:*:*:*:*:*:*","purl":"pkg:pub/term_glyph@1.2.1?hosted_url=pub.dev","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:cpe23","value":"cpe:2.3:a:term-glyph:term_glyph:1.2.1:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:term_glyph:term-glyph:1.2.1:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:term_glyph:term_glyph:1.2.1:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:term:term-glyph:1.2.1:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:term:term_glyph:1.2.1:*:*:*:*:*:*:*"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:pub/test_api@0.7.10?hosted_url=pub.dev&package-id=6ebfead881306bce","type":"library","name":"test_api","version":"0.7.10","cpe":"cpe:2.3:a:test-api:test-api:0.7.10:*:*:*:*:*:*:*","purl":"pkg:pub/test_api@0.7.10?hosted_url=pub.dev","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:cpe23","value":"cpe:2.3:a:test-api:test_api:0.7.10:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:test_api:test-api:0.7.10:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:test_api:test_api:0.7.10:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:test:test-api:0.7.10:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:test:test_api:0.7.10:*:*:*:*:*:*:*"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:pub/typed_data@1.4.0?hosted_url=pub.dev&package-id=95496a924576854f","type":"library","name":"typed_data","version":"1.4.0","cpe":"cpe:2.3:a:typed-data:typed-data:1.4.0:*:*:*:*:*:*:*","purl":"pkg:pub/typed_data@1.4.0?hosted_url=pub.dev","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:cpe23","value":"cpe:2.3:a:typed-data:typed_data:1.4.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:typed_data:typed-data:1.4.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:typed_data:typed_data:1.4.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:typed:typed-data:1.4.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:typed:typed_data:1.4.0:*:*:*:*:*:*:*"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:pub/vector_math@2.2.0?hosted_url=pub.dev&package-id=25ab5ac920e8ee9b","type":"library","name":"vector_math","version":"2.2.0","cpe":"cpe:2.3:a:vector-math:vector-math:2.2.0:*:*:*:*:*:*:*","purl":"pkg:pub/vector_math@2.2.0?hosted_url=pub.dev","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:cpe23","value":"cpe:2.3:a:vector-math:vector_math:2.2.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:vector_math:vector-math:2.2.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:vector_math:vector_math:2.2.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:vector:vector-math:2.2.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:vector:vector_math:2.2.0:*:*:*:*:*:*:*"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:pub/vm_service@14.2.5?hosted_url=pub.dev&package-id=1c7e63e35fe08ddd","type":"library","name":"vm_service","version":"14.2.5","cpe":"cpe:2.3:a:vm-service:vm-service:14.2.5:*:*:*:*:*:*:*","purl":"pkg:pub/vm_service@14.2.5?hosted_url=pub.dev","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:cpe23","value":"cpe:2.3:a:vm-service:vm_service:14.2.5:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:vm_service:vm-service:14.2.5:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:vm_service:vm_service:14.2.5:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:vm:vm-service:14.2.5:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:vm:vm_service:14.2.5:*:*:*:*:*:*:*"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:pub/web@1.1.1?hosted_url=pub.dev&package-id=c3b8b3aace0bf70a","type":"library","name":"web","version":"1.1.1","cpe":"cpe:2.3:a:web:web:1.1.1:*:*:*:*:*:*:*","purl":"pkg:pub/web@1.1.1?hosted_url=pub.dev","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:pub/win32@5.13.0?hosted_url=pub.dev&package-id=f050260319bfccca","type":"library","name":"win32","version":"5.13.0","cpe":"cpe:2.3:a:win32:win32:5.13.0:*:*:*:*:*:*:*","purl":"pkg:pub/win32@5.13.0?hosted_url=pub.dev","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"pkg:pub/xdg_directories@1.1.0?hosted_url=pub.dev&package-id=fb74bb3e6c1a0232","type":"library","name":"xdg_directories","version":"1.1.0","cpe":"cpe:2.3:a:xdg-directories:xdg-directories:1.1.0:*:*:*:*:*:*:*","purl":"pkg:pub/xdg_directories@1.1.0?hosted_url=pub.dev","properties":[{"name":"syft:package:foundBy","value":"dart-pubspec-lock-cataloger"},{"name":"syft:package:language","value":"dart"},{"name":"syft:package:type","value":"dart-pub"},{"name":"syft:package:metadataType","value":"dart-pubspec-lock-entry"},{"name":"syft:cpe23","value":"cpe:2.3:a:xdg-directories:xdg_directories:1.1.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:xdg_directories:xdg-directories:1.1.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:xdg_directories:xdg_directories:1.1.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:xdg:xdg-directories:1.1.0:*:*:*:*:*:*:*"},{"name":"syft:cpe23","value":"cpe:2.3:a:xdg:xdg_directories:1.1.0:*:*:*:*:*:*:*"},{"name":"syft:location:0:path","value":"/pubspec.lock"}]},{"bom-ref":"70143f44594a8edc","type":"file","name":"/Users/charlestalk/AntiGravity/ProtoGNOME/artifacts/protognome_1.0.0-1_amd64.deb","hashes":[{"alg":"SHA-1","content":"b917d1c9333119b5d7aef4a4eb8b88b9d43c88e7"},{"alg":"SHA-256","content":"f8cada661f111219e7a6f82b16a0691a843fcab1aafc82cbbe4ead9be78edd83"}]},{"bom-ref":"218154d258272853","type":"file","name":"/Users/charlestalk/AntiGravity/ProtoGNOME/artifacts/protognome_1.0.1-1_amd64.deb","hashes":[{"alg":"SHA-1","content":"93877a6e04a76cb1a4edf33b48e71d146b88f2ab"},{"alg":"SHA-256","content":"93f188758f887b37758ea68c4778c8948d7d5397675dbb16c7297d0a5cc39083"}]},{"bom-ref":"8ffcc4078ad66db5","type":"file","name":"/Users/charlestalk/AntiGravity/ProtoGNOME/artifacts/protognome_1.0.3-1_amd64.deb","hashes":[{"alg":"SHA-1","content":"c0ffeef675080780fc66e3228756f28fd9e833cf"},{"alg":"SHA-256","content":"a20deb17e2ac125980dd29ae69570fa534b9df11acadfe082d62ff65f19cedf1"}]},{"bom-ref":"7ad5159dca32d089","type":"file","name":"/Users/charlestalk/AntiGravity/ProtoGNOME/artifacts/protognome_1.0.4-1_amd64.deb","hashes":[{"alg":"SHA-1","content":"6cb653ef1b72d6eb32131c298979005de28572b8"},{"alg":"SHA-256","content":"d293b5454b6da48c873abcb8e537a130763794dee0994a6943d8f7b77eb0fef2"}]},{"bom-ref":"77d11cd5896a8847","type":"file","name":"/Users/charlestalk/AntiGravity/ProtoGNOME/artifacts/protognome_1.0.5-1_amd64.deb","hashes":[{"alg":"SHA-1","content":"242da93fab62d4d3067e204575b9aaca282d162e"},{"alg":"SHA-256","content":"83f079d29d0b06b35ce3aca57c98800f8ddb6ee7f11bd6b77048396773f6f269"}]},{"bom-ref":"dba1e33a815885e3","type":"file","name":"/Users/charlestalk/AntiGravity/ProtoGNOME/artifacts/protognome_1.0.6-1_amd64.deb","hashes":[{"alg":"SHA-1","content":"011de13b9c3b5bcce35ea664029fc5c7b1e3da39"},{"alg":"SHA-256","content":"95acd5b717034173ae42be5b3c03964a5968a8a8354990ad9b378840a6858fdf"}]},{"bom-ref":"dfd29cebb447ce74","type":"file","name":"/Users/charlestalk/AntiGravity/ProtoGNOME/artifacts/protognome_1.0.7-1_amd64.deb","hashes":[{"alg":"SHA-1","content":"ca7580370cecf7f5c8debab490e5a25d9de27b62"},{"alg":"SHA-256","content":"df195745540908d76f52e1fca068192f393d6367d39372bb130b53723c59ea9f"}]},{"bom-ref":"e506d8ff6e657c8e","type":"file","name":"/Users/charlestalk/AntiGravity/ProtoGNOME/pubspec.lock","hashes":[{"alg":"SHA-1","content":"9d84028dbf65ab6c92d78a807e6a09643a6b155b"},{"alg":"SHA-256","content":"1b84f4089326b4d2120c309b83fb960fc3b1956fbd96716f7bb32f691b5e4093"}]},{"bom-ref":"95ba31257a3edc60","type":"file","name":"/Users/charlestalk/AntiGravity/ProtoGNOME/pubspec.yaml","hashes":[{"alg":"SHA-1","content":"8f4a7c1503ce42fdd8bab9cf5e4909caf51ab23e"},{"alg":"SHA-256","content":"6c1249f80c9de86cac50ba9fbb3b7aa595e05f60ea222e9ef294314aef8272cd"}]}]}
+{
+  "$schema": "http://cyclonedx.org/schema/bom-1.6.schema.json",
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "serialNumber": "urn:uuid:84680482-2149-426e-8afe-91f49cee3a0a",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-04-06T21:24:15+00:00",
+    "tools": {
+      "components": [
+        {
+          "type": "application",
+          "manufacturer": {
+            "name": "Aqua Security Software Ltd."
+          },
+          "group": "aquasecurity",
+          "name": "trivy",
+          "version": "0.69.3"
+        }
+      ]
+    },
+    "component": {
+      "bom-ref": "37e29f6e-a1dc-4fc1-ab9a-e0aafa0159c2",
+      "type": "application",
+      "name": ".",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:SchemaVersion",
+          "value": "2"
+        }
+      ]
+    }
+  },
+  "components": [
+    {
+      "bom-ref": "7976ff6c-219c-4ccb-a474-1c871e6bc139",
+      "type": "application",
+      "name": "pubspec.lock",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:Class",
+          "value": "lang-pkgs"
+        },
+        {
+          "name": "aquasecurity:trivy:Type",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/archive@4.0.9",
+      "type": "library",
+      "name": "archive",
+      "version": "4.0.9",
+      "purl": "pkg:pub/archive@4.0.9",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "archive@4.0.9"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/async@2.11.0",
+      "type": "library",
+      "name": "async",
+      "version": "2.11.0",
+      "purl": "pkg:pub/async@2.11.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "async@2.11.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/boolean_selector@2.1.1",
+      "type": "library",
+      "name": "boolean_selector",
+      "version": "2.1.1",
+      "purl": "pkg:pub/boolean_selector@2.1.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "boolean_selector@2.1.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/characters@1.4.1",
+      "type": "library",
+      "name": "characters",
+      "version": "1.4.1",
+      "purl": "pkg:pub/characters@1.4.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "characters@1.4.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/clock@1.1.2",
+      "type": "library",
+      "name": "clock",
+      "version": "1.1.2",
+      "purl": "pkg:pub/clock@1.1.2",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "clock@1.1.2"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/collection@1.19.1",
+      "type": "library",
+      "name": "collection",
+      "version": "1.19.1",
+      "purl": "pkg:pub/collection@1.19.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "collection@1.19.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/crypto@3.0.7",
+      "type": "library",
+      "name": "crypto",
+      "version": "3.0.7",
+      "purl": "pkg:pub/crypto@3.0.7",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "crypto@3.0.7"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/cupertino_icons@1.0.8",
+      "type": "library",
+      "name": "cupertino_icons",
+      "version": "1.0.8",
+      "purl": "pkg:pub/cupertino_icons@1.0.8",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "cupertino_icons@1.0.8"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/fake_async@1.3.3",
+      "type": "library",
+      "name": "fake_async",
+      "version": "1.3.3",
+      "purl": "pkg:pub/fake_async@1.3.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "fake_async@1.3.3"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/ffi@2.1.3",
+      "type": "library",
+      "name": "ffi",
+      "version": "2.1.3",
+      "purl": "pkg:pub/ffi@2.1.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "ffi@2.1.3"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/flutter@0.0.0",
+      "type": "library",
+      "name": "flutter",
+      "version": "0.0.0",
+      "purl": "pkg:pub/flutter@0.0.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "flutter@0.0.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/flutter_lints@4.0.0",
+      "type": "library",
+      "name": "flutter_lints",
+      "version": "4.0.0",
+      "purl": "pkg:pub/flutter_lints@4.0.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "flutter_lints@4.0.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/flutter_test@0.0.0",
+      "type": "library",
+      "name": "flutter_test",
+      "version": "0.0.0",
+      "purl": "pkg:pub/flutter_test@0.0.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "flutter_test@0.0.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/flutter_web_plugins@0.0.0",
+      "type": "library",
+      "name": "flutter_web_plugins",
+      "version": "0.0.0",
+      "purl": "pkg:pub/flutter_web_plugins@0.0.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "flutter_web_plugins@0.0.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/google_fonts@8.0.2",
+      "type": "library",
+      "name": "google_fonts",
+      "version": "8.0.2",
+      "purl": "pkg:pub/google_fonts@8.0.2",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "google_fonts@8.0.2"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/http@1.6.0",
+      "type": "library",
+      "name": "http",
+      "version": "1.6.0",
+      "purl": "pkg:pub/http@1.6.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "http@1.6.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/http_parser@4.0.2",
+      "type": "library",
+      "name": "http_parser",
+      "version": "4.0.2",
+      "purl": "pkg:pub/http_parser@4.0.2",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "http_parser@4.0.2"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/leak_tracker@11.0.2",
+      "type": "library",
+      "name": "leak_tracker",
+      "version": "11.0.2",
+      "purl": "pkg:pub/leak_tracker@11.0.2",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "leak_tracker@11.0.2"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/leak_tracker_flutter_testing@3.0.10",
+      "type": "library",
+      "name": "leak_tracker_flutter_testing",
+      "version": "3.0.10",
+      "purl": "pkg:pub/leak_tracker_flutter_testing@3.0.10",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "leak_tracker_flutter_testing@3.0.10"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/leak_tracker_testing@3.0.2",
+      "type": "library",
+      "name": "leak_tracker_testing",
+      "version": "3.0.2",
+      "purl": "pkg:pub/leak_tracker_testing@3.0.2",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "leak_tracker_testing@3.0.2"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/lints@4.0.0",
+      "type": "library",
+      "name": "lints",
+      "version": "4.0.0",
+      "purl": "pkg:pub/lints@4.0.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "lints@4.0.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/matcher@0.12.19",
+      "type": "library",
+      "name": "matcher",
+      "version": "0.12.19",
+      "purl": "pkg:pub/matcher@0.12.19",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "matcher@0.12.19"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/material_color_utilities@0.13.0",
+      "type": "library",
+      "name": "material_color_utilities",
+      "version": "0.13.0",
+      "purl": "pkg:pub/material_color_utilities@0.13.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "material_color_utilities@0.13.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/meta@1.17.0",
+      "type": "library",
+      "name": "meta",
+      "version": "1.17.0",
+      "purl": "pkg:pub/meta@1.17.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "meta@1.17.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/package_info_plus@9.0.0",
+      "type": "library",
+      "name": "package_info_plus",
+      "version": "9.0.0",
+      "purl": "pkg:pub/package_info_plus@9.0.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "package_info_plus@9.0.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/package_info_plus_platform_interface@3.2.1",
+      "type": "library",
+      "name": "package_info_plus_platform_interface",
+      "version": "3.2.1",
+      "purl": "pkg:pub/package_info_plus_platform_interface@3.2.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "package_info_plus_platform_interface@3.2.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/path@1.9.1",
+      "type": "library",
+      "name": "path",
+      "version": "1.9.1",
+      "purl": "pkg:pub/path@1.9.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "path@1.9.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/path_provider@2.1.5",
+      "type": "library",
+      "name": "path_provider",
+      "version": "2.1.5",
+      "purl": "pkg:pub/path_provider@2.1.5",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "path_provider@2.1.5"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/path_provider_android@2.2.15",
+      "type": "library",
+      "name": "path_provider_android",
+      "version": "2.2.15",
+      "purl": "pkg:pub/path_provider_android@2.2.15",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "path_provider_android@2.2.15"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/path_provider_foundation@2.4.1",
+      "type": "library",
+      "name": "path_provider_foundation",
+      "version": "2.4.1",
+      "purl": "pkg:pub/path_provider_foundation@2.4.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "path_provider_foundation@2.4.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/path_provider_linux@2.2.1",
+      "type": "library",
+      "name": "path_provider_linux",
+      "version": "2.2.1",
+      "purl": "pkg:pub/path_provider_linux@2.2.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "path_provider_linux@2.2.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/path_provider_platform_interface@2.1.2",
+      "type": "library",
+      "name": "path_provider_platform_interface",
+      "version": "2.1.2",
+      "purl": "pkg:pub/path_provider_platform_interface@2.1.2",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "path_provider_platform_interface@2.1.2"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/path_provider_windows@2.3.0",
+      "type": "library",
+      "name": "path_provider_windows",
+      "version": "2.3.0",
+      "purl": "pkg:pub/path_provider_windows@2.3.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "path_provider_windows@2.3.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/platform@3.1.6",
+      "type": "library",
+      "name": "platform",
+      "version": "3.1.6",
+      "purl": "pkg:pub/platform@3.1.6",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "platform@3.1.6"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/plugin_platform_interface@2.1.8",
+      "type": "library",
+      "name": "plugin_platform_interface",
+      "version": "2.1.8",
+      "purl": "pkg:pub/plugin_platform_interface@2.1.8",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "plugin_platform_interface@2.1.8"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/posix@6.5.0",
+      "type": "library",
+      "name": "posix",
+      "version": "6.5.0",
+      "purl": "pkg:pub/posix@6.5.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "posix@6.5.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/sky_engine@0.0.0",
+      "type": "library",
+      "name": "sky_engine",
+      "version": "0.0.0",
+      "purl": "pkg:pub/sky_engine@0.0.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "sky_engine@0.0.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/source_span@1.10.0",
+      "type": "library",
+      "name": "source_span",
+      "version": "1.10.0",
+      "purl": "pkg:pub/source_span@1.10.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "source_span@1.10.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/sqflite_common@2.5.4%2B6",
+      "type": "library",
+      "name": "sqflite_common",
+      "version": "2.5.4+6",
+      "purl": "pkg:pub/sqflite_common@2.5.4%2B6",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "sqflite_common@2.5.4+6"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/sqflite_common_ffi@2.3.4%2B4",
+      "type": "library",
+      "name": "sqflite_common_ffi",
+      "version": "2.3.4+4",
+      "purl": "pkg:pub/sqflite_common_ffi@2.3.4%2B4",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "sqflite_common_ffi@2.3.4+4"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/sqlite3@2.9.4",
+      "type": "library",
+      "name": "sqlite3",
+      "version": "2.9.4",
+      "purl": "pkg:pub/sqlite3@2.9.4",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "sqlite3@2.9.4"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/sqlite3_flutter_libs@0.5.42",
+      "type": "library",
+      "name": "sqlite3_flutter_libs",
+      "version": "0.5.42",
+      "purl": "pkg:pub/sqlite3_flutter_libs@0.5.42",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "sqlite3_flutter_libs@0.5.42"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/stack_trace@1.12.1",
+      "type": "library",
+      "name": "stack_trace",
+      "version": "1.12.1",
+      "purl": "pkg:pub/stack_trace@1.12.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "stack_trace@1.12.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/stream_channel@2.1.4",
+      "type": "library",
+      "name": "stream_channel",
+      "version": "2.1.4",
+      "purl": "pkg:pub/stream_channel@2.1.4",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "stream_channel@2.1.4"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/string_scanner@1.2.0",
+      "type": "library",
+      "name": "string_scanner",
+      "version": "1.2.0",
+      "purl": "pkg:pub/string_scanner@1.2.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "string_scanner@1.2.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/synchronized@3.3.0%2B3",
+      "type": "library",
+      "name": "synchronized",
+      "version": "3.3.0+3",
+      "purl": "pkg:pub/synchronized@3.3.0%2B3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "synchronized@3.3.0+3"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/term_glyph@1.2.1",
+      "type": "library",
+      "name": "term_glyph",
+      "version": "1.2.1",
+      "purl": "pkg:pub/term_glyph@1.2.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "term_glyph@1.2.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/test_api@0.7.10",
+      "type": "library",
+      "name": "test_api",
+      "version": "0.7.10",
+      "purl": "pkg:pub/test_api@0.7.10",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "test_api@0.7.10"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/typed_data@1.4.0",
+      "type": "library",
+      "name": "typed_data",
+      "version": "1.4.0",
+      "purl": "pkg:pub/typed_data@1.4.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "typed_data@1.4.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/vector_math@2.2.0",
+      "type": "library",
+      "name": "vector_math",
+      "version": "2.2.0",
+      "purl": "pkg:pub/vector_math@2.2.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "vector_math@2.2.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/vm_service@14.2.5",
+      "type": "library",
+      "name": "vm_service",
+      "version": "14.2.5",
+      "purl": "pkg:pub/vm_service@14.2.5",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "vm_service@14.2.5"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/web@1.1.1",
+      "type": "library",
+      "name": "web",
+      "version": "1.1.1",
+      "purl": "pkg:pub/web@1.1.1",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "web@1.1.1"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/win32@5.13.0",
+      "type": "library",
+      "name": "win32",
+      "version": "5.13.0",
+      "purl": "pkg:pub/win32@5.13.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "win32@5.13.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pub/xdg_directories@1.1.0",
+      "type": "library",
+      "name": "xdg_directories",
+      "version": "1.1.0",
+      "purl": "pkg:pub/xdg_directories@1.1.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:PkgID",
+          "value": "xdg_directories@1.1.0"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "pub"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "37e29f6e-a1dc-4fc1-ab9a-e0aafa0159c2",
+      "dependsOn": [
+        "7976ff6c-219c-4ccb-a474-1c871e6bc139"
+      ]
+    },
+    {
+      "ref": "7976ff6c-219c-4ccb-a474-1c871e6bc139",
+      "dependsOn": [
+        "pkg:pub/archive@4.0.9",
+        "pkg:pub/async@2.11.0",
+        "pkg:pub/boolean_selector@2.1.1",
+        "pkg:pub/characters@1.4.1",
+        "pkg:pub/clock@1.1.2",
+        "pkg:pub/collection@1.19.1",
+        "pkg:pub/crypto@3.0.7",
+        "pkg:pub/cupertino_icons@1.0.8",
+        "pkg:pub/fake_async@1.3.3",
+        "pkg:pub/ffi@2.1.3",
+        "pkg:pub/flutter@0.0.0",
+        "pkg:pub/flutter_lints@4.0.0",
+        "pkg:pub/flutter_test@0.0.0",
+        "pkg:pub/flutter_web_plugins@0.0.0",
+        "pkg:pub/google_fonts@8.0.2",
+        "pkg:pub/http@1.6.0",
+        "pkg:pub/http_parser@4.0.2",
+        "pkg:pub/leak_tracker@11.0.2",
+        "pkg:pub/leak_tracker_flutter_testing@3.0.10",
+        "pkg:pub/leak_tracker_testing@3.0.2",
+        "pkg:pub/lints@4.0.0",
+        "pkg:pub/matcher@0.12.19",
+        "pkg:pub/material_color_utilities@0.13.0",
+        "pkg:pub/meta@1.17.0",
+        "pkg:pub/package_info_plus@9.0.0",
+        "pkg:pub/package_info_plus_platform_interface@3.2.1",
+        "pkg:pub/path@1.9.1",
+        "pkg:pub/path_provider@2.1.5",
+        "pkg:pub/path_provider_android@2.2.15",
+        "pkg:pub/path_provider_foundation@2.4.1",
+        "pkg:pub/path_provider_linux@2.2.1",
+        "pkg:pub/path_provider_platform_interface@2.1.2",
+        "pkg:pub/path_provider_windows@2.3.0",
+        "pkg:pub/platform@3.1.6",
+        "pkg:pub/plugin_platform_interface@2.1.8",
+        "pkg:pub/posix@6.5.0",
+        "pkg:pub/sky_engine@0.0.0",
+        "pkg:pub/source_span@1.10.0",
+        "pkg:pub/sqflite_common@2.5.4%2B6",
+        "pkg:pub/sqflite_common_ffi@2.3.4%2B4",
+        "pkg:pub/sqlite3@2.9.4",
+        "pkg:pub/sqlite3_flutter_libs@0.5.42",
+        "pkg:pub/stack_trace@1.12.1",
+        "pkg:pub/stream_channel@2.1.4",
+        "pkg:pub/string_scanner@1.2.0",
+        "pkg:pub/synchronized@3.3.0%2B3",
+        "pkg:pub/term_glyph@1.2.1",
+        "pkg:pub/test_api@0.7.10",
+        "pkg:pub/typed_data@1.4.0",
+        "pkg:pub/vector_math@2.2.0",
+        "pkg:pub/vm_service@14.2.5",
+        "pkg:pub/web@1.1.1",
+        "pkg:pub/win32@5.13.0",
+        "pkg:pub/xdg_directories@1.1.0"
+      ]
+    },
+    {
+      "ref": "pkg:pub/archive@4.0.9",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/async@2.11.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/boolean_selector@2.1.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/characters@1.4.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/clock@1.1.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/collection@1.19.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/crypto@3.0.7",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/cupertino_icons@1.0.8",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/fake_async@1.3.3",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/ffi@2.1.3",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/flutter@0.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/flutter_lints@4.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/flutter_test@0.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/flutter_web_plugins@0.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/google_fonts@8.0.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/http@1.6.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/http_parser@4.0.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/leak_tracker@11.0.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/leak_tracker_flutter_testing@3.0.10",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/leak_tracker_testing@3.0.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/lints@4.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/matcher@0.12.19",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/material_color_utilities@0.13.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/meta@1.17.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/package_info_plus@9.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/package_info_plus_platform_interface@3.2.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/path@1.9.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/path_provider@2.1.5",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/path_provider_android@2.2.15",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/path_provider_foundation@2.4.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/path_provider_linux@2.2.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/path_provider_platform_interface@2.1.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/path_provider_windows@2.3.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/platform@3.1.6",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/plugin_platform_interface@2.1.8",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/posix@6.5.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/sky_engine@0.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/source_span@1.10.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/sqflite_common@2.5.4%2B6",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/sqflite_common_ffi@2.3.4%2B4",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/sqlite3@2.9.4",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/sqlite3_flutter_libs@0.5.42",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/stack_trace@1.12.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/stream_channel@2.1.4",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/string_scanner@1.2.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/synchronized@3.3.0%2B3",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/term_glyph@1.2.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/test_api@0.7.10",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/typed_data@1.4.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/vector_math@2.2.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/vm_service@14.2.5",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/web@1.1.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/win32@5.13.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pub/xdg_directories@1.1.0",
+      "dependsOn": []
+    }
+  ],
+  "vulnerabilities": []
+}
