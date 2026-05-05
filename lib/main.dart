@@ -27,13 +27,12 @@ class ProtoGNOMEApp extends StatelessWidget {
           secondary: Color(0xFF4F46E5),
           surface: Color(0xFF1A1A2E),
           onSurface: Colors.white,
-          background: Color(0xFF0F0F1A),
-          onBackground: Colors.white,
         ),
         scaffoldBackgroundColor: const Color(0xFF0F0F1A),
         cardColor: const Color(0xFF1E1E3A),
         dividerColor: const Color(0xFF2A2A4A),
-        textTheme: GoogleFonts.interTextTheme(Theme.of(context).textTheme).copyWith(
+        textTheme:
+            GoogleFonts.interTextTheme(Theme.of(context).textTheme).copyWith(
           displayLarge: const TextStyle(color: Colors.white),
           bodyLarge: const TextStyle(color: Colors.white),
           bodyMedium: const TextStyle(color: Color(0xFFB0B0D0)),
@@ -47,13 +46,13 @@ class ProtoGNOMEApp extends StatelessWidget {
           style: ElevatedButton.styleFrom(
             foregroundColor: Colors.white,
             backgroundColor: const Color(0xFF7C3AED),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           ),
         ),
         checkboxTheme: CheckboxThemeData(
-          fillColor: MaterialStateProperty.resolveWith((states) =>
-              states.contains(MaterialState.selected)
+          fillColor: WidgetStateProperty.resolveWith((states) =>
+              states.contains(WidgetState.selected)
                   ? const Color(0xFF7C3AED)
                   : null),
         ),

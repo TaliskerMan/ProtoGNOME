@@ -26,13 +26,15 @@ class VdfParser {
         sb.write(dump(entry.value as Map<String, dynamic>, indent: indent + 1));
         sb.writeln('$tab}');
       } else {
-        sb.writeln('$tab"${_escape(entry.key)}"\t\t"${_escape(entry.value.toString())}"');
+        sb.writeln(
+            '$tab"${_escape(entry.key)}"\t\t"${_escape(entry.value.toString())}"');
       }
     }
     return sb.toString();
   }
 
-  static String _escape(String s) => s.replaceAll('"', '\\"').replaceAll('\\', '\\\\');
+  static String _escape(String s) =>
+      s.replaceAll('"', '\\"').replaceAll('\\', '\\\\');
 
   static List<String> _tokenize(String content) {
     final tokens = <String>[];
@@ -62,7 +64,9 @@ class VdfParser {
         i++;
       } else if (c == '/' && i + 1 < content.length && content[i + 1] == '/') {
         // Line comment
-        while (i < content.length && content[i] != '\n') i++;
+        while (i < content.length && content[i] != '\n') {
+          i++;
+        }
       } else if (c == '\n' || c == '\r' || c == '\t' || c == ' ') {
         i++;
       } else {

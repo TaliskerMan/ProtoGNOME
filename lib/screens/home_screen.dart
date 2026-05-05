@@ -1,13 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2024 ProtoGNOME Contributors
 
-import 'dart:io';
 import 'package:flutter/material.dart';
-import '../models/compat_tool.dart';
-import '../models/steam_game.dart';
 import '../services/github_release_service.dart';
 import '../services/steam_service.dart';
-import '../services/database_service.dart';
 import 'tool_manager_screen.dart';
 import 'game_manager_screen.dart';
 import 'settings_screen.dart';
@@ -100,7 +96,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   // Steam status indicator
                   Tooltip(
-                    message: _steamRunning ? 'Steam is running' : 'Steam is not running',
+                    message: _steamRunning
+                        ? 'Steam is running'
+                        : 'Steam is not running',
                     child: Container(
                       width: 10,
                       height: 10,
@@ -160,8 +158,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 if (!_validInstall)
                   Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 8),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     color: const Color(0xFF7F1D1D),
                     child: Row(
                       children: [
@@ -181,8 +179,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 if (_steamRunning)
                   Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 6),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                     color: const Color(0xFF78350F),
                     child: Row(
                       children: [
@@ -191,14 +189,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         const SizedBox(width: 8),
                         const Text(
                           'Steam is running. Please restart Steam after applying changes.',
-                          style: TextStyle(
-                              color: Color(0xFFFDE68A), fontSize: 13),
+                          style:
+                              TextStyle(color: Color(0xFFFDE68A), fontSize: 13),
                         ),
                         const Spacer(),
                         TextButton.icon(
                           onPressed: _checkSteam,
-                          icon: const Icon(Icons.refresh, size: 14,
-                              color: Color(0xFFFDE68A)),
+                          icon: const Icon(Icons.refresh,
+                              size: 14, color: Color(0xFFFDE68A)),
                           label: const Text('Refresh',
                               style: TextStyle(
                                   color: Color(0xFFFDE68A), fontSize: 12)),

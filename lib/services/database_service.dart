@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2024 ProtoGNOME Contributors
 
-import 'dart:io';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
@@ -157,8 +156,7 @@ class DatabaseService {
 
   Future<List<SteamGame>> getAllCachedGames() async {
     final database = await db;
-    final maps = await database.query('steam_games',
-        orderBy: 'game_name ASC');
+    final maps = await database.query('steam_games', orderBy: 'game_name ASC');
     return maps.map((m) => SteamGame.fromMap(m)).toList();
   }
 }

@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2024 ProtoGNOME Contributors
 
-import 'dart:io';
 import 'package:flutter/material.dart';
 import '../models/compat_tool.dart';
 import '../services/github_release_service.dart';
@@ -45,24 +44,30 @@ class _ToolManagerScreenState extends State<ToolManagerScreen> {
     });
     try {
       final steamDir = widget.steamService.getCompatToolsDir();
-      _availableLocations = InstallLocationService().getAvailableLocations(steamDir);
-      
+      _availableLocations =
+          InstallLocationService().getAvailableLocations(steamDir);
+
       if (_selectedLocation == null && _availableLocations.isNotEmpty) {
         _selectedLocation = _availableLocations.first;
       }
       // If selected location became invalid or not in the list, default to first
-      if (_selectedLocation != null && !_availableLocations.any((loc) => loc.path == _selectedLocation!.path)) {
-        _selectedLocation = _availableLocations.isNotEmpty ? _availableLocations.first : null;
+      if (_selectedLocation != null &&
+          !_availableLocations
+              .any((loc) => loc.path == _selectedLocation!.path)) {
+        _selectedLocation =
+            _availableLocations.isNotEmpty ? _availableLocations.first : null;
       }
 
       final tools = await widget.releaseService.fetchAvailableReleases(
           _selectedToolType,
           forceRefresh: forceRefresh);
-          
-      final installed = _selectedLocation != null && !_selectedLocation!.name.contains('(Not Installed)')
-          ? widget.steamService.getInstalledCompatTools(customDir: _selectedLocation!.path)
+
+      final installed = _selectedLocation != null &&
+              !_selectedLocation!.name.contains('(Not Installed)')
+          ? widget.steamService
+              .getInstalledCompatTools(customDir: _selectedLocation!.path)
           : <String>[];
-          
+
       setState(() {
         _availableTools = tools;
         _installedToolNames = installed;
@@ -77,7 +82,8 @@ class _ToolManagerScreenState extends State<ToolManagerScreen> {
   }
 
   Future<void> _installTool(CompatTool tool) async {
-    if (_selectedLocation == null || _selectedLocation!.name.contains('(Not Installed)')) {
+    if (_selectedLocation == null ||
+        _selectedLocation!.name.contains('(Not Installed)')) {
       _showError('Selected target is not available or not installed.');
       return;
     }
@@ -102,7 +108,8 @@ class _ToolManagerScreenState extends State<ToolManagerScreen> {
               ),
             );
           } else {
-            _showError('Failed to install ${tool.name}. Check your internet connection.');
+            _showError(
+                'Failed to install ${tool.name}. Check your internet connection.');
           }
         },
       ),
@@ -110,7 +117,8 @@ class _ToolManagerScreenState extends State<ToolManagerScreen> {
   }
 
   Future<void> _removeTool(String toolName) async {
-    if (_selectedLocation == null || _selectedLocation!.name.contains('(Not Installed)')) return;
+    if (_selectedLocation == null ||
+        _selectedLocation!.name.contains('(Not Installed)')) return;
     final installDir = _selectedLocation!.path;
 
     final confirmed = await showDialog<bool>(
@@ -128,7 +136,8 @@ class _ToolManagerScreenState extends State<ToolManagerScreen> {
               child: const Text('Cancel')),
           ElevatedButton(
             onPressed: () => Navigator.of(ctx).pop(true),
-            style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFEF4444)),
+            style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFFEF4444)),
             child: const Text('Remove'),
           ),
         ],
@@ -151,8 +160,7 @@ class _ToolManagerScreenState extends State<ToolManagerScreen> {
 
   void _showError(String msg) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-          content: Text(msg), backgroundColor: const Color(0xFF7F1D1D)),
+      SnackBar(content: Text(msg), backgroundColor: const Color(0xFF7F1D1D)),
     );
   }
 
@@ -203,7 +211,8 @@ class _ToolManagerScreenState extends State<ToolManagerScreen> {
                       );
                     }).toList(),
                     onChanged: (newLoc) {
-                      if (newLoc != null && !newLoc.name.contains('(Not Installed)')) {
+                      if (newLoc != null &&
+                          !newLoc.name.contains('(Not Installed)')) {
                         setState(() => _selectedLocation = newLoc);
                         _loadData(); // reload installed tools for the new selection
                       }
@@ -242,10 +251,10 @@ class _ToolManagerScreenState extends State<ToolManagerScreen> {
                     selectedColor: const Color(0xFF7C3AED),
                     backgroundColor: const Color(0xFF2A2A4A),
                     labelStyle: TextStyle(
-                      color: isSelected ? Colors.white : const Color(0xFF8888AA),
-                      fontWeight: isSelected
-                          ? FontWeight.w600
-                          : FontWeight.normal,
+                      color:
+                          isSelected ? Colors.white : const Color(0xFF8888AA),
+                      fontWeight:
+                          isSelected ? FontWeight.w600 : FontWeight.normal,
                     ),
                     checkmarkColor: Colors.white,
                   ),
@@ -259,8 +268,7 @@ class _ToolManagerScreenState extends State<ToolManagerScreen> {
         Expanded(
           child: _loading
               ? const Center(
-                  child: CircularProgressIndicator(
-                      color: Color(0xFF7C3AED)))
+                  child: CircularProgressIndicator(color: Color(0xFF7C3AED)))
               : _error != null
                   ? Center(
                       child: Column(
@@ -270,8 +278,7 @@ class _ToolManagerScreenState extends State<ToolManagerScreen> {
                               color: Color(0xFF8888AA), size: 48),
                           const SizedBox(height: 12),
                           Text(_error!,
-                              style: const TextStyle(
-                                  color: Color(0xFF8888AA))),
+                              style: const TextStyle(color: Color(0xFF8888AA))),
                           const SizedBox(height: 12),
                           ElevatedButton(
                               onPressed: () => _loadData(forceRefresh: true),
@@ -284,15 +291,14 @@ class _ToolManagerScreenState extends State<ToolManagerScreen> {
                       itemCount: _availableTools.length,
                       itemBuilder: (ctx, i) {
                         final tool = _availableTools[i];
-                        final installed = _installedToolNames
-                            .any((n) => n == tool.name);
+                        final installed =
+                            _installedToolNames.any((n) => n == tool.name);
                         return ToolCard(
                           tool: tool,
                           isInstalled: installed,
                           onInstall: () => _installTool(tool),
-                          onRemove: installed
-                              ? () => _removeTool(tool.name)
-                              : null,
+                          onRemove:
+                              installed ? () => _removeTool(tool.name) : null,
                         );
                       },
                     ),
@@ -368,8 +374,7 @@ class _DownloadProgressDialogState extends State<_DownloadProgressDialog> {
           if (_progress > 0)
             Text('${(_progress * 100).toStringAsFixed(0)}%',
                 style: const TextStyle(
-                    color: Color(0xFF7C3AED),
-                    fontWeight: FontWeight.bold)),
+                    color: Color(0xFF7C3AED), fontWeight: FontWeight.bold)),
         ],
       ),
     );
