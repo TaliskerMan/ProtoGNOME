@@ -5,6 +5,9 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Auto-increment version/build number
+python3 "/Users/charlestalk/AntiGravity/workflow-tools/increment_build.py" "${SCRIPT_DIR:-.}"
+
 VERSION="1.0.7"
 PKG_NAME="protognome"
 FLUTTER="${HOME}/flutter/bin/flutter"
