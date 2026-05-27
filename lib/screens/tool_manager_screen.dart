@@ -118,7 +118,9 @@ class _ToolManagerScreenState extends State<ToolManagerScreen> {
 
   Future<void> _removeTool(String toolName) async {
     if (_selectedLocation == null ||
-        _selectedLocation!.name.contains('(Not Installed)')) return;
+        _selectedLocation!.name.contains('(Not Installed)')) {
+      return;
+    }
     final installDir = _selectedLocation!.path;
 
     final confirmed = await showDialog<bool>(
