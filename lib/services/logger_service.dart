@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2024 ProtoGNOME Contributors
 
+// ignore_for_file: avoid_print
+
 import 'dart:io';
 import 'package:path/path.dart' as p;
 

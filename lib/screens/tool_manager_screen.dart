@@ -98,6 +98,7 @@ class _ToolManagerScreenState extends State<ToolManagerScreen> {
         installDir: installDir,
         releaseService: widget.releaseService,
         onComplete: (success) {
+          if (!mounted) return;
           Navigator.of(ctx).pop();
           if (success) {
             _loadData();
@@ -150,6 +151,7 @@ class _ToolManagerScreenState extends State<ToolManagerScreen> {
       final success = widget.releaseService.removeTool(toolName, installDir);
       if (success) {
         _loadData();
+        if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('$toolName removed.'),

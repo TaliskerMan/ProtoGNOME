@@ -44,8 +44,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Scaffold(
       body: Row(
         children: [
@@ -113,7 +111,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             color: (_steamRunning
                                     ? const Color(0xFF22C55E)
                                     : const Color(0xFFEF4444))
-                                .withOpacity(0.4),
+                                .withValues(alpha: 0.4),
                             blurRadius: 6,
                             spreadRadius: 2,
                           ),

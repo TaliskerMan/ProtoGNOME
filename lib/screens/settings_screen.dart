@@ -38,6 +38,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Future<void> _saveToken() async {
     await _db.setSetting('github_token', _tokenController.text.trim());
     GitHubReleaseService().setGithubToken(_tokenController.text.trim());
+    if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
           content: Text('GitHub token saved.'),

@@ -33,7 +33,7 @@ class ToolCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         side: BorderSide(
           color: isInstalled
-              ? const Color(0xFF7C3AED).withOpacity(0.4)
+              ? const Color(0xFF7C3AED).withValues(alpha: 0.4)
               : Colors.transparent,
           width: 1,
         ),
@@ -74,7 +74,7 @@ class ToolCard extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 6, vertical: 2),
                           decoration: BoxDecoration(
-                            color: const Color(0xFF7C3AED).withOpacity(0.2),
+                            color: const Color(0xFF7C3AED).withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(4),
                           ),
                           child: const Text('Installed',
