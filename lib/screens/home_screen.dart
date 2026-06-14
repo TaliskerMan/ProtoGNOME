@@ -9,6 +9,8 @@ import 'game_manager_screen.dart';
 import 'settings_screen.dart';
 import 'about_screen.dart';
 
+/// The main workspace screen shell mapping sub-screens through a sidebar [NavigationRail].
+/// Hosts tool management, game compatibility tools list, local settings adjustments, and about panel.
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 

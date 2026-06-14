@@ -4,11 +4,19 @@
 import 'dart:io';
 import 'package:path/path.dart' as p;
 
+/// Represents a target software environment (Steam, Lutris, Heroic) and its local
+/// installation directory path for compatibility runner tools.
 class InstallLocation {
+  /// The unique identifier of the installation target.
   final String id;
+
+  /// The descriptive name of the installation target (e.g. 'Lutris').
   final String name;
+
+  /// The absolute directory path where compatibility tools are installed.
   final String path;
 
+  /// Creates a representation of a tool installation directory location.
   InstallLocation({
     required this.id,
     required this.name,
@@ -16,6 +24,8 @@ class InstallLocation {
   });
 }
 
+/// Service that queries the local filesystem to discover compatible runner/wrapper targets.
+/// Detects Lutris directories, Heroic configs, and Steam configurations.
 class InstallLocationService {
   static final InstallLocationService _instance = InstallLocationService._internal();
   factory InstallLocationService() => _instance;
@@ -23,6 +33,7 @@ class InstallLocationService {
 
   final String _home = Platform.environment['HOME'] ?? '';
 
+  /// Queries directories to return all active and placeholder [InstallLocation] entries.
   List<InstallLocation> getAvailableLocations(String? steamCompatToolsDir) {
     final locations = <InstallLocation>[];
 

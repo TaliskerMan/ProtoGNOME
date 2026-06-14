@@ -6,6 +6,7 @@
 /// This is a simplified implementation focused on the keys ProtoGNOME needs.
 library;
 
+/// Deserializer and serializer utility class for Valve Data Format (VDF) text streams.
 class VdfParser {
   /// Parse text VDF content into a nested Map structure.
   static Map<String, dynamic> parse(String content) {
@@ -90,6 +91,7 @@ class VdfParser {
   }
 }
 
+/// Parser state tracker traversing a token stream.
 class _VdfTokenParser {
   final List<String> tokens;
   int pos = 0;

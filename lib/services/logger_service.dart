@@ -6,6 +6,8 @@
 import 'dart:io';
 import 'package:path/path.dart' as p;
 
+/// Service mapping local application diagnostic logs to standard console output
+/// and appending them to ~/.local/state/protognome/app.log.
 class LoggerService {
   static final LoggerService _instance = LoggerService._internal();
   factory LoggerService() => _instance;
@@ -16,6 +18,7 @@ class LoggerService {
     _initLogFile();
   }
 
+  /// Initializes the log file configuration under XDG state directories.
   void _initLogFile() {
     try {
       final stateHome = Platform.environment['XDG_STATE_HOME'] ??
@@ -33,6 +36,7 @@ class LoggerService {
     }
   }
 
+  /// Appends [message] with a timestamp to the log file and prints to stdout.
   void log(String message) {
     print(message);
     if (_logFile != null) {
@@ -45,6 +49,7 @@ class LoggerService {
     }
   }
 
+  /// Formats and logs an [error] with a descriptive [prefix] and optional [stack] trace.
   void logError(String prefix, Object error, [StackTrace? stack]) {
     final msg = '[ERROR] $prefix: $error';
     log(msg);

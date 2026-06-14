@@ -4,6 +4,8 @@
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
+/// Screen component showing system details, project forks, package parameters,
+/// maintainer contact information, and license / copyright details.
 class AboutScreen extends StatefulWidget {
   const AboutScreen({super.key});
 
@@ -146,6 +148,7 @@ class _AboutScreenState extends State<AboutScreen> {
   }
 }
 
+/// Renders a single detail row on the About screen page.
 class _AboutRow extends StatelessWidget {
   final IconData icon;
   final String label;

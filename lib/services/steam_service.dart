@@ -7,8 +7,8 @@ import '../models/steam_game.dart';
 import 'vdf_parser.dart';
 import 'logger_service.dart';
 
-/// Handles reading and writing Steam configuration files.
-/// Ports the logic from ProtonUp-Qt's steamutil.py to Dart.
+/// Handles Steam config file scanning, VDF parsing, and compatibility tool lookup.
+/// Ports key utilities of ProtonUp-Qt's steamutil.py to Dart/Flutter.
 class SteamService {
   static final SteamService _instance = SteamService._internal();
   factory SteamService() => _instance;
@@ -21,7 +21,7 @@ class SteamService {
     '.steam/debian-installation',
   ];
 
-  /// Returns the effective Steam root directory or null if not found.
+  /// Returns the absolute path of the detected Steam root directory, or null if not found.
   String? getSteamRoot() {
     final home = Platform.environment['HOME'] ?? '';
     final seen = <String>{};
@@ -37,21 +37,21 @@ class SteamService {
     return null;
   }
 
-  /// Returns the Steam config directory (where config.vdf lives).
+  /// Returns the directory path where Steam's configuration files reside (e.g. config.vdf).
   String? getSteamConfigDir() {
     final root = getSteamRoot();
     if (root == null) return null;
     return p.join(root, 'config');
   }
 
-  /// Returns the compatibilitytools.d directory for native Steam.
+  /// Returns the path to the Steam compatibilitytools.d folder containing custom wrappers.
   String? getCompatToolsDir() {
     final root = getSteamRoot();
     if (root == null) return null;
     return p.join(root, 'compatibilitytools.d');
   }
 
-  /// Checks if the Steam installation is valid (has config.vdf + libraryfolders.vdf).
+  /// Checks if both config.vdf and libraryfolders.vdf exist under the config directory.
   bool isValidSteamInstall() {
     final cfgDir = getSteamConfigDir();
     if (cfgDir == null) return false;
@@ -59,7 +59,7 @@ class SteamService {
         File(p.join(cfgDir, 'libraryfolders.vdf')).existsSync();
   }
 
-  /// Returns whether Steam is currently running.
+  /// Searches the OS proc directory to verify if a steam executable process is currently running.
   bool isSteamRunning() {
     try {
       final procDir = Directory('/proc');
@@ -78,7 +78,7 @@ class SteamService {
     return false;
   }
 
-  /// Returns the CompatToolMapping node from config.vdf.
+  /// Retrieves the internal CompatToolMapping block parsed from config.vdf.
   Map<String, dynamic>? _getCompatToolMapping() {
     final cfgDir = getSteamConfigDir();
     if (cfgDir == null) return null;
@@ -102,8 +102,7 @@ class SteamService {
     }
   }
 
-  /// Parses Steam library folders and returns installed game list.
-  /// Ported from ProtonUp-Qt's get_steam_app_list().
+  /// Scans libraryfolders.vdf and manifest files to compile a list of all locally installed [SteamGame]s.
   Future<List<SteamGame>> getInstalledGames() async {
     final cfgDir = getSteamConfigDir();
     if (cfgDir == null) return [];
@@ -166,7 +165,7 @@ class SteamService {
     return games;
   }
 
-  /// Gets list of installed compatibility tools from a given directory (defaults to Steam's compatibilitytools.d).
+  /// Lists compatibility tool subdirectory names found in Steam's compatibilitytools.d or a custom [customDir].
   List<String> getInstalledCompatTools({String? customDir}) {
     final ctDir = customDir ?? getCompatToolsDir();
     if (ctDir == null) return [];

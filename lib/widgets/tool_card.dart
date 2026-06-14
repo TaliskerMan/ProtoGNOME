@@ -4,6 +4,8 @@
 import 'package:flutter/material.dart';
 import '../models/compat_tool.dart';
 
+/// A custom Card widget that displays a compatibility tool's name, install state,
+/// release date, download size, and provides install/remove actions.
 class ToolCard extends StatelessWidget {
   final CompatTool tool;
   final bool isInstalled;

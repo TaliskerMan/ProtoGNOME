@@ -6,6 +6,9 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'screens/home_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+/// Main entry point for the ProtoGNOME application.
+/// Initializes Flutter bindings, sqflite FFI database handlers,
+/// and runs the root [ProtoGNOMEApp] widget.
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   sqfliteFfiInit();
@@ -13,6 +16,9 @@ void main() async {
   runApp(const ProtoGNOMEApp());
 }
 
+/// The root application widget of ProtoGNOME.
+/// Configures MaterialApp with a dark violet custom color palette,
+/// custom Google Fonts Inter styling, button presets, and checks home navigation routes.
 class ProtoGNOMEApp extends StatelessWidget {
   const ProtoGNOMEApp({super.key});
 

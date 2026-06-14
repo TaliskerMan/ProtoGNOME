@@ -6,6 +6,8 @@ import '../services/steam_service.dart';
 import '../services/database_service.dart';
 import '../services/github_release_service.dart';
 
+/// Screen component displaying current configuration details, including detected Steam roots,
+/// config dirs, custom GitHub API authentication token forms, and basic version specs.
 class SettingsScreen extends StatefulWidget {
   final SteamService steamService;
 
@@ -220,6 +222,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 }
 
+/// Simple info row for version and license attributes.
 class _InfoRow extends StatelessWidget {
   final String label;
   final String value;

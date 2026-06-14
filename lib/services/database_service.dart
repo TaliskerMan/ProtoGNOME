@@ -7,6 +7,8 @@ import 'package:path_provider/path_provider.dart';
 import '../models/compat_tool.dart';
 import '../models/steam_game.dart';
 
+/// Service managing SQLite local database caching using `sqflite_common_ffi`.
+/// Handles persistent application settings, compatibility tools caches, and detected Steam games.
 class DatabaseService {
   static final DatabaseService _instance = DatabaseService._internal();
   factory DatabaseService() => _instance;
@@ -14,11 +16,13 @@ class DatabaseService {
 
   Database? _db;
 
+  /// Returns the active SQLite database instance, initializing it if necessary.
   Future<Database> get db async {
     _db ??= await _initDatabase();
     return _db!;
   }
 
+  /// Initializes the SQLite database on local storage.
   Future<Database> _initDatabase() async {
     sqfliteFfiInit();
     databaseFactory = databaseFactoryFfi;
@@ -33,6 +37,7 @@ class DatabaseService {
     );
   }
 
+  /// Callback to execute the SQL table creation queries on new database instances.
   Future<void> _onCreate(Database db, int version) async {
     await db.execute('''
       CREATE TABLE compat_tools (
@@ -76,6 +81,7 @@ class DatabaseService {
 
   // ---- Settings ----
 
+  /// Retrieves a persistent configuration value for the given [key].
   Future<String?> getSetting(String key) async {
     final database = await db;
     final result = await database.query(
@@ -89,6 +95,7 @@ class DatabaseService {
     return null;
   }
 
+  /// Updates or inserts a persistent configuration [value] for [key].
   Future<void> setSetting(String key, String value) async {
     final database = await db;
     await database.insert(
@@ -100,6 +107,7 @@ class DatabaseService {
 
   // ---- Compat Tools ----
 
+  /// Retrieves a list of cached [CompatTool] entries for [toolType] if they are less than 1 hour old.
   Future<List<CompatTool>> getCachedTools(String toolType) async {
     final database = await db;
     // Only use cache if it's < 1 hour old
@@ -112,6 +120,7 @@ class DatabaseService {
     return maps.map((m) => CompatTool.fromMap(m)).toList();
   }
 
+  /// Caches a batch list of [CompatTool] instances in the local SQLite tables.
   Future<void> cacheTools(List<CompatTool> tools) async {
     final database = await db;
     final now = DateTime.now().millisecondsSinceEpoch;
@@ -125,6 +134,7 @@ class DatabaseService {
     await batch.commit(noResult: true);
   }
 
+  /// Updates or inserts a single [CompatTool] instance in the local cache.
   Future<void> upsertTool(CompatTool tool) async {
     final database = await db;
     final now = DateTime.now().millisecondsSinceEpoch;
@@ -134,6 +144,7 @@ class DatabaseService {
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
+  /// Deletes the cached compatibility tool entry matching the given [name].
   Future<void> deleteTool(String name) async {
     final database = await db;
     await database.delete('compat_tools', where: 'name = ?', whereArgs: [name]);
@@ -141,6 +152,7 @@ class DatabaseService {
 
   // ---- Steam Games ----
 
+  /// Caches a batch list of [SteamGame] instances in the database.
   Future<void> cacheGames(List<SteamGame> games) async {
     final database = await db;
     final now = DateTime.now().millisecondsSinceEpoch;
@@ -154,6 +166,7 @@ class DatabaseService {
     await batch.commit(noResult: true);
   }
 
+  /// Returns all cached [SteamGame] entries sorted alphabetically by name.
   Future<List<SteamGame>> getAllCachedGames() async {
     final database = await db;
     final maps = await database.query('steam_games', orderBy: 'game_name ASC');

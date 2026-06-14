@@ -6,6 +6,8 @@ import '../models/steam_game.dart';
 import '../services/steam_service.dart';
 import '../services/database_service.dart';
 
+/// Screen component displaying the list of Steam games, allowing users
+/// to view which Proton/compatibility tool is currently configured for each game.
 class GameManagerScreen extends StatefulWidget {
   final SteamService steamService;
 
@@ -177,6 +179,7 @@ class _GameManagerScreenState extends State<GameManagerScreen> {
   }
 }
 
+/// Card tile item representing a single Steam game in the list.
 class _GameListTile extends StatelessWidget {
   final SteamGame game;
 

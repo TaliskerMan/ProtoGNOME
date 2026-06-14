@@ -49,8 +49,8 @@ const List<Map<String, dynamic>> kToolSources = [
   },
 ];
 
-/// Fetches releases and manages download of compatibility tools from GitHub.
-/// Ports ProtonUp-Qt's GitHub-based tool fetching logic.
+/// Service querying GitHub Releases APIs to list and download Steam compatibility tools.
+/// Features zip/tar.gz/tar.xz/tar.zst archive extraction routines and tool deletion operations.
 class GitHubReleaseService {
   static final GitHubReleaseService _instance =
       GitHubReleaseService._internal();
@@ -60,21 +60,25 @@ class GitHubReleaseService {
   final _db = DatabaseService();
   String _githubToken = '';
 
+  /// Generates HTTP headers for GitHub API queries, including authorization tokens if present.
   Map<String, String> get _headers => {
         'Accept': 'application/vnd.github.v3+json',
         if (_githubToken.isNotEmpty) 'Authorization': 'token $_githubToken',
       };
 
+  /// Initializes the service by reading any cached GitHub API token from the database.
   Future<void> init() async {
     _githubToken = await _db.getSetting('github_token') ?? '';
   }
 
+  /// Sets a new GitHub API [token] and persists it in the local database.
   void setGithubToken(String token) {
     _githubToken = token;
     _db.setSetting('github_token', token);
   }
 
-  /// Fetch available releases for a specific tool type from GitHub.
+  /// Fetches available releases for a specific [toolType] (e.g. 'ge-proton') from GitHub.
+  /// Falls back to local database caches on request limits or network issues.
   Future<List<CompatTool>> fetchAvailableReleases(String toolType,
       {bool forceRefresh = false}) async {
     if (!forceRefresh) {
@@ -151,7 +155,7 @@ class GitHubReleaseService {
     }
   }
 
-  /// Fetch releases for ALL configured tool types.
+  /// Queries GitHub releases for all configured compat tool sources.
   Future<Map<String, List<CompatTool>>> fetchAllReleases(
       {bool forceRefresh = false}) async {
     final result = <String, List<CompatTool>>{};
@@ -163,8 +167,8 @@ class GitHubReleaseService {
     return result;
   }
 
-  /// Download and extract a compatibility tool to the install directory.
-  /// Reports progress via the [onProgress] callback.
+  /// Downloads the specified compatibility [tool] to a temporary directory,
+  /// piping chunk progress to [onProgress], and extracts it to the active [installDir].
   Future<bool> downloadAndInstall(
     CompatTool tool,
     String installDir, {
@@ -212,6 +216,8 @@ class GitHubReleaseService {
     }
   }
 
+  /// Private helper that spawns OS subprocesses (tar, zstd) or uses Dart ZipDecoder
+  /// to extract compatibility tool archives into [installDir].
   Future<void> _extractArchive(
       File archiveFile, String installDir, String toolName) async {
     final path = archiveFile.path;
@@ -254,7 +260,8 @@ class GitHubReleaseService {
     }
   }
 
-  /// Remove a compatibility tool from the install directory.
+  /// Removes a compatibility tool matching [toolName] from the [installDir].
+  /// Implements path traversal checks to ensure deletions are constrained within [installDir].
   bool removeTool(String toolName, String installDir) {
     final cleanToolName = p.basename(toolName);
     final toolPath = Directory(p.join(installDir, cleanToolName));

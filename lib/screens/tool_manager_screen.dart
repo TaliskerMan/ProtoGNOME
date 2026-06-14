@@ -8,6 +8,8 @@ import '../services/steam_service.dart';
 import '../services/install_location_service.dart';
 import '../widgets/tool_card.dart';
 
+/// Screen component displaying the list of available releases from GitHub
+/// and allowing user tool installations, removals, or type queries.
 class ToolManagerScreen extends StatefulWidget {
   final SteamService steamService;
   final GitHubReleaseService releaseService;
@@ -312,6 +314,7 @@ class _ToolManagerScreenState extends State<ToolManagerScreen> {
   }
 }
 
+/// Modal dialog tracking the background download progress and extraction status.
 class _DownloadProgressDialog extends StatefulWidget {
   final CompatTool tool;
   final String installDir;

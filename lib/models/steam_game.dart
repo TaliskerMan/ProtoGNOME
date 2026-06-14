@@ -1,14 +1,28 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2024 ProtoGNOME Contributors
 
+/// Represents a detected Steam game (or non-Steam shortcut library entry)
+/// and its assigned compatibility tool configuration.
 class SteamGame {
+  /// The unique application ID assigned by Steam.
   final int appId;
-  final String gameName;
-  String? compatTool; // internal name e.g. 'GE-Proton9-20'
-  final bool isShortcut;
-  final String? libraryPath;
-  bool isSelected; // for batch operations
 
+  /// The human-readable name of the game.
+  final String gameName;
+
+  /// The active compatibility tool mapped to the game.
+  String? compatTool;
+
+  /// Indicates if the entry is a user-added custom shortcut.
+  final bool isShortcut;
+
+  /// Path to the Steam library folder where the game is installed.
+  final String? libraryPath;
+
+  /// State flag tracking selection states during batch UI operations.
+  bool isSelected;
+
+  /// Creates a [SteamGame] representation with associated parameters.
   SteamGame({
     required this.appId,
     required this.gameName,
@@ -18,8 +32,10 @@ class SteamGame {
     this.isSelected = false,
   });
 
+  /// Returns string representation of [appId].
   String get appIdStr => appId.toString();
 
+  /// Serializes game attributes into a database map.
   Map<String, dynamic> toMap() {
     return {
       'app_id': appId,
@@ -30,6 +46,7 @@ class SteamGame {
     };
   }
 
+  /// Deserializes database maps into a [SteamGame] instance.
   factory SteamGame.fromMap(Map<String, dynamic> map) {
     return SteamGame(
       appId: map['app_id'] as int,
