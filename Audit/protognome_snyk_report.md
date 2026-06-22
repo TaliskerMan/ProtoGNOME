@@ -13,6 +13,8 @@
 
 A comprehensive security audit was performed across the full ProtoGNOME codebase — a Linux-targeted Flutter application for managing Steam compatibility tools and game assets. The audit addressed two primary security domains:
 
+> **Scope note.** This report covers dependency CVEs (SCA) and generic code-pattern issues (SAST). It is *not* a verdict on the correctness of the download/install pipeline. In particular, a clean SAST result did not catch that download integrity verification was wired halfway and never executed (fixed in 1.0.8 by comparing the published `.sha512sum`/`.sha256sum` before extraction), nor the asymmetric tar/zip path-traversal handling (also hardened in 1.0.8). Treat the result as "no known-vulnerable dependencies or obvious unsafe patterns," not as an assurance that the install pipeline is correct — that is covered by manual review and the unit tests under `test/`.
+
 | Domain | Description |
 |---|---|
 | **SAST** (Static Application Security Testing) | Analyses first-party Dart/Flutter source code for coding vulnerabilities such as injection flaws, insecure cryptography, path traversal, hardcoded secrets, and similar weaknesses. |

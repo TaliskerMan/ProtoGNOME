@@ -3,8 +3,8 @@
 
 import 'package:flutter/material.dart';
 import '../services/steam_service.dart';
-import '../services/database_service.dart';
 import '../services/github_release_service.dart';
+import '../services/secret_service.dart';
 
 /// Screen component displaying current configuration details, including detected Steam roots,
 /// config dirs, custom GitHub API authentication token forms, and basic version specs.
@@ -18,7 +18,6 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  final _db = DatabaseService();
   final _tokenController = TextEditingController();
   bool _obscureToken = true;
   String? _detectedSteamRoot;
@@ -30,7 +29,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Future<void> _loadSettings() async {
-    final token = await _db.getSetting('github_token') ?? '';
+    // Read the token from the platform secret store, not the database.
+    final token = await SecretService().getGithubToken() ?? '';
     setState(() {
       _tokenController.text = token;
       _detectedSteamRoot = widget.steamService.getSteamRoot();
@@ -38,8 +38,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Future<void> _saveToken() async {
-    await _db.setSetting('github_token', _tokenController.text.trim());
-    GitHubReleaseService().setGithubToken(_tokenController.text.trim());
+    await GitHubReleaseService().setGithubToken(_tokenController.text.trim());
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
@@ -100,7 +99,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
             title: 'GitHub API Token',
             children: [
               const Text(
-                'Optional: Add a GitHub Personal Access Token to avoid API rate limits when fetching release lists.',
+                'Optional: Add a GitHub Personal Access Token to avoid API rate limits when fetching release lists. '
+                'Without a token the GitHub API is limited to 60 requests/hour. The token is stored in your system keyring, not in plaintext.',
                 style: TextStyle(color: Color(0xFF8888AA), fontSize: 13),
               ),
               const SizedBox(height: 12),
@@ -149,7 +149,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             icon: Icons.info_outline_rounded,
             title: 'About ProtoGNOME',
             children: [
-              const _InfoRow(label: 'Version', value: '1.0.0'),
+              const _InfoRow(label: 'Version', value: '1.0.8'),
               const _InfoRow(label: 'License', value: 'GNU GPL v3'),
               const _InfoRow(label: 'Author', value: 'ProtoGNOME Contributors'),
             ],

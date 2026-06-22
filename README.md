@@ -11,18 +11,22 @@ ProtoGNOME is a **fork of [ProtonUp-Qt](https://github.com/DavidoTek/ProtonUp-Qt
 - 🗄️ **SQLite backend** for caching release lists and preferences
 - 🔍 **Game search** and per-game assigned tool list
 
-## Security Hardening (v1.0.7+)
+## Security
 
-> [!IMPORTANT]
-> **Why was this version rebuilt?**
-> ProtoGNOME v1.0.7 includes critical security patches to protect users from malicious local exploits and injection attacks.
-> - **Command Injection Protection**: The `.tar.zst` extraction mechanism was rewritten to explicitly rely on secure, native Dart subprocess routing instead of unsafe `bash -c` string wrapper logic.
-> - **Insecure Space Protection**: Sandbox environments explicitly manage and lock all intermediate `/tmp/` staging files rather than resolving shared directories.
-> - **Audit Trails**: ProtoGNOME now ships with a localized system tracer tracking behaviors to `~/.local/state/protognome/app.log`.
+ProtoGNOME downloads and installs executable Proton runtimes, so the download/install pipeline is built defensively:
+
+- **Integrity verification (v1.0.8+):** downloaded archives are checked against the release's published `.sha512sum`/`.sha256sum` before extraction; a mismatch — or a download that can't be verified — refuses to install.
+- **Archive extraction safety:** ZIP entries are bounded with `path.isWithin`, and `.tar.gz`/`.tar.xz`/`.tar.zst` archives are listed and validated (absolute paths and `..` members rejected) before extraction, rather than relying solely on the system `tar`.
+- **No shell string interpolation:** subprocesses (`tar`, `zstd`) are invoked with array-form arguments, never `bash -c` string wrappers.
+- **Isolated staging:** downloads and intermediate extraction use private `Directory.systemTemp` directories, cleaned up afterwards.
+- **Download size cap:** oversized responses are rejected to avoid disk exhaustion.
+- **Read-only Steam integration:** ProtoGNOME parses `config.vdf`/`libraryfolders.vdf` but never writes them.
+- **Token storage:** the optional GitHub PAT is stored in the system keyring (libsecret), not in plaintext.
+- **Audit log:** activity is traced to `~/.local/state/protognome/app.log`.
 
 ## Installation
 
-Download the latest `.deb` from [Releases](https://github.com/ProtoGNOME/ProtoGNOME/releases):
+Download the latest `.deb` from [Releases](https://github.com/TaliskerMan/ProtoGNOME/releases):
 
 ```bash
 # Verify the package
@@ -38,7 +42,7 @@ sudo apt-get install -f  # fix dependencies if needed
 
 ```bash
 # Requirements: Flutter 3.24+, cmake, ninja-build, libgtk-3-dev, g++
-git clone https://github.com/ProtoGNOME/ProtoGNOME.git
+git clone https://github.com/TaliskerMan/ProtoGNOME.git
 cd ProtoGNOME
 flutter pub get
 bash build_release.sh

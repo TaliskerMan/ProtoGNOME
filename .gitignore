@@ -10,6 +10,9 @@ build/
 # Debian packaging temp dir
 deb_pkg/
 
+# Generated release artifacts (publish to GitHub Releases, not git)
+artifacts/
+
 # Downloaded tarball
 *.tar.xz
 

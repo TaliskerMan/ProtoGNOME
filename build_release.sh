@@ -5,10 +5,13 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-# Auto-increment version/build number
-python3 "/Users/charlestalk/AntiGravity/workflow-tools/increment_build.py" "${SCRIPT_DIR:-.}"
-
-VERSION="1.0.7"
+# Version is single-sourced from pubspec.yaml (no auto-increment) to avoid the
+# drift between pubspec, debian/changelog, the git tag, and the built .deb.
+VERSION="$(grep '^version:' "${SCRIPT_DIR}/pubspec.yaml" | awk '{print $2}' | cut -d'+' -f1)"
+if [ -z "${VERSION}" ]; then
+  echo "ERROR: could not read version from pubspec.yaml" >&2
+  exit 1
+fi
 PKG_NAME="protognome"
 FLUTTER="${HOME}/flutter/bin/flutter"
 ARTIFACTS="${SCRIPT_DIR}/artifacts"

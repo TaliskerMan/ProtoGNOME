@@ -1,3 +1,14 @@
+protognome (1.0.8-1) unstable; urgency=medium
+
+  * Verify .sha512sum/.sha256sum download integrity before extracting; refuse on mismatch.
+  * Harden tar extraction: validate members (reject absolute/.. paths) before extracting.
+  * Add a 4 GiB download size cap to prevent disk exhaustion.
+  * Move the optional GitHub token to the system keyring (libsecret); migrate and scrub the old plaintext copy.
+  * Single-source the version from pubspec.yaml; stop auto-incrementing the build number.
+  * Add unit tests for the VDF parser, asset selection, checksum parsing, and archive-member validation.
+
+ -- Chuck Talk <chuck@nordheim.online>  Mon, 22 Jun 2026 12:00:00 -0500
+
 protognome (1.0.6-1) unstable; urgency=medium
 
   * Made game manager screen a safe, read-only viewer.
