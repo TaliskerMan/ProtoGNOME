@@ -31,8 +31,8 @@ class LoggerService {
       
       _logFile = File(p.join(logDir.path, 'app.log'));
       log('--- ProtoGNOME Session Started ---');
-    } catch (e) {
-      print('Failed to initialize local LoggerService: $e');
+    } catch (error) {
+      print('Failed to initialize local LoggerService: $error');
     }
   }
 
@@ -43,7 +43,7 @@ class LoggerService {
       try {
         final ts = DateTime.now().toIso8601String();
         _logFile!.writeAsStringSync('[$ts] $message\n', mode: FileMode.append);
-      } catch (e) {
+      } catch (error) {
         // Silently fail if log cannot be appended
       }
     }

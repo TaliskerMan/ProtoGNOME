@@ -96,8 +96,8 @@ class SteamService {
       if (valve == null) return null;
       return (valve['Steam'] as Map<String, dynamic>?)?['CompatToolMapping']
           as Map<String, dynamic>?;
-    } catch (e) {
-      LoggerService().logError('Reading config.vdf', e);
+    } catch (error) {
+      LoggerService().logError('Reading config.vdf', error);
       return null;
     }
   }
@@ -158,8 +158,8 @@ class SteamService {
           ));
         }
       }
-    } catch (e) {
-      LoggerService().logError('Getting installed games', e);
+    } catch (error) {
+      LoggerService().logError('Getting installed games', error);
     }
 
     return games;

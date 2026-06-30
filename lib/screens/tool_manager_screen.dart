@@ -75,9 +75,9 @@ class _ToolManagerScreenState extends State<ToolManagerScreen> {
         _installedToolNames = installed;
         _loading = false;
       });
-    } catch (e) {
+    } catch (error) {
       setState(() {
-        _error = e.toString();
+        _error = error.toString();
         _loading = false;
       });
     }
@@ -95,13 +95,13 @@ class _ToolManagerScreenState extends State<ToolManagerScreen> {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (ctx) => _DownloadProgressDialog(
+      builder: (context) => _DownloadProgressDialog(
         tool: tool,
         installDir: installDir,
         releaseService: widget.releaseService,
         onComplete: (success) {
           if (!mounted) return;
-          Navigator.of(ctx).pop();
+          Navigator.of(context).pop();
           if (success) {
             _loadData();
             ScaffoldMessenger.of(context).showSnackBar(
@@ -128,19 +128,19 @@ class _ToolManagerScreenState extends State<ToolManagerScreen> {
 
     final confirmed = await showDialog<bool>(
       context: context,
-      builder: (ctx) => AlertDialog(
+      builder: (context) => AlertDialog(
         backgroundColor: const Color(0xFF1E1E3A),
-        title: const Text('Remove Tool', style: TextStyle(color: Colors.white)),
+        title: const Text('Confirm Removal', style: TextStyle(color: Colors.white)),
         content: Text(
-          'Are you sure you want to remove $toolName?',
+          'Are you sure you want to completely remove $toolName from your system?',
           style: const TextStyle(color: Color(0xFFB0B0D0)),
         ),
         actions: [
           TextButton(
-              onPressed: () => Navigator.of(ctx).pop(false),
+              onPressed: () => Navigator.of(context).pop(false),
               child: const Text('Cancel')),
           ElevatedButton(
-            onPressed: () => Navigator.of(ctx).pop(true),
+            onPressed: () => Navigator.of(context).pop(true),
             style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFFEF4444)),
             child: const Text('Remove'),
@@ -295,16 +295,16 @@ class _ToolManagerScreenState extends State<ToolManagerScreen> {
                   : ListView.builder(
                       padding: const EdgeInsets.all(16),
                       itemCount: _availableTools.length,
-                      itemBuilder: (ctx, i) {
-                        final tool = _availableTools[i];
-                        final installed =
-                            _installedToolNames.any((n) => n == tool.name);
+                      itemBuilder: (context, index) {
+                        final tool = _availableTools[index];
+                        final isInstalled =
+                            _installedToolNames.any((name) => name == tool.name);
                         return ToolCard(
                           tool: tool,
-                          isInstalled: installed,
+                          isInstalled: isInstalled,
                           onInstall: () => _installTool(tool),
                           onRemove:
-                              installed ? () => _removeTool(tool.name) : null,
+                              isInstalled ? () => _removeTool(tool.name) : null,
                         );
                       },
                     ),

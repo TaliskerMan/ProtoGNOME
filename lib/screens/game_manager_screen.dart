@@ -46,9 +46,9 @@ class _GameManagerScreenState extends State<GameManagerScreen> {
         _games = games;
         _loading = false;
       });
-    } catch (e) {
+    } catch (error) {
       setState(() {
-        _error = e.toString();
+        _error = error.toString();
         _loading = false;
       });
     }
@@ -118,7 +118,7 @@ class _GameManagerScreenState extends State<GameManagerScreen> {
               ),
             ),
             style: const TextStyle(color: Colors.white, fontSize: 14),
-            onChanged: (v) => setState(() => _searchQuery = v),
+            onChanged: (value) => setState(() => _searchQuery = value),
           ),
         ),
         // Game list
@@ -168,8 +168,8 @@ class _GameManagerScreenState extends State<GameManagerScreen> {
                       : ListView.builder(
                           padding: const EdgeInsets.fromLTRB(8, 0, 8, 16),
                           itemCount: filtered.length,
-                          itemBuilder: (ctx, i) {
-                            final game = filtered[i];
+                          itemBuilder: (context, index) {
+                            final game = filtered[index];
                             return _GameListTile(game: game);
                           },
                         ),

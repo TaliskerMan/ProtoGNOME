@@ -233,8 +233,8 @@ class GitHubReleaseService {
 
       await _db.cacheTools(tools);
       return tools;
-    } catch (e) {
-      LoggerService().logError('Fetching releases for $toolType', e);
+    } catch (error) {
+      LoggerService().logError('Fetching releases for $toolType', error);
       return await _db.getCachedTools(toolType);
     }
   }
@@ -315,8 +315,8 @@ class GitHubReleaseService {
       }
 
       return await _extractArchive(tempFile, installDir, tool.name);
-    } catch (e) {
-      LoggerService().logError('Downloading ${tool.name}', e);
+    } catch (error) {
+      LoggerService().logError('Downloading ${tool.name}', error);
       return false;
     } finally {
       try {
@@ -352,8 +352,8 @@ class GitHubReleaseService {
         return false;
       }
       return true;
-    } catch (e) {
-      LoggerService().logError('Checksum verification', e);
+    } catch (error) {
+      LoggerService().logError('Checksum verification', error);
       return false;
     }
   }
@@ -460,8 +460,8 @@ class GitHubReleaseService {
       toolPath.deleteSync(recursive: true);
       _db.deleteTool(toolName);
       return true;
-    } catch (e) {
-      LoggerService().logError('Removing $toolName', e);
+    } catch (error) {
+      LoggerService().logError('Removing $toolName', error);
       return false;
     }
   }

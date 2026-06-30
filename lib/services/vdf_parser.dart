@@ -39,50 +39,50 @@ class VdfParser {
 
   static List<String> _tokenize(String content) {
     final tokens = <String>[];
-    int i = 0;
-    while (i < content.length) {
-      final c = content[i];
-      if (c == '"') {
+    int index = 0;
+    while (index < content.length) {
+      final char = content[index];
+      if (char == '"') {
         // Quoted string
-        i++;
+        index++;
         final buf = StringBuffer();
-        while (i < content.length && content[i] != '"') {
-          if (content[i] == '\\' && i + 1 < content.length) {
-            i++;
-            buf.write(content[i]);
+        while (index < content.length && content[index] != '"') {
+          if (content[index] == '\\' && index + 1 < content.length) {
+            index++;
+            buf.write(content[index]);
           } else {
-            buf.write(content[i]);
+            buf.write(content[index]);
           }
-          i++;
+          index++;
         }
-        i++; // closing quote
+        index++; // closing quote
         tokens.add(buf.toString());
-      } else if (c == '{') {
+      } else if (char == '{') {
         tokens.add('{');
-        i++;
-      } else if (c == '}') {
+        index++;
+      } else if (char == '}') {
         tokens.add('}');
-        i++;
-      } else if (c == '/' && i + 1 < content.length && content[i + 1] == '/') {
+        index++;
+      } else if (char == '/' && index + 1 < content.length && content[index + 1] == '/') {
         // Line comment
-        while (i < content.length && content[i] != '\n') {
-          i++;
+        while (index < content.length && content[index] != '\n') {
+          index++;
         }
-      } else if (c == '\n' || c == '\r' || c == '\t' || c == ' ') {
-        i++;
+      } else if (char == '\n' || char == '\r' || char == '\t' || char == ' ') {
+        index++;
       } else {
         // Unquoted token
         final buf = StringBuffer();
-        while (i < content.length &&
-            content[i] != ' ' &&
-            content[i] != '\n' &&
-            content[i] != '\r' &&
-            content[i] != '\t' &&
-            content[i] != '"' &&
-            content[i] != '{' &&
-            content[i] != '}') {
-          buf.write(content[i]);
-          i++;
+        while (index < content.length &&
+            content[index] != ' ' &&
+            content[index] != '\n' &&
+            content[index] != '\r' &&
+            content[index] != '\t' &&
+            content[index] != '"' &&
+            content[index] != '{' &&
+            content[index] != '}') {
+          buf.write(content[index]);
+          index++;
         }
         if (buf.isNotEmpty) tokens.add(buf.toString());
       }
