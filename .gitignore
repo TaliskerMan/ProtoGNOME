@@ -18,3 +18,5 @@ artifacts/
 
 # Secrets
 *.asc
+
+.DS_Store
