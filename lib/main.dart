@@ -1,3 +1,4 @@
+// Auto-incremented to version 1.0.9+2 for build release on 2026-07-20 (Rule_017)
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2024 ProtoGNOME Contributors
 

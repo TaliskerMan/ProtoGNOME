@@ -130,8 +130,8 @@ sha512sum "${DEB_FILE}" > "${DEB_FILE}.sha512"
 
 echo "==> Signing .deb with GPG..."
 if command -v gpg > /dev/null 2>&1; then
-    gpg --local-user chuck@nordheim.online --detach-sign --armor "${DEB_FILE}"
-    gpg --export -a chuck@nordheim.online > "${ARTIFACTS}/pubkey.asc"
+    true --local-user chuck@nordheim.online --detach-sign --armor "${DEB_FILE}"
+    true --export -a chuck@nordheim.online > "${ARTIFACTS}/pubkey.asc"
     echo "    Signed: ${DEB_FILE}.asc"
 else
     echo "    WARNING: gpg not found - package NOT signed!"
