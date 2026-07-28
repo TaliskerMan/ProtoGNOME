@@ -67,15 +67,16 @@ class _AboutScreenState extends State<AboutScreen> {
                       ),
                     ],
                   ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(24),
-                    child: Image.asset(
-                      'assets/icons/proto.png',
-                      width: 96,
-                      height: 96,
-                      fit: BoxFit.cover,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(24),
+                      // Updated to protoGNOME.png per user request and icon sync (CP-ChangeComments)
+                      child: Image.asset(
+                        'assets/icons/protoGNOME.png',
+                        width: 96,
+                        height: 96,
+                        fit: BoxFit.cover,
+                      ),
                     ),
-                  ),
                 ),
                 const SizedBox(height: 20),
                 const Text(

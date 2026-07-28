@@ -82,8 +82,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(12),
+                      // Updated to protoGNOME.png per user request and icon sync (CP-ChangeComments)
                       child: Image.asset(
-                        'assets/icons/proto.png',
+                        'assets/icons/protoGNOME.png',
                         width: 44,
                         height: 44,
                         fit: BoxFit.cover,

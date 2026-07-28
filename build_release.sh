@@ -80,8 +80,11 @@ cp "${SCRIPT_DIR}/share/applications/protognome.desktop" \
 sed -i 's/^StartupWMClass=.*/StartupWMClass=io.protognome.protognome/' \
    "${DEB_ROOT}/usr/share/applications/io.protognome.protognome.desktop"
 
-# Icon
-if [ -f "${SCRIPT_DIR}/assets/icons/proto.png" ]; then
+# Icon (Updated to prioritize protoGNOME.png - CP-ChangeComments)
+if [ -f "${SCRIPT_DIR}/assets/icons/protoGNOME.png" ]; then
+    cp "${SCRIPT_DIR}/assets/icons/protoGNOME.png" \
+       "${DEB_ROOT}/usr/share/icons/hicolor/256x256/apps/protognome.png"
+elif [ -f "${SCRIPT_DIR}/assets/icons/proto.png" ]; then
     cp "${SCRIPT_DIR}/assets/icons/proto.png" \
        "${DEB_ROOT}/usr/share/icons/hicolor/256x256/apps/protognome.png"
 elif [ -f "${SCRIPT_DIR}/assets/icons/noln.png" ]; then

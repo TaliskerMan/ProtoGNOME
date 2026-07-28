@@ -2,6 +2,15 @@
 
 All notable changes to the ProtoGNOME project are documented in this file. This project adheres to Semantic Versioning.
 
+## [1.0.10] - 2026-07-28
+
+### Added
+- **Updated Icon:** Added new high-resolution `protoGNOME.png` app icon to assets and packaging pipeline.
+
+### Changed
+- Updated About screen and Home screen UI to load `assets/icons/protoGNOME.png`.
+- Updated release build script to package `protoGNOME.png` to `/usr/share/icons/hicolor/256x256/apps/protognome.png`.
+
 ---
 
 ## [1.0.8] - 2026-06-22
