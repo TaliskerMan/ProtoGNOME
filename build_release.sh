@@ -81,8 +81,13 @@ sed -i 's/^StartupWMClass=.*/StartupWMClass=io.protognome.protognome/' \
    "${DEB_ROOT}/usr/share/applications/io.protognome.protognome.desktop"
 
 # Icon
-cp "${SCRIPT_DIR}/assets/icons/proto.png" \
-   "${DEB_ROOT}/usr/share/icons/hicolor/256x256/apps/protognome.png"
+if [ -f "${SCRIPT_DIR}/assets/icons/proto.png" ]; then
+    cp "${SCRIPT_DIR}/assets/icons/proto.png" \
+       "${DEB_ROOT}/usr/share/icons/hicolor/256x256/apps/protognome.png"
+elif [ -f "${SCRIPT_DIR}/assets/icons/noln.png" ]; then
+    cp "${SCRIPT_DIR}/assets/icons/noln.png" \
+       "${DEB_ROOT}/usr/share/icons/hicolor/256x256/apps/protognome.png"
+fi
 
 # Copyright
 cp "${SCRIPT_DIR}/LICENSE" \
@@ -130,8 +135,9 @@ sha512sum "${DEB_FILE}" > "${DEB_FILE}.sha512"
 
 echo "==> Signing .deb with GPG..."
 if command -v gpg > /dev/null 2>&1; then
-    true --local-user chuck@nordheim.online --detach-sign --armor "${DEB_FILE}"
-    true --export -a chuck@nordheim.online > "${ARTIFACTS}/pubkey.asc"
+    rm -f "${DEB_FILE}.asc"
+    gpg --batch --no-tty --local-user chuck@nordheim.online --detach-sign --armor "${DEB_FILE}"
+    gpg --batch --no-tty --export -a chuck@nordheim.online > "${ARTIFACTS}/pubkey.asc"
     echo "    Signed: ${DEB_FILE}.asc"
 else
     echo "    WARNING: gpg not found - package NOT signed!"
@@ -139,7 +145,8 @@ fi
 
 # Copy to NOBuilds directory
 echo "==> Copying to NOBuilds directory..."
-NOBUILDS_DIR="${HOME}/NOBuilds/ProtoGNOME/v${VERSION}"
+DATE_STR=$(date +%m-%d-%Y)
+NOBUILDS_DIR="${HOME}/NOBuilds/ProtoGNOME-${DATE_STR}-${VERSION}"
 mkdir -p "${NOBUILDS_DIR}"
 
 cp "${DEB_FILE}" "${NOBUILDS_DIR}/"
