@@ -28,18 +28,19 @@ class VdfParser {
         sb.writeln('$tab}');
       } else {
         sb.writeln(
-            '$tab"${_escape(entry.key)}"\t\t"${_escape(entry.value.toString())}"');
+          '$tab"${_escape(entry.key)}"\t\t"${_escape(entry.value.toString())}"',
+        );
       }
     }
     return sb.toString();
   }
 
   static String _escape(String s) =>
-      s.replaceAll('"', '\\"').replaceAll('\\', '\\\\');
+      s.replaceAll('"', r'\"').replaceAll(r'\', r'\\');
 
   static List<String> _tokenize(String content) {
     final tokens = <String>[];
-    int index = 0;
+    var index = 0;
     while (index < content.length) {
       final char = content[index];
       if (char == '"') {
@@ -47,7 +48,7 @@ class VdfParser {
         index++;
         final buf = StringBuffer();
         while (index < content.length && content[index] != '"') {
-          if (content[index] == '\\' && index + 1 < content.length) {
+          if (content[index] == r'\' && index + 1 < content.length) {
             index++;
             buf.write(content[index]);
           } else {
@@ -63,7 +64,9 @@ class VdfParser {
       } else if (char == '}') {
         tokens.add('}');
         index++;
-      } else if (char == '/' && index + 1 < content.length && content[index + 1] == '/') {
+      } else if (char == '/' &&
+          index + 1 < content.length &&
+          content[index + 1] == '/') {
         // Line comment
         while (index < content.length && content[index] != '\n') {
           index++;
@@ -93,10 +96,9 @@ class VdfParser {
 
 /// Parser state tracker traversing a token stream.
 class _VdfTokenParser {
+  _VdfTokenParser(this.tokens);
   final List<String> tokens;
   int pos = 0;
-
-  _VdfTokenParser(this.tokens);
 
   Map<String, dynamic> parseBlock() {
     final result = <String, dynamic>{};

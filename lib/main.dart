@@ -3,9 +3,9 @@
 // Copyright (C) 2024 ProtoGNOME Contributors
 
 import 'package:flutter/material.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'screens/home_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:protognome/screens/home_screen.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 /// Main entry point for the ProtoGNOME application.
 /// Initializes Flutter bindings, sqflite FFI database handlers,
@@ -33,7 +33,6 @@ class ProtoGNOMEApp extends StatelessWidget {
           primary: Color(0xFF7C3AED),
           secondary: Color(0xFF4F46E5),
           surface: Color(0xFF1A1A2E),
-          onSurface: Colors.white,
         ),
         scaffoldBackgroundColor: const Color(0xFF0F0F1A),
         cardColor: const Color(0xFF1E1E3A),
@@ -58,10 +57,11 @@ class ProtoGNOMEApp extends StatelessWidget {
           ),
         ),
         checkboxTheme: CheckboxThemeData(
-          fillColor: WidgetStateProperty.resolveWith((states) =>
-              states.contains(WidgetState.selected)
-                  ? const Color(0xFF7C3AED)
-                  : null),
+          fillColor: WidgetStateProperty.resolveWith(
+            (states) => states.contains(WidgetState.selected)
+                ? const Color(0xFF7C3AED)
+                : null,
+          ),
         ),
         useMaterial3: true,
       ),

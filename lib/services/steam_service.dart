@@ -2,17 +2,18 @@
 // Copyright (C) 2024 ProtoGNOME Contributors
 
 import 'dart:io';
+
 import 'package:path/path.dart' as p;
-import '../models/steam_game.dart';
-import 'vdf_parser.dart';
-import 'logger_service.dart';
+import 'package:protognome/models/steam_game.dart';
+import 'package:protognome/services/logger_service.dart';
+import 'package:protognome/services/vdf_parser.dart';
 
 /// Handles Steam config file scanning, VDF parsing, and compatibility tool lookup.
 /// Ports key utilities of ProtonUp-Qt's steamutil.py to Dart/Flutter.
 class SteamService {
-  static final SteamService _instance = SteamService._internal();
   factory SteamService() => _instance;
   SteamService._internal();
+  static final SteamService _instance = SteamService._internal();
 
   static const List<String> _possibleSteamRoots = [
     '.local/share/Steam',
@@ -92,7 +93,8 @@ class SteamService {
       if (store == null) return null;
       final software = store['Software'] as Map<String, dynamic>?;
       if (software == null) return null;
-      final valve = (software['Valve'] ?? software['valve']) as Map<String, dynamic>?;
+      final valve =
+          (software['Valve'] ?? software['valve']) as Map<String, dynamic>?;
       if (valve == null) return null;
       return (valve['Steam'] as Map<String, dynamic>?)?['CompatToolMapping']
           as Map<String, dynamic>?;
@@ -134,7 +136,7 @@ class SteamService {
           // Check if the game is actually installed
           if (!File(manifestPath).existsSync()) continue;
 
-          String gameName = appId;
+          var gameName = appId;
           try {
             final manifestContent = File(manifestPath).readAsStringSync();
             final manifest = VdfParser.parse(manifestContent);
@@ -142,7 +144,8 @@ class SteamService {
             final installDir = appState?['installdir'] as String? ?? '';
             gameName = appState?['name'] as String? ?? appId;
             // Skip if not installed to common
-            if (!Directory(p.join(steamappsPath, 'common', installDir)).existsSync()) {
+            if (!Directory(p.join(steamappsPath, 'common', installDir))
+                .existsSync()) {
               continue;
             }
           } catch (_) {}
@@ -150,12 +153,14 @@ class SteamService {
           final ctMapping = compatMap[appId] as Map<String, dynamic>?;
           final compatTool = ctMapping?['name'] as String?;
 
-          games.add(SteamGame(
-            appId: int.tryParse(appId) ?? 0,
-            gameName: gameName,
-            compatTool: compatTool,
-            libraryPath: folderPath,
-          ));
+          games.add(
+            SteamGame(
+              appId: int.tryParse(appId) ?? 0,
+              gameName: gameName,
+              compatTool: compatTool,
+              libraryPath: folderPath,
+            ),
+          );
         }
       }
     } catch (error) {

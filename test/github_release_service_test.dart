@@ -68,22 +68,29 @@ void main() {
 
     test('handles binary-mode (*) filename markers', () {
       const body = 'abc123 *tool.tar.zst\n';
-      expect(GitHubReleaseService.parseChecksumDigest(body, 'tool.tar.zst'),
-          'abc123');
+      expect(
+        GitHubReleaseService.parseChecksumDigest(body, 'tool.tar.zst'),
+        'abc123',
+      );
     });
 
     test('returns null when multiple entries and none match', () {
       const body = 'aaaa  one.tar.gz\nbbbb  two.tar.gz\n';
       expect(
-          GitHubReleaseService.parseChecksumDigest(body, 'three.tar.gz'), isNull);
+        GitHubReleaseService.parseChecksumDigest(body, 'three.tar.gz'),
+        isNull,
+      );
     });
   });
 
   group('isSafeArchiveMember', () {
     test('accepts normal relative members', () {
-      expect(GitHubReleaseService.isSafeArchiveMember('GE-Proton9-1/proton'),
-          isTrue);
-      expect(GitHubReleaseService.isSafeArchiveMember('files/data.bin'), isTrue);
+      expect(
+        GitHubReleaseService.isSafeArchiveMember('GE-Proton9-1/proton'),
+        isTrue,
+      );
+      expect(
+          GitHubReleaseService.isSafeArchiveMember('files/data.bin'), isTrue);
     });
 
     test('rejects absolute paths and parent traversal', () {

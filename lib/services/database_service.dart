@@ -1,18 +1,18 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2024 ProtoGNOME Contributors
 
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
-import '../models/compat_tool.dart';
-import '../models/steam_game.dart';
+import 'package:protognome/models/compat_tool.dart';
+import 'package:protognome/models/steam_game.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 /// Service managing SQLite local database caching using `sqflite_common_ffi`.
 /// Handles persistent application settings, compatibility tools caches, and detected Steam games.
 class DatabaseService {
-  static final DatabaseService _instance = DatabaseService._internal();
   factory DatabaseService() => _instance;
   DatabaseService._internal();
+  static final DatabaseService _instance = DatabaseService._internal();
 
   Database? _db;
 
@@ -117,7 +117,7 @@ class DatabaseService {
       where: 'tool_type = ? AND (cached_at IS NULL OR cached_at > ?)',
       whereArgs: [toolType, oneHourAgo],
     );
-    return maps.map((m) => CompatTool.fromMap(m)).toList();
+    return maps.map(CompatTool.fromMap).toList();
   }
 
   /// Caches a batch list of [CompatTool] instances in the local SQLite tables.
@@ -128,8 +128,11 @@ class DatabaseService {
     for (final tool in tools) {
       final map = tool.toMap();
       map['cached_at'] = now;
-      batch.insert('compat_tools', map,
-          conflictAlgorithm: ConflictAlgorithm.replace);
+      batch.insert(
+        'compat_tools',
+        map,
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
     }
     await batch.commit(noResult: true);
   }
@@ -140,8 +143,11 @@ class DatabaseService {
     final now = DateTime.now().millisecondsSinceEpoch;
     final map = tool.toMap();
     map['cached_at'] = now;
-    await database.insert('compat_tools', map,
-        conflictAlgorithm: ConflictAlgorithm.replace);
+    await database.insert(
+      'compat_tools',
+      map,
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
   }
 
   /// Deletes the cached compatibility tool entry matching the given [name].
@@ -160,8 +166,11 @@ class DatabaseService {
     for (final game in games) {
       final map = game.toMap();
       map['cached_at'] = now;
-      batch.insert('steam_games', map,
-          conflictAlgorithm: ConflictAlgorithm.replace);
+      batch.insert(
+        'steam_games',
+        map,
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
     }
     await batch.commit(noResult: true);
   }
@@ -170,6 +179,6 @@ class DatabaseService {
   Future<List<SteamGame>> getAllCachedGames() async {
     final database = await db;
     final maps = await database.query('steam_games', orderBy: 'game_name ASC');
-    return maps.map((m) => SteamGame.fromMap(m)).toList();
+    return maps.map(SteamGame.fromMap).toList();
   }
 }

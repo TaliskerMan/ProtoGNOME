@@ -2,12 +2,12 @@
 // Copyright (C) 2024 ProtoGNOME Contributors
 
 import 'package:flutter/material.dart';
-import '../services/github_release_service.dart';
-import '../services/steam_service.dart';
-import 'tool_manager_screen.dart';
-import 'game_manager_screen.dart';
-import 'settings_screen.dart';
-import 'about_screen.dart';
+import 'package:protognome/screens/about_screen.dart';
+import 'package:protognome/screens/game_manager_screen.dart';
+import 'package:protognome/screens/settings_screen.dart';
+import 'package:protognome/screens/tool_manager_screen.dart';
+import 'package:protognome/services/github_release_service.dart';
+import 'package:protognome/services/steam_service.dart';
 
 /// The main workspace screen shell mapping sub-screens through a sidebar [NavigationRail].
 /// Hosts tool management, game compatibility tools list, local settings adjustments, and about panel.
@@ -56,7 +56,6 @@ class _HomeScreenState extends State<HomeScreen> {
             onDestinationSelected: (index) {
               setState(() => _selectedIndex = index);
             },
-            extended: false,
             indicatorColor: const Color(0xFF7C3AED),
             selectedIconTheme:
                 const IconThemeData(color: Colors.white, size: 24),
@@ -72,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
               fontSize: 12,
             ),
             leading: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              padding: const EdgeInsets.symmetric(vertical: 16),
               child: Column(
                 children: [
                   Container(
@@ -83,15 +82,19 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(12),
-                      child: Image.asset('assets/icons/proto.png',
-                          width: 44, height: 44, fit: BoxFit.cover),
+                      child: Image.asset(
+                        'assets/icons/proto.png',
+                        width: 44,
+                        height: 44,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
             trailing: Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
+              padding: const EdgeInsets.only(bottom: 8),
               child: Column(
                 children: [
                   // Steam status indicator
@@ -149,7 +152,10 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           // Vertical divider
           const VerticalDivider(
-              width: 1, thickness: 1, color: Color(0xFF2A2A4A)),
+            width: 1,
+            thickness: 1,
+            color: Color(0xFF2A2A4A),
+          ),
           // Main Content
           Expanded(
             child: Column(
@@ -163,15 +169,20 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: const Color(0xFF7F1D1D),
                     child: Row(
                       children: [
-                        const Icon(Icons.warning_amber_rounded,
-                            color: Color(0xFFFCA5A5), size: 16),
+                        const Icon(
+                          Icons.warning_amber_rounded,
+                          color: Color(0xFFFCA5A5),
+                          size: 16,
+                        ),
                         const SizedBox(width: 8),
                         Text(
                           _steamRoot == null
                               ? 'Steam installation not found. Please configure the install path in Settings.'
                               : 'Steam installation found but may be incomplete.',
                           style: const TextStyle(
-                              color: Color(0xFFFCA5A5), fontSize: 13),
+                            color: Color(0xFFFCA5A5),
+                            fontSize: 13,
+                          ),
                         ),
                       ],
                     ),
@@ -184,8 +195,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: const Color(0xFF78350F),
                     child: Row(
                       children: [
-                        const Icon(Icons.info_outline,
-                            color: Color(0xFFFDE68A), size: 16),
+                        const Icon(
+                          Icons.info_outline,
+                          color: Color(0xFFFDE68A),
+                          size: 16,
+                        ),
                         const SizedBox(width: 8),
                         const Text(
                           'Steam is running. Please restart Steam after applying changes.',
@@ -195,11 +209,18 @@ class _HomeScreenState extends State<HomeScreen> {
                         const Spacer(),
                         TextButton.icon(
                           onPressed: _checkSteam,
-                          icon: const Icon(Icons.refresh,
-                              size: 14, color: Color(0xFFFDE68A)),
-                          label: const Text('Refresh',
-                              style: TextStyle(
-                                  color: Color(0xFFFDE68A), fontSize: 12)),
+                          icon: const Icon(
+                            Icons.refresh,
+                            size: 14,
+                            color: Color(0xFFFDE68A),
+                          ),
+                          label: const Text(
+                            'Refresh',
+                            style: TextStyle(
+                              color: Color(0xFFFDE68A),
+                              fontSize: 12,
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -210,8 +231,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     index: _selectedIndex,
                     children: [
                       ToolManagerScreen(
-                          steamService: _steamService,
-                          releaseService: _releaseService),
+                        steamService: _steamService,
+                        releaseService: _releaseService,
+                      ),
                       GameManagerScreen(steamService: _steamService),
                       SettingsScreen(steamService: _steamService),
                       const AboutScreen(),

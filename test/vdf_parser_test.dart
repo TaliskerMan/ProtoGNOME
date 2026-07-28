@@ -41,12 +41,12 @@ void main() {
     });
 
     test('handles escaped quotes and comment lines', () {
-      const vdf = '''
+      const vdf = r'''
 "root"
 {
 	// this is a comment
-	"name"	"He said \\"hi\\""
-	"path"	"C:\\\\Games"
+	"name"	"He said \"hi\""
+	"path"	"C:\\Games"
 }
 ''';
       final result = VdfParser.parse(vdf);
@@ -59,7 +59,7 @@ void main() {
       final data = {
         'libraryfolders': {
           '0': {'path': '/a/b', 'label': ''},
-        }
+        },
       };
       final dumped = VdfParser.dump(data);
       final reparsed = VdfParser.parse(dumped);

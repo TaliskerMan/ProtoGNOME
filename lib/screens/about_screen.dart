@@ -42,11 +42,14 @@ class _AboutScreenState extends State<AboutScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('About',
-              style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white)),
+          const Text(
+            'About',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
           const SizedBox(height: 24),
           Center(
             child: Column(
@@ -66,22 +69,28 @@ class _AboutScreenState extends State<AboutScreen> {
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(24),
-                    child: Image.asset('assets/icons/proto.png',
-                        width: 96, height: 96, fit: BoxFit.cover),
+                    child: Image.asset(
+                      'assets/icons/proto.png',
+                      width: 96,
+                      height: 96,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 20),
                 const Text(
                   'ProtoGNOME',
                   style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      letterSpacing: -0.5),
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    letterSpacing: -0.5,
+                  ),
                 ),
                 Text(
                   _version,
-                  style: const TextStyle(color: Color(0xFF8888AA), fontSize: 15),
+                  style:
+                      const TextStyle(color: Color(0xFF8888AA), fontSize: 15),
                 ),
                 const SizedBox(height: 8),
                 const Text(
@@ -93,40 +102,61 @@ class _AboutScreenState extends State<AboutScreen> {
             ),
           ),
           const SizedBox(height: 32),
-          _buildCard(children: [
-            const _AboutRow(icon: Icons.code, label: 'Based on',
-                value: 'ProtonUp-Qt by DavidoTek (GPL v3)'),
-            const _AboutRow(icon: Icons.flutter_dash, label: 'Built with',
-                value: 'Flutter 3.24 + Dart'),
-            const _AboutRow(icon: Icons.storage_outlined, label: 'Backend',
-                value: 'SQLite via sqflite_common_ffi'),
-            const _AboutRow(icon: Icons.gavel_outlined, label: 'License',
-                value: 'GNU General Public License v3.0'),
-            const _AboutRow(icon: Icons.people_outline, label: 'Maintainer',
-                value: 'Chuck Talk <chuck@nordheim.online>'),
-          ]),
+          _buildCard(
+            children: [
+              const _AboutRow(
+                icon: Icons.code,
+                label: 'Based on',
+                value: 'ProtonUp-Qt by DavidoTek (GPL v3)',
+              ),
+              const _AboutRow(
+                icon: Icons.flutter_dash,
+                label: 'Built with',
+                value: 'Flutter 3.24 + Dart',
+              ),
+              const _AboutRow(
+                icon: Icons.storage_outlined,
+                label: 'Backend',
+                value: 'SQLite via sqflite_common_ffi',
+              ),
+              const _AboutRow(
+                icon: Icons.gavel_outlined,
+                label: 'License',
+                value: 'GNU General Public License v3.0',
+              ),
+              const _AboutRow(
+                icon: Icons.people_outline,
+                label: 'Maintainer',
+                value: 'Chuck Talk <chuck@nordheim.online>',
+              ),
+            ],
+          ),
           const SizedBox(height: 16),
-          _buildCard(children: [
-            const Text(
-              'Copyright & Acknowledgements',
-              style: TextStyle(
+          _buildCard(
+            children: [
+              const Text(
+                'Copyright & Acknowledgements',
+                style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.w600,
-                  fontSize: 15),
-            ),
-            const SizedBox(height: 12),
-            const Text(
-              'ProtoGNOME is a fork of ProtonUp-Qt © 2021-2024 DavidoTek, '
-              'licensed under the GNU General Public License v3.\n\n'
-              'This program is free software: you can redistribute it and/or modify '
-              'it under the terms of the GNU General Public License as published by '
-              'the Free Software Foundation, either version 3 of the License, or '
-              '(at your option) any later version.\n\n'
-              'GE-Proton is © GloriousEggroll. Steam is © Valve Corporation. '
-              'This project is not affiliated with or endorsed by Valve.',
-              style: TextStyle(color: Color(0xFF8888AA), fontSize: 13, height: 1.6),
-            ),
-          ]),
+                  fontSize: 15,
+                ),
+              ),
+              const SizedBox(height: 12),
+              const Text(
+                'ProtoGNOME is a fork of ProtonUp-Qt © 2021-2024 DavidoTek, '
+                'licensed under the GNU General Public License v3.\n\n'
+                'This program is free software: you can redistribute it and/or modify '
+                'it under the terms of the GNU General Public License as published by '
+                'the Free Software Foundation, either version 3 of the License, or '
+                '(at your option) any later version.\n\n'
+                'GE-Proton is © GloriousEggroll. Steam is © Valve Corporation. '
+                'This project is not affiliated with or endorsed by Valve.',
+                style: TextStyle(
+                    color: Color(0xFF8888AA), fontSize: 13, height: 1.6),
+              ),
+            ],
+          ),
         ],
       ),
     );
@@ -150,12 +180,14 @@ class _AboutScreenState extends State<AboutScreen> {
 
 /// Renders a single detail row on the About screen page.
 class _AboutRow extends StatelessWidget {
+  const _AboutRow({
+    required this.icon,
+    required this.label,
+    required this.value,
+  });
   final IconData icon;
   final String label;
   final String value;
-
-  const _AboutRow(
-      {required this.icon, required this.label, required this.value});
 
   @override
   Widget build(BuildContext context) {
@@ -167,13 +199,19 @@ class _AboutRow extends StatelessWidget {
           const SizedBox(width: 10),
           SizedBox(
             width: 100,
-            child: Text(label,
-                style: const TextStyle(
-                    color: Color(0xFF8888AA), fontSize: 13)),
+            child: Text(
+              label,
+              style: const TextStyle(
+                color: Color(0xFF8888AA),
+                fontSize: 13,
+              ),
+            ),
           ),
           Expanded(
-            child: Text(value,
-                style: const TextStyle(color: Colors.white, fontSize: 13)),
+            child: Text(
+              value,
+              style: const TextStyle(color: Colors.white, fontSize: 13),
+            ),
           ),
         ],
       ),

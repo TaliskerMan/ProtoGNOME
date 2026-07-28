@@ -4,6 +4,34 @@
 /// Represents a Steam compatibility tool (e.g. Proton-GE, Luxtorpeda, Boxtron)
 /// loaded from GitHub releases or detected in the local system configuration.
 class CompatTool {
+  /// Creates a [CompatTool] instance representing a compatibility wrapper.
+  CompatTool({
+    required this.name,
+    required this.version,
+    required this.toolType,
+    this.releaseDate,
+    this.downloadUrl,
+    this.downloadSize,
+    this.checksum,
+    this.isInstalled = false,
+    this.isDownloading = false,
+    this.downloadProgress = 0.0,
+  });
+
+  /// Deserializes database maps into a [CompatTool] instance.
+  factory CompatTool.fromMap(Map<String, dynamic> map) {
+    return CompatTool(
+      name: map['name'] as String,
+      version: map['version'] as String,
+      toolType: map['tool_type'] as String,
+      releaseDate: map['release_date'] as String?,
+      downloadUrl: map['download_url'] as String?,
+      downloadSize: map['download_size'] as int?,
+      checksum: map['checksum'] as String?,
+      isInstalled: (map['is_installed'] as int? ?? 0) == 1,
+    );
+  }
+
   /// The descriptive name of the compatibility tool.
   final String name;
 
@@ -34,20 +62,6 @@ class CompatTool {
   /// Current download fraction from 0.0 to 1.0.
   double downloadProgress;
 
-  /// Creates a [CompatTool] instance representing a compatibility wrapper.
-  CompatTool({
-    required this.name,
-    required this.version,
-    required this.toolType,
-    this.releaseDate,
-    this.downloadUrl,
-    this.downloadSize,
-    this.checksum,
-    this.isInstalled = false,
-    this.isDownloading = false,
-    this.downloadProgress = 0.0,
-  });
-
   /// Convenience getter for display labels.
   String get displayName => name;
 
@@ -63,19 +77,5 @@ class CompatTool {
       'checksum': checksum,
       'is_installed': isInstalled ? 1 : 0,
     };
-  }
-
-  /// Deserializes database maps into a [CompatTool] instance.
-  factory CompatTool.fromMap(Map<String, dynamic> map) {
-    return CompatTool(
-      name: map['name'] as String,
-      version: map['version'] as String,
-      toolType: map['tool_type'] as String,
-      releaseDate: map['release_date'] as String?,
-      downloadUrl: map['download_url'] as String?,
-      downloadSize: map['download_size'] as int?,
-      checksum: map['checksum'] as String?,
-      isInstalled: (map['is_installed'] as int? ?? 0) == 1,
-    );
   }
 }

@@ -9,26 +9,26 @@ import 'package:path/path.dart' as p;
 /// Service mapping local application diagnostic logs to standard console output
 /// and appending them to ~/.local/state/protognome/app.log.
 class LoggerService {
-  static final LoggerService _instance = LoggerService._internal();
   factory LoggerService() => _instance;
-
-  File? _logFile;
 
   LoggerService._internal() {
     _initLogFile();
   }
+  static final LoggerService _instance = LoggerService._internal();
+
+  File? _logFile;
 
   /// Initializes the log file configuration under XDG state directories.
   void _initLogFile() {
     try {
       final stateHome = Platform.environment['XDG_STATE_HOME'] ??
           p.join(Platform.environment['HOME'] ?? '', '.local', 'state');
-      
+
       final logDir = Directory(p.join(stateHome, 'protognome'));
       if (!logDir.existsSync()) {
         logDir.createSync(recursive: true);
       }
-      
+
       _logFile = File(p.join(logDir.path, 'app.log'));
       log('--- ProtoGNOME Session Started ---');
     } catch (error) {
