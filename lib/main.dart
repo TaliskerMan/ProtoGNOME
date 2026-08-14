@@ -1,19 +1,42 @@
-// Auto-incremented to version 1.0.10+3 for build release on 2026-08-14 (Rule_028 / CP-AutoIncrement: GE-Proton architecture suffix detection and deletion fix)
+// Auto-incremented to version 1.0.11+4 for build release on 2026-08-14 (Rule_028 / CP-AutoIncrement: Linux sqlite3 FFI dynamic library resolution fix)
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2024 ProtoGNOME Contributors
 
+import 'dart:ffi';
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'screens/home_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:sqlite3/open.dart';
+import 'screens/home_screen.dart';
+
+/// Top-level FFI initialization function for Linux sqlite3 dynamic library resolution.
+/// (CP-ChangeComments: Overrides Linux sqlite3 lookup to load libsqlite3.so.0 cleanly if libsqlite3.so is missing)
+void protognomeFfiInit() {
+  if (Platform.isLinux) {
+    open.overrideFor(OperatingSystem.linux, () {
+      try {
+        return DynamicLibrary.open('libsqlite3.so.0');
+      } catch (_) {
+        return DynamicLibrary.open('libsqlite3.so');
+      }
+    });
+  }
+}
 
 /// Main entry point for the ProtoGNOME application.
-/// Initializes Flutter bindings, sqflite FFI database handlers,
+/// Initializes Flutter bindings, sqflite FFI database handlers with Linux dynamic library fallback,
 /// and runs the root [ProtoGNOMEApp] widget.
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  sqfliteFfiInit();
-  databaseFactory = databaseFactoryFfi;
+  if (Platform.isLinux || Platform.isWindows || Platform.isMacOS) {
+    protognomeFfiInit();
+    sqfliteFfiInit();
+    databaseFactory = createDatabaseFactoryFfi(ffiInit: protognomeFfiInit);
+  } else {
+    sqfliteFfiInit();
+    databaseFactory = databaseFactoryFfi;
+  }
   runApp(const ProtoGNOMEApp());
 }
 

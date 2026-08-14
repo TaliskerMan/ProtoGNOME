@@ -124,7 +124,7 @@ Section: games
 Priority: optional
 Architecture: ${ARCH}
 Installed-Size: ${INSTALLED_SIZE}
-Depends: libgtk-3-0, libblkid1, liblzma5, libsecret-1-0
+Depends: libgtk-3-0, libblkid1, liblzma5, libsecret-1-0, libsqlite3-0
 Recommends: steam
 Maintainer: Chuck Talk <chuck@nordheim.online>
 Homepage: https://github.com/ProtoGNOME/ProtoGNOME

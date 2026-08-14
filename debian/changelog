@@ -1,3 +1,12 @@
+protognome (1.0.11+4) unstable; urgency=medium
+
+  * Override Linux sqlite3 FFI dynamic library resolution via open.overrideFor to load libsqlite3.so.0.
+  * Fix runtime SqfliteFfiException on Linux systems missing libsqlite3-dev development symlinks.
+  * Add libsqlite3-0 runtime dependency to DEBIAN/control.
+  * Auto-increment version string to 1.0.11+4 (CP-AutoIncrement).
+
+ -- Chuck Talk <chuck@nordheim.online>  Fri, 14 Aug 2026 11:09:00 -0500
+
 protognome (1.0.10+3) unstable; urgency=medium
 
   * Fix GE-Proton installation status detection for versions with architecture suffixes (e.g. GE-Proton11-5-x86_64).
