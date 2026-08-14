@@ -92,4 +92,22 @@ void main() {
       expect(GitHubReleaseService.isSafeArchiveMember('a/../../b'), isFalse);
     });
   });
+
+  group('calculateChunkRanges', () {
+    test('splits file size into balanced parallel byte ranges', () {
+      final ranges =
+          GitHubReleaseService.calculateChunkRanges(100, numChunks: 4);
+      expect(ranges, [
+        {'start': 0, 'end': 24},
+        {'start': 25, 'end': 49},
+        {'start': 50, 'end': 74},
+        {'start': 75, 'end': 99},
+      ]);
+    });
+
+    test('handles small or zero total bytes gracefully', () {
+      expect(GitHubReleaseService.calculateChunkRanges(0), isEmpty);
+      expect(GitHubReleaseService.calculateChunkRanges(-100), isEmpty);
+    });
+  });
 }

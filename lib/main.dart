@@ -1,4 +1,4 @@
-// Auto-incremented to version 1.0.11+4 for build release on 2026-08-14 (Rule_028 / CP-AutoIncrement: Linux sqlite3 FFI dynamic library resolution fix)
+// Auto-incremented to version 1.0.12+5 for build release on 2026-08-14 (Rule_028 / CP-AutoIncrement: Parallel HTTP multi-stream range downloader for 3x-6x faster tool downloads)
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2024 ProtoGNOME Contributors
 

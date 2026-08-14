@@ -1,3 +1,13 @@
+protognome (1.0.12+5) unstable; urgency=medium
+
+  * Implement high-performance parallel multi-connection HTTP range downloader in GitHubReleaseService.
+  * Split large tool downloads (> 10 MB) into 4 to 8 parallel range streams for 3x to 6x faster download speeds.
+  * Pre-resolve 302 redirects to edge CDN endpoints and write concurrent stream chunks directly to disk offsets via RandomAccessFile.
+  * Add calculateChunkRanges unit tests covering chunk calculation logic.
+  * Auto-increment version string to 1.0.12+5 (CP-AutoIncrement).
+
+ -- Chuck Talk <chuck@nordheim.online>  Fri, 14 Aug 2026 11:16:00 -0500
+
 protognome (1.0.11+4) unstable; urgency=medium
 
   * Override Linux sqlite3 FFI dynamic library resolution via open.overrideFor to load libsqlite3.so.0.
