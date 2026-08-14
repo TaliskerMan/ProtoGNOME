@@ -297,8 +297,10 @@ class _ToolManagerScreenState extends State<ToolManagerScreen> {
                       itemCount: _availableTools.length,
                       itemBuilder: (context, index) {
                         final tool = _availableTools[index];
-                        final isInstalled =
-                            _installedToolNames.any((name) => name == tool.name);
+                        final isInstalled = widget.steamService.isToolInstalled(
+                          tool.name,
+                          customDir: _selectedLocation?.path,
+                        );
                         return ToolCard(
                           tool: tool,
                           isInstalled: isInstalled,

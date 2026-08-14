@@ -1,4 +1,4 @@
-// Auto-incremented to version 1.0.9+2 for build release on 2026-07-20 (Rule_017)
+// Auto-incremented to version 1.0.10+3 for build release on 2026-08-14 (Rule_028 / CP-AutoIncrement: GE-Proton architecture suffix detection and deletion fix)
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2024 ProtoGNOME Contributors
 

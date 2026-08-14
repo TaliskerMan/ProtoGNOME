@@ -11,6 +11,7 @@ import '../models/compat_tool.dart';
 import 'database_service.dart';
 import 'secret_service.dart';
 import 'logger_service.dart';
+import 'steam_service.dart';
 
 /// Tool source definitions ported from ProtonUp-Qt's ctloader.py / ctmods.
 const List<Map<String, dynamic>> kToolSources = [
@@ -447,8 +448,10 @@ class GitHubReleaseService {
   /// Removes a compatibility tool matching [toolName] from the [installDir].
   /// Implements path traversal checks to ensure deletions are constrained within [installDir].
   bool removeTool(String toolName, String installDir) {
-    final cleanToolName = p.basename(toolName);
-    final toolPath = Directory(p.join(installDir, cleanToolName));
+    final targetDirName =
+        SteamService().findInstalledToolDir(toolName, customDir: installDir) ??
+            p.basename(toolName);
+    final toolPath = Directory(p.join(installDir, targetDirName));
 
     // Strict bounds check to prevent directory deletion exploits
     if (!p.isWithin(p.normalize(installDir), p.normalize(toolPath.path))) {
@@ -459,6 +462,7 @@ class GitHubReleaseService {
     try {
       toolPath.deleteSync(recursive: true);
       _db.deleteTool(toolName);
+      _db.deleteTool(targetDirName);
       return true;
     } catch (error) {
       LoggerService().logError('Removing $toolName', error);

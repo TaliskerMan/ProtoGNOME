@@ -157,8 +157,8 @@ sha512sum "${DEB_FILE}" > "${DEB_FILE}.sha512"
 
 echo "==> Signing .deb with GPG..."
 if command -v gpg > /dev/null 2>&1; then
-    true --local-user chuck@nordheim.online --detach-sign --armor "${DEB_FILE}"
-    true --export -a chuck@nordheim.online > "${ARTIFACTS}/pubkey.asc"
+    gpg --batch --yes --local-user chuck@nordheim.online --detach-sign --armor "${DEB_FILE}"
+    gpg --export -a chuck@nordheim.online > "${ARTIFACTS}/pubkey.asc"
     echo "    Signed: ${DEB_FILE}.asc"
 else
     echo "    WARNING: gpg not found - package NOT signed!"
@@ -166,23 +166,28 @@ fi
 
 # Copy to NOBuilds directory
 echo "==> Copying to NOBuilds directory..."
+DATE_STR="$(date +%m-%d-%Y)"
 NOBUILDS_DIR="${HOME}/NOBuilds/ProtoGNOME/v${VERSION}"
-mkdir -p "${NOBUILDS_DIR}"
-
-cp "${DEB_FILE}" "${NOBUILDS_DIR}/"
-cp "${DEB_FILE}.asc" "${NOBUILDS_DIR}/" || true
-cp "${DEB_FILE}.sha256" "${NOBUILDS_DIR}/" || true
-cp "${DEB_FILE}.sha512" "${NOBUILDS_DIR}/" || true
-cp "${ARTIFACTS}/pubkey.asc" "${NOBUILDS_DIR}/" || true
-cp LICENSE "${NOBUILDS_DIR}/"
-cp README.md "${NOBUILDS_DIR}/"
-cp Audit/SBOM-Linux.json "${NOBUILDS_DIR}/" || true
-cp Audit/SBOM-Linux "${NOBUILDS_DIR}/" || true
-cp Audit/sbom.json "${NOBUILDS_DIR}/" || true
+NOBUILDS_PATTERN_DIR="${HOME}/NOBuilds/ProtoGNOME-${DATE_STR}-${VERSION}"
+mkdir -p "${NOBUILDS_DIR}" "${NOBUILDS_PATTERN_DIR}"
 
 # Generate source code archive
 echo "Generating source tarball..."
-tar --exclude=build --exclude=.dart_tool --exclude=.git -czf "${NOBUILDS_DIR}/protognome_source.tar.gz" .
+tar --exclude=build --exclude=.dart_tool --exclude=.git --exclude=artifacts --exclude=deb_pkg -czf "${ARTIFACTS}/protognome_source.tar.gz" .
+
+for target_dir in "${NOBUILDS_DIR}" "${NOBUILDS_PATTERN_DIR}"; do
+    cp "${DEB_FILE}" "${target_dir}/"
+    cp "${DEB_FILE}.asc" "${target_dir}/" || true
+    cp "${DEB_FILE}.sha256" "${target_dir}/" || true
+    cp "${DEB_FILE}.sha512" "${target_dir}/" || true
+    cp "${ARTIFACTS}/pubkey.asc" "${target_dir}/" || true
+    cp "${ARTIFACTS}/protognome_source.tar.gz" "${target_dir}/" || true
+    cp LICENSE "${target_dir}/"
+    cp README.md "${target_dir}/"
+    cp Audit/SBOM-Linux.json "${target_dir}/" || true
+    cp Audit/SBOM-Linux "${target_dir}/" || true
+    cp Audit/sbom.json "${target_dir}/" || true
+done
 
 echo ""
 echo "==================================="

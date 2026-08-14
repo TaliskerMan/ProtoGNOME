@@ -189,4 +189,56 @@ class SteamService {
 
     return tools;
   }
+
+  /// Checks if a compatibility tool matching [toolName] is installed in [customDir] or default dir.
+  bool isToolInstalled(String toolName, {String? customDir}) {
+    return findInstalledToolDir(toolName, customDir: customDir) != null;
+  }
+
+  /// Finds the directory name of an installed tool matching [toolName] (e.g. 'GE-Proton11-5'),
+  /// handling arch suffixes like '-x86_64' or internal 'version' file content.
+  String? findInstalledToolDir(String toolName, {String? customDir}) {
+    final ctDir = customDir ?? getCompatToolsDir();
+    if (ctDir == null) return null;
+
+    final dir = Directory(ctDir);
+    if (!dir.existsSync()) return null;
+
+    for (final entry in dir.listSync()) {
+      if (entry is Directory) {
+        final dirName = p.basename(entry.path);
+        if (_doesDirMatchToolName(dirName, entry.path, toolName)) {
+          return dirName;
+        }
+      }
+    }
+    return null;
+  }
+
+  bool _doesDirMatchToolName(String dirName, String dirPath, String toolName) {
+    // 1. Exact match
+    if (dirName == toolName) return true;
+
+    // 2. Normalized folder name match (stripping arch/platform suffixes)
+    final normalizedDir = dirName.replaceAll(
+        RegExp(r'[-_.]?(x86_64|amd64|i686|x86)$', caseSensitive: false), '');
+    if (normalizedDir == toolName) return true;
+    if (dirName.startsWith('$toolName-') || dirName.startsWith('${toolName}_')) {
+      return true;
+    }
+
+    // 3. Check version file inside directory if present
+    final versionFile = File(p.join(dirPath, 'version'));
+    if (versionFile.existsSync()) {
+      try {
+        final content = versionFile.readAsStringSync().trim();
+        final tokens = content.split(RegExp(r'\s+'));
+        if (tokens.contains(toolName) || content.endsWith(toolName)) {
+          return true;
+        }
+      } catch (_) {}
+    }
+
+    return false;
+  }
 }
