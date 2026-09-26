@@ -105,9 +105,22 @@ void main() {
       ]);
     });
 
+    test('splits large file (>100MB) into 6 chunks correctly', () {
+      final totalBytes = 150 * 1024 * 1024;
+      final ranges =
+          GitHubReleaseService.calculateChunkRanges(totalBytes, numChunks: 6);
+      expect(ranges.length, 6);
+      expect(ranges.first['start'], 0);
+      expect(ranges.last['end'], totalBytes - 1);
+      for (var i = 0; i < ranges.length - 1; i++) {
+        expect(ranges[i]['end']! + 1, ranges[i + 1]['start']);
+      }
+    });
+
     test('handles small or zero total bytes gracefully', () {
       expect(GitHubReleaseService.calculateChunkRanges(0), isEmpty);
       expect(GitHubReleaseService.calculateChunkRanges(-100), isEmpty);
     });
   });
 }
+

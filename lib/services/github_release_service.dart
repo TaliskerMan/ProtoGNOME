@@ -269,34 +269,49 @@ class GitHubReleaseService {
     return ranges;
   }
 
-  /// Downloads a specific byte range chunk from [url] into [file] at position [start].
-  /// (CP-ChangeComments: Helper for parallel multi-connection range requests to saturate bandwidth)
+  /// Downloads the byte range [start]..[end] of [url] into its own [partFile].
+  ///
+  /// Each chunk writes to a separate part file that is concatenated afterwards.
+  /// (Previously every chunk opened the shared target with FileMode.writeOnly,
+  /// which truncates the file on open, so concurrent chunks wiped each other's
+  /// data and left zero-filled holes; the file still reached full length, so
+  /// progress hit 100% but the checksum then failed and install was refused.)
   Future<void> _downloadChunk({
     required String url,
-    required File file,
+    required File partFile,
     required int start,
     required int end,
-    required Map<String, String> headers,
     required void Function(int bytesRead) onChunkRead,
   }) async {
     final request = http.Request('GET', Uri.parse(url));
-    request.headers.addAll(headers);
+    request.headers['Accept'] = 'application/octet-stream';
     request.headers['Range'] = 'bytes=$start-$end';
     final response = await request.send();
 
-    if (response.statusCode != 206 && response.statusCode != 200) {
-      throw Exception('Chunk HTTP ${response.statusCode}');
+    // A 200 means the server ignored the Range header and is sending the whole
+    // file, which would corrupt the assembly; only 206 is acceptable here.
+    if (response.statusCode != 206) {
+      await response.stream.drain<void>();
+      throw Exception('Chunk $start-$end: expected HTTP 206, got ${response.statusCode}');
     }
 
-    final raf = await file.open(mode: FileMode.writeOnly);
+    final expected = end - start + 1;
+    var written = 0;
+    final sink = partFile.openWrite();
     try {
-      await raf.setPosition(start);
       await for (final data in response.stream) {
-        await raf.writeFrom(data);
+        written += data.length;
+        if (written > expected) {
+          throw Exception('Chunk $start-$end: received more than $expected bytes');
+        }
+        sink.add(data);
         onChunkRead(data.length);
       }
     } finally {
-      await raf.close();
+      await sink.close();
+    }
+    if (written != expected) {
+      throw Exception('Chunk $start-$end: received $written of $expected bytes');
     }
   }
 
@@ -308,39 +323,71 @@ class GitHubReleaseService {
     int totalBytes, {
     void Function(double progress)? onProgress,
   }) async {
+    final partFiles = <File>[];
     try {
-      // Pre-resolve HTTP 302 redirect to final CDN URL (e.g. objects.githubusercontent.com)
-      final headReq = http.Request('HEAD', Uri.parse(url));
-      headReq.headers.addAll(_headers);
+      // Pre-resolve the HTTP 302 redirect to the CDN URL. followRedirects must be
+      // off, otherwise the client follows it and 'location' is never present.
+      var finalUrl = url;
+      final headReq = http.Request('HEAD', Uri.parse(url))
+        ..followRedirects = false;
       final headResp = await headReq.send();
-      final finalUrl = headResp.headers['location'] ?? url;
+      await headResp.stream.drain<void>();
+      final location = headResp.headers['location'];
+      if (headResp.statusCode >= 300 &&
+          headResp.statusCode < 400 &&
+          location != null) {
+        finalUrl = Uri.parse(url).resolve(location).toString();
+      }
 
       final numChunks = totalBytes > 100 * 1024 * 1024 ? 6 : 4;
       final ranges = calculateChunkRanges(totalBytes, numChunks: numChunks);
       if (ranges.isEmpty) return false;
 
+      for (var i = 0; i < ranges.length; i++) {
+        partFiles.add(File('${tempFile.path}.part$i'));
+      }
+
       var totalReceived = 0;
-      final futures = ranges.map((range) {
-        return _downloadChunk(
+      final futures = <Future<void>>[];
+      for (var i = 0; i < ranges.length; i++) {
+        futures.add(_downloadChunk(
           url: finalUrl,
-          file: tempFile,
-          start: range['start']!,
-          end: range['end']!,
-          headers: _headers,
+          partFile: partFiles[i],
+          start: ranges[i]['start']!,
+          end: ranges[i]['end']!,
           onChunkRead: (read) {
             totalReceived += read;
-            if (totalBytes > 0) {
-              onProgress?.call((totalReceived / totalBytes).clamp(0.0, 1.0));
-            }
+            onProgress?.call((totalReceived / totalBytes).clamp(0.0, 1.0));
           },
-        );
-      });
+        ));
+      }
+      await Future.wait(futures, eagerError: true);
 
-      await Future.wait(futures);
-      return tempFile.existsSync() && tempFile.lengthSync() == totalBytes;
+      // Assemble the parts in order into the target file.
+      final out = tempFile.openWrite();
+      try {
+        for (final part in partFiles) {
+          await out.addStream(part.openRead());
+        }
+      } finally {
+        await out.close();
+      }
+
+      final ok = tempFile.lengthSync() == totalBytes;
+      if (!ok) {
+        LoggerService().log(
+            'Parallel download size mismatch (${tempFile.lengthSync()} != $totalBytes); falling back to single stream.');
+      }
+      return ok;
     } catch (error) {
       LoggerService().log('Parallel download fallback to single stream: $error');
       return false;
+    } finally {
+      for (final part in partFiles) {
+        try {
+          if (part.existsSync()) part.deleteSync();
+        } catch (_) {}
+      }
     }
   }
 
@@ -482,11 +529,11 @@ class GitHubReleaseService {
     if (path.endsWith('.tar.gz') || path.endsWith('.tgz')) {
       if (!await _validateTarMembers(path, ['-tzf'])) return false;
       final r = await Process.run('tar', ['-xzf', path, '-C', installDir]);
-      return r.exitCode == 0;
+      return _tarOk(r, toolName);
     } else if (path.endsWith('.tar.xz')) {
       if (!await _validateTarMembers(path, ['-tJf'])) return false;
       final r = await Process.run('tar', ['-xJf', path, '-C', installDir]);
-      return r.exitCode == 0;
+      return _tarOk(r, toolName);
     } else if (path.endsWith('.tar.zst')) {
       final safeTempDir = Directory.systemTemp.createTempSync('zst_extract_');
       final safeTarPath = p.join(safeTempDir.path, 'tmp.tar');
@@ -500,7 +547,7 @@ class GitHubReleaseService {
         }
         if (!await _validateTarMembers(safeTarPath, ['-tf'])) return false;
         final r = await Process.run('tar', ['-xf', safeTarPath, '-C', installDir]);
-        return r.exitCode == 0;
+        return _tarOk(r, toolName);
       } finally {
         try {
           safeTempDir.deleteSync(recursive: true);
@@ -528,6 +575,15 @@ class GitHubReleaseService {
     }
     LoggerService().logError('Extraction', 'Unsupported archive format: $path');
     return false;
+  }
+
+  /// Logs tar's stderr on failure so extraction problems show up in app.log.
+  bool _tarOk(ProcessResult r, String toolName) {
+    if (r.exitCode != 0) {
+      LoggerService().logError(
+          'Extracting $toolName', 'tar exit ${r.exitCode}: ${r.stderr}');
+    }
+    return r.exitCode == 0;
   }
 
   /// Lists a tar archive's members (without extracting) and validates that none

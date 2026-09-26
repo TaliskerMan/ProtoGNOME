@@ -149,7 +149,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             icon: Icons.info_outline_rounded,
             title: 'About ProtoGNOME',
             children: [
-              const _InfoRow(label: 'Version', value: '1.0.8'),
+              const _InfoRow(label: 'Version', value: '1.0.13'),
               const _InfoRow(label: 'License', value: 'GNU GPL v3'),
               const _InfoRow(label: 'Author', value: 'ProtoGNOME Contributors'),
             ],

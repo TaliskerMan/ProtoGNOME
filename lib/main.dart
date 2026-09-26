@@ -1,4 +1,4 @@
-// Auto-incremented to version 1.0.12+5 for build release on 2026-08-14 (Rule_028 / CP-AutoIncrement: Parallel HTTP multi-stream range downloader for 3x-6x faster tool downloads)
+// Auto-incremented to version 1.0.13+6 for build release on 2026-09-26 (Rule_028 / CP-AutoIncrement: Fix parallel download chunk file isolation, HTTP 206 enforcement, CDN redirect handling, and tar error logging)
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2024 ProtoGNOME Contributors
 

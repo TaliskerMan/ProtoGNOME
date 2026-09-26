@@ -4,6 +4,41 @@ All notable changes to the ProtoGNOME project are documented in this file. This 
 
 ---
 
+## [1.0.13] - 2026-09-26
+
+### Fixed
+- **Parallel multi-stream range download corruption:** Isolated concurrent chunk downloads to individual `.partN` temporary files assembled in order upon completion, preventing mutual file handle truncation.
+- **HTTP status verification:** Enforced strict HTTP 206 Partial Content validation, rejecting non-range 200 OK responses.
+- **CDN redirect resolution:** Disabled automatic redirect following on initial HEAD probe to properly capture 302 `location` headers from edge CDNs.
+- **Temporary part cleanup:** Guaranteed part file deletion in `finally` blocks upon completion or failure.
+- **Archive extraction error logging:** Added `_tarOk` helper logging `stderr` output to `LoggerService` when tar extraction fails.
+
+### Added
+- **Unit tests:** Added unit tests verifying 6-chunk splitting and continuity for downloads > 100 MB.
+
+---
+
+## [1.0.12] - 2026-08-14
+
+### Added
+- **Parallel multi-connection downloader:** Implemented multi-stream HTTP range downloader in `GitHubReleaseService` splitting large downloads (>10 MB) into 4 to 8 parallel range streams for 3x to 6x faster download speeds.
+
+---
+
+## [1.0.11] - 2026-08-14
+
+### Fixed
+- **SQLite3 FFI resolution:** Overrode Linux sqlite3 FFI dynamic library resolution via `open.overrideFor` to load `libsqlite3.so.0`, resolving `SqfliteFfiException` on systems missing development symlinks.
+
+---
+
+## [1.0.10] - 2026-08-14
+
+### Fixed
+- **Tool detection with arch suffix:** Added support for matching tools with architecture suffixes (e.g. `GE-Proton11-5-x86_64`) and internal `version` files.
+
+---
+
 ## [1.0.8] - 2026-06-22
 
 ### Added

@@ -1,3 +1,16 @@
+protognome (1.0.13+6) unstable; urgency=medium
+
+  * Fix parallel multi-stream HTTP range downloader chunk file isolation using discrete part files.
+  * Prevent concurrent stream file truncation and data corruption on multi-stream downloads.
+  * Enforce HTTP 206 Partial Content verification to reject unexpected HTTP 200 responses.
+  * Fix CDN redirect resolution by disabling followRedirects on initial HEAD probe.
+  * Add automatic assembly and cleanup of temporary part files upon download completion or error.
+  * Add _tarOk helper logging tar stderr on archive extraction failures to LoggerService.
+  * Add unit tests for 6-chunk large file range partitioning and continuity verification.
+  * Auto-increment version string to 1.0.13+6 (CP-AutoIncrement).
+
+ -- Chuck Talk <chuck@nordheim.online>  Sat, 26 Sep 2026 10:45:00 -0500
+
 protognome (1.0.12+5) unstable; urgency=medium
 
   * Implement high-performance parallel multi-connection HTTP range downloader in GitHubReleaseService.
