@@ -2,23 +2,22 @@
 // Copyright (C) 2024 ProtoGNOME Contributors
 
 import 'package:flutter/material.dart';
-import '../models/compat_tool.dart';
-import '../services/github_release_service.dart';
-import '../services/steam_service.dart';
-import '../services/install_location_service.dart';
-import '../widgets/tool_card.dart';
+import 'package:protognome/models/compat_tool.dart';
+import 'package:protognome/services/github_release_service.dart';
+import 'package:protognome/services/install_location_service.dart';
+import 'package:protognome/services/steam_service.dart';
+import 'package:protognome/widgets/tool_card.dart';
 
 /// Screen component displaying the list of available releases from GitHub
 /// and allowing user tool installations, removals, or type queries.
 class ToolManagerScreen extends StatefulWidget {
-  final SteamService steamService;
-  final GitHubReleaseService releaseService;
-
   const ToolManagerScreen({
-    super.key,
     required this.steamService,
     required this.releaseService,
+    super.key,
   });
+  final SteamService steamService;
+  final GitHubReleaseService releaseService;
 
   @override
   State<ToolManagerScreen> createState() => _ToolManagerScreenState();
@@ -27,7 +26,6 @@ class ToolManagerScreen extends StatefulWidget {
 class _ToolManagerScreenState extends State<ToolManagerScreen> {
   String _selectedToolType = 'ge-proton';
   List<CompatTool> _availableTools = [];
-  List<String> _installedToolNames = [];
   List<InstallLocation> _availableLocations = [];
   InstallLocation? _selectedLocation;
   bool _loading = false;
@@ -61,18 +59,12 @@ class _ToolManagerScreenState extends State<ToolManagerScreen> {
       }
 
       final tools = await widget.releaseService.fetchAvailableReleases(
-          _selectedToolType,
-          forceRefresh: forceRefresh);
-
-      final installed = _selectedLocation != null &&
-              !_selectedLocation!.name.contains('(Not Installed)')
-          ? widget.steamService
-              .getInstalledCompatTools(customDir: _selectedLocation!.path)
-          : <String>[];
+        _selectedToolType,
+        forceRefresh: forceRefresh,
+      );
 
       setState(() {
         _availableTools = tools;
-        _installedToolNames = installed;
         _loading = false;
       });
     } catch (error) {
@@ -111,8 +103,9 @@ class _ToolManagerScreenState extends State<ToolManagerScreen> {
               ),
             );
           } else {
-            _showError(
-                'Failed to install ${tool.name}. Check your internet connection.');
+            final reason = widget.releaseService.lastInstallError ??
+                'Check the log for details.';
+            _showError('${tool.name} was not installed. $reason');
           }
         },
       ),
@@ -130,19 +123,22 @@ class _ToolManagerScreenState extends State<ToolManagerScreen> {
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: const Color(0xFF1E1E3A),
-        title: const Text('Confirm Removal', style: TextStyle(color: Colors.white)),
+        title: const Text('Confirm Removal',
+            style: TextStyle(color: Colors.white)),
         content: Text(
           'Are you sure you want to completely remove $toolName from your system?',
           style: const TextStyle(color: Color(0xFFB0B0D0)),
         ),
         actions: [
           TextButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              child: const Text('Cancel')),
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Cancel'),
+          ),
           ElevatedButton(
             onPressed: () => Navigator.of(context).pop(true),
             style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFEF4444)),
+              backgroundColor: const Color(0xFFEF4444),
+            ),
             child: const Text('Remove'),
           ),
         ],
@@ -163,6 +159,11 @@ class _ToolManagerScreenState extends State<ToolManagerScreen> {
       }
     }
   }
+
+  /// True if the selected tool works with the selected launcher.
+  bool get _launcherSupported =>
+      _selectedLocation != null &&
+      toolSupportsLauncher(_selectedToolType, _selectedLocation!.id);
 
   void _showError(String msg) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -269,26 +270,43 @@ class _ToolManagerScreenState extends State<ToolManagerScreen> {
             ),
           ),
         ),
+        if (_selectedLocation != null && !_launcherSupported)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(24, 12, 24, 0),
+            child: Text(
+              '${kToolSources.firstWhere((s) => s['type'] == _selectedToolType)['name']} '
+              "works only with Steam, so it can't be installed into "
+              '${_selectedLocation!.name}.',
+              style: const TextStyle(color: Color(0xFFFCA5A5), fontSize: 13),
+            ),
+          ),
         const SizedBox(height: 8),
         // Tool list
         Expanded(
           child: _loading
               ? const Center(
-                  child: CircularProgressIndicator(color: Color(0xFF7C3AED)))
+                  child: CircularProgressIndicator(color: Color(0xFF7C3AED)),
+                )
               : _error != null
                   ? Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Icon(Icons.cloud_off,
-                              color: Color(0xFF8888AA), size: 48),
+                          const Icon(
+                            Icons.cloud_off,
+                            color: Color(0xFF8888AA),
+                            size: 48,
+                          ),
                           const SizedBox(height: 12),
-                          Text(_error!,
-                              style: const TextStyle(color: Color(0xFF8888AA))),
+                          Text(
+                            _error!,
+                            style: const TextStyle(color: Color(0xFF8888AA)),
+                          ),
                           const SizedBox(height: 12),
                           ElevatedButton(
-                              onPressed: () => _loadData(forceRefresh: true),
-                              child: const Text('Retry')),
+                            onPressed: () => _loadData(forceRefresh: true),
+                            child: const Text('Retry'),
+                          ),
                         ],
                       ),
                     )
@@ -297,6 +315,8 @@ class _ToolManagerScreenState extends State<ToolManagerScreen> {
                       itemCount: _availableTools.length,
                       itemBuilder: (context, index) {
                         final tool = _availableTools[index];
+                        // Matches folders with an arch suffix
+                        // (GE-Proton11-9-x86_64) or a 'version' file too.
                         final isInstalled = widget.steamService.isToolInstalled(
                           tool.name,
                           customDir: _selectedLocation?.path,
@@ -304,7 +324,11 @@ class _ToolManagerScreenState extends State<ToolManagerScreen> {
                         return ToolCard(
                           tool: tool,
                           isInstalled: isInstalled,
-                          onInstall: () => _installTool(tool),
+                          // Unverifiable releases, and launchers this tool
+                          // doesn't work with, get no Install button.
+                          onInstall: tool.isVerifiable && _launcherSupported
+                              ? () => _installTool(tool)
+                              : null,
                           onRemove:
                               isInstalled ? () => _removeTool(tool.name) : null,
                         );
@@ -318,17 +342,16 @@ class _ToolManagerScreenState extends State<ToolManagerScreen> {
 
 /// Modal dialog tracking the background download progress and extraction status.
 class _DownloadProgressDialog extends StatefulWidget {
-  final CompatTool tool;
-  final String installDir;
-  final GitHubReleaseService releaseService;
-  final void Function(bool success) onComplete;
-
   const _DownloadProgressDialog({
     required this.tool,
     required this.installDir,
     required this.releaseService,
     required this.onComplete,
   });
+  final CompatTool tool;
+  final String installDir;
+  final GitHubReleaseService releaseService;
+  final void Function(bool success) onComplete;
 
   @override
   State<_DownloadProgressDialog> createState() =>
@@ -336,7 +359,7 @@ class _DownloadProgressDialog extends StatefulWidget {
 }
 
 class _DownloadProgressDialogState extends State<_DownloadProgressDialog> {
-  double _progress = 0.0;
+  double _progress = 0;
   String _status = 'Starting download...';
 
   @override
@@ -378,12 +401,18 @@ class _DownloadProgressDialogState extends State<_DownloadProgressDialog> {
             valueColor: const AlwaysStoppedAnimation(Color(0xFF7C3AED)),
           ),
           const SizedBox(height: 12),
-          Text(_status,
-              style: const TextStyle(color: Color(0xFF8888AA), fontSize: 13)),
+          Text(
+            _status,
+            style: const TextStyle(color: Color(0xFF8888AA), fontSize: 13),
+          ),
           if (_progress > 0)
-            Text('${(_progress * 100).toStringAsFixed(0)}%',
-                style: const TextStyle(
-                    color: Color(0xFF7C3AED), fontWeight: FontWeight.bold)),
+            Text(
+              '${(_progress * 100).toStringAsFixed(0)}%',
+              style: const TextStyle(
+                color: Color(0xFF7C3AED),
+                fontWeight: FontWeight.bold,
+              ),
+            ),
         ],
       ),
     );

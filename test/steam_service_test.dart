@@ -75,4 +75,11 @@ void main() {
       );
     });
   });
+
+  test('looks for native, Flatpak and Snap Steam, native first', () {
+    const roots = SteamService.possibleSteamRoots;
+    expect(roots.first, '.local/share/Steam');
+    expect(roots, contains('.var/app/com.valvesoftware.Steam/data/Steam'));
+    expect(roots, contains('snap/steam/common/.local/share/Steam'));
+  });
 }

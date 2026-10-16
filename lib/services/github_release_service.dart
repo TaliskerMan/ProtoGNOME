@@ -14,54 +14,65 @@ import 'logger_service.dart';
 import 'steam_service.dart';
 
 /// Tool source definitions ported from ProtonUp-Qt's ctloader.py / ctmods.
+///
+/// Only tools whose releases can be verified are offered: each release must
+/// publish a checksum file and/or carry GitHub's recorded SHA-256 digest for
+/// the download (see [CompatTool.isVerifiable]). Boxtron and SteamTinkerLaunch
+/// were removed because their releases can never be verified, and "Proton-GE
+/// (tkg)" because wine-tkg-git's releases are Arch Linux Wine packages that
+/// Steam cannot use as a compatibility tool.
 const List<Map<String, dynamic>> kToolSources = [
   {
     'name': 'GE-Proton',
     'type': 'ge-proton',
     'repo': 'GloriousEggroll/proton-ge-custom',
     'asset_suffix': '.tar.gz',
-    'description': 'GloriousEggroll\'s Proton build with extra patches',
-  },
-  {
-    'name': 'Proton-GE (tkg)',
-    'type': 'proton-tkg',
-    'repo': 'Frogging-Family/wine-tkg-git',
-    'asset_suffix': '.tar.zst',
-    'description': 'TkG\'s Proton build with advanced configuration',
-  },
-  {
-    'name': 'Boxtron',
-    'type': 'boxtron',
-    'repo': 'dreamer/boxtron',
-    'asset_suffix': '.tar.xz',
-    'description': 'Steam Play compatibility tool for DOS games via DOSBox',
+    'launchers': ['steam', 'heroic'],
+    'description': "GloriousEggroll's Proton build with extra patches",
   },
   {
     'name': 'Luxtorpeda',
     'type': 'luxtorpeda',
     'repo': 'luxtorpeda-dev/luxtorpeda',
     'asset_suffix': '.tar.xz',
-    'description': 'Steam Play compatibility tool for specific games using native Linux engines',
-  },
-  {
-    'name': 'SteamTinkerLaunch',
-    'type': 'stl',
-    'repo': 'sonic2kk/steamtinkerlaunch',
-    'asset_suffix': '',
-    'description': 'Wrapper for Steam with extensive game launch configuration',
+    'launchers': ['steam'],
+    'description':
+        'Steam Play compatibility tool for specific games using native Linux engines',
   },
 ];
 
+/// True if the tool of [toolType] works with the launcher [launcherId]
+/// ('steam' or 'heroic'), following ProtonUp-Qt: GE-Proton works with Steam
+/// and Heroic, Luxtorpeda only with Steam.
+bool toolSupportsLauncher(String toolType, String launcherId) {
+  final source = kToolSources.firstWhere(
+    (s) => s['type'] == toolType,
+    orElse: () => const {},
+  );
+  final launchers = source['launchers'] as List<dynamic>? ?? const [];
+  return launchers.contains(launcherId);
+}
+
 /// Result of choosing the download + checksum assets from a release's asset list.
 class AssetSelection {
+  const AssetSelection({
+    this.downloadUrl,
+    this.downloadSize,
+    this.checksumUrl,
+    this.assetDigest,
+  });
   final String? downloadUrl;
   final int? downloadSize;
+
+  /// The publisher's checksum file for the chosen download, if any.
   final String? checksumUrl;
-  const AssetSelection({this.downloadUrl, this.downloadSize, this.checksumUrl});
+
+  /// GitHub's recorded digest for the chosen download (`sha256:<hex>`), if any.
+  final String? assetDigest;
 }
 
 /// Service querying GitHub Releases APIs to list and download Steam compatibility tools.
-/// Features zip/tar.gz/tar.xz/tar.zst archive extraction routines and tool deletion operations.
+/// Features zip/tar.gz/tar.xz archive extraction routines and tool deletion operations.
 class GitHubReleaseService {
   static final GitHubReleaseService _instance =
       GitHubReleaseService._internal();
@@ -114,29 +125,86 @@ class GitHubReleaseService {
     await SecretService().setGithubToken(token);
   }
 
-  /// Chooses the download asset (matching [assetSuffix]) and any published
-  /// checksum asset (`.sha512sum`/`.sha256sum`) from a release's asset list.
-  /// Pure function so it can be unit-tested.
+  /// Checksum-file extensions recognised next to a download, in preference
+  /// order. `.sha512`/`.sha256` (bare) are what Luxtorpeda publishes.
+  static const List<String> kChecksumExtensions = [
+    '.sha512sum',
+    '.sha256sum',
+    '.sha512',
+    '.sha256',
+  ];
+
+  /// Chooses the download asset (matching [assetSuffix]) from a release's
+  /// asset list, the publisher's checksum file for THAT asset, and GitHub's
+  /// recorded digest for it. Pure function so it can be unit-tested.
+  ///
+  /// - Builds for other CPUs (aarch64/arm64) are skipped; if several candidates
+  ///   remain, one marked x86_64 is preferred. (GE-Proton publishes both
+  ///   `-aarch64.tar.gz` and `-x86_64.tar.gz`; previously whichever came last
+  ///   in the list was taken.)
+  /// - The checksum file must belong to the chosen download: named
+  ///   `<download><ext>` or `<download minus suffix><ext>`.
   static AssetSelection selectAsset(
-      List<dynamic> assets, String assetSuffix) {
-    String? downloadUrl;
-    int? downloadSize;
-    String? checksumUrl;
+    List<dynamic> assets,
+    String assetSuffix,
+  ) {
+    final byName = <String, Map<String, dynamic>>{};
     for (final asset in assets) {
-      final name = asset['name'] as String? ?? '';
-      if (assetSuffix.isNotEmpty && name.endsWith(assetSuffix)) {
-        downloadUrl = asset['browser_download_url'] as String?;
-        downloadSize = asset['size'] as int?;
-      }
-      if (name.endsWith('.sha512sum') || name.endsWith('.sha256sum')) {
-        checksumUrl = asset['browser_download_url'] as String?;
+      if (asset is Map<String, dynamic>) {
+        final name = asset['name'] as String? ?? '';
+        if (name.isNotEmpty) byName[name] = asset;
       }
     }
-    return AssetSelection(
-      downloadUrl: downloadUrl,
-      downloadSize: downloadSize,
-      checksumUrl: checksumUrl,
+
+    if (assetSuffix.isEmpty) return const AssetSelection();
+    final candidates = byName.keys
+        .where((n) => n.endsWith(assetSuffix) && !_isOtherArch(n))
+        .toList();
+    if (candidates.isEmpty) return const AssetSelection();
+    final chosen = candidates.firstWhere(
+      (n) => n.toLowerCase().contains('x86_64'),
+      orElse: () => candidates.first,
     );
+    final asset = byName[chosen]!;
+
+    String? checksumUrl;
+    final stem = chosen.substring(0, chosen.length - assetSuffix.length);
+    outer:
+    for (final ext in kChecksumExtensions) {
+      for (final name in ['$chosen$ext', '$stem$ext']) {
+        final c = byName[name];
+        if (c != null && c['browser_download_url'] is String) {
+          checksumUrl = c['browser_download_url'] as String;
+          break outer;
+        }
+      }
+    }
+
+    final rawDigest = asset['digest'];
+    final digest = rawDigest is String ? rawDigest : null;
+    return AssetSelection(
+      downloadUrl: asset['browser_download_url'] as String?,
+      downloadSize: asset['size'] as int?,
+      checksumUrl: checksumUrl,
+      assetDigest: parseGithubDigest(digest) != null ? digest : null,
+    );
+  }
+
+  /// True for asset names built for a CPU other than x86_64.
+  static bool _isOtherArch(String name) {
+    final n = name.toLowerCase();
+    return n.contains('aarch64') ||
+        n.contains('arm64') ||
+        n.contains('armhf') ||
+        n.contains('i686');
+  }
+
+  /// Returns the hex part of a GitHub asset digest (`sha256:<64 hex>`), or
+  /// null if [digest] is missing or not in that form. Pure + testable.
+  static String? parseGithubDigest(String? digest) {
+    if (digest == null) return null;
+    final m = RegExp(r'^sha256:([0-9a-fA-F]{64})$').firstMatch(digest.trim());
+    return m?.group(1)?.toLowerCase();
   }
 
   /// Extracts the expected hex digest for [assetFileName] from the body of a
@@ -215,11 +283,7 @@ class GitHubReleaseService {
         final assets = release['assets'] as List<dynamic>? ?? [];
         final selection = selectAsset(assets, assetSuffix);
 
-        String? downloadUrl = selection.downloadUrl;
-        // For STL (which has no separate binary asset), use tarball.
-        if (assetSuffix.isEmpty) {
-          downloadUrl = release['tarball_url'] as String?;
-        }
+        final downloadUrl = selection.downloadUrl;
 
         tools.add(CompatTool(
           name: tag,
@@ -229,6 +293,7 @@ class GitHubReleaseService {
           downloadUrl: downloadUrl,
           downloadSize: selection.downloadSize,
           checksum: selection.checksumUrl,
+          assetDigest: selection.assetDigest,
         ));
       }
 
@@ -391,16 +456,39 @@ class GitHubReleaseService {
     }
   }
 
+  /// Why the last [downloadAndInstall] failed, in words a user can act on.
+  /// Null after a successful install.
+  String? lastInstallError;
+
   /// Downloads the specified compatibility [tool] to a temporary directory,
-  /// piping chunk progress to [onProgress], verifies its published checksum,
-  /// and extracts it to the active [installDir]. Returns false (and installs
-  /// nothing) if the download is oversized or the checksum does not match.
+  /// piping chunk progress to [onProgress], verifies it, and extracts it to
+  /// the active [installDir]. Returns false (and installs nothing) if the
+  /// download is oversized, can't be verified, or fails verification; the
+  /// reason is left in [lastInstallError].
+  ///
+  /// Verification is required: every available check must pass (the
+  /// publisher's checksum file and GitHub's recorded SHA-256 digest), and a
+  /// release offering neither is refused before anything is downloaded.
   Future<bool> downloadAndInstall(
     CompatTool tool,
     String installDir, {
     void Function(double progress)? onProgress,
   }) async {
-    if (tool.downloadUrl == null) return false;
+    lastInstallError = null;
+    if (tool.downloadUrl == null) {
+      lastInstallError = 'This release has no download for this computer.';
+      return false;
+    }
+    if (!tool.isVerifiable) {
+      lastInstallError =
+          'This release can\'t be verified (it publishes no checksum), so '
+          'ProtoGNOME won\'t install it.';
+      LoggerService().logError(
+        'Install',
+        'No checksum or GitHub digest for ${tool.name}; refusing to install.',
+      );
+      return false;
+    }
 
     final tempDir = Directory.systemTemp.createTempSync('protognome_dl_');
 
@@ -426,12 +514,18 @@ class GitHubReleaseService {
         request.headers.addAll(_headers);
         final streamed = await request.send();
 
-        if (streamed.statusCode != 200) return false;
+        if (streamed.statusCode != 200) {
+          lastInstallError =
+              'The download failed (HTTP ${streamed.statusCode}). Check your '
+              'internet connection and try again.';
+          return false;
+        }
 
         final total = streamed.contentLength ?? totalSize;
         if (total > kMaxDownloadBytes) {
           LoggerService().logError('Download',
               'Asset for ${tool.name} reports $total bytes, exceeding the ${kMaxDownloadBytes} byte cap. Aborting.');
+          lastInstallError = 'The download is larger than ProtoGNOME allows.';
           return false;
         }
         var received = 0;
@@ -443,6 +537,7 @@ class GitHubReleaseService {
             await sink.close();
             LoggerService().logError('Download',
                 'Download for ${tool.name} exceeded the ${kMaxDownloadBytes} byte cap mid-stream. Aborting.');
+            lastInstallError = 'The download is larger than ProtoGNOME allows.';
             return false;
           }
           sink.add(chunk);
@@ -453,25 +548,49 @@ class GitHubReleaseService {
         await sink.close();
       }
 
-      // Integrity: verify the published checksum before extracting/installing an
-      // executable runtime. Refuse on mismatch or when verification can't run.
+      // Integrity: every available check must pass before an executable
+      // runtime is extracted. isVerifiable (checked above) guarantees at
+      // least one exists.
+      final fileName = p.basename(tempFile.path);
       if (tool.checksum != null && tool.checksum!.isNotEmpty) {
-        final ok = await _verifyChecksum(
-            tempFile, tool.checksum!, p.basename(tempFile.path));
+        final ok = await _verifyChecksum(tempFile, tool.checksum!, fileName);
         if (!ok) {
-          LoggerService().logError('Install',
-              'Checksum verification failed for ${tool.name}; refusing to install.');
+          LoggerService().logError(
+            'Install',
+            'Publisher checksum verification failed for ${tool.name}; refusing to install.',
+          );
+          lastInstallError = _verificationFailedMessage;
           return false;
         }
-        LoggerService().log('Checksum verified for ${tool.name}.');
-      } else {
-        LoggerService().log(
-            'No checksum published for ${tool.name}; installing without integrity verification.');
+        LoggerService().log('Publisher checksum verified for ${tool.name}.');
+      }
+      final githubHex = parseGithubDigest(tool.assetDigest);
+      if (githubHex != null) {
+        final actual =
+            (await sha256.bind(tempFile.openRead()).first).toString();
+        if (actual != githubHex) {
+          LoggerService().logError(
+            'Install',
+            'GitHub digest mismatch for $fileName: expected $githubHex, got $actual; refusing to install.',
+          );
+          lastInstallError = _verificationFailedMessage;
+          return false;
+        }
+        LoggerService().log('GitHub SHA-256 digest verified for ${tool.name}.');
       }
 
-      return await _extractArchive(tempFile, installDir, tool.name);
+      final extracted =
+          await _extractArchive(tempFile, installDir, tool.name);
+      if (!extracted) {
+        lastInstallError =
+            'The download was verified but could not be unpacked. See the log '
+            'for details.';
+      }
+      return extracted;
     } catch (error) {
       LoggerService().logError('Downloading ${tool.name}', error);
+      lastInstallError ??=
+          'The download failed. Check your internet connection and try again.';
       return false;
     } finally {
       try {
@@ -479,6 +598,12 @@ class GitHubReleaseService {
       } catch (_) {}
     }
   }
+
+  static const String _verificationFailedMessage =
+      'The download could not be verified against its published checksum, '
+      'so it was not installed. It may have been corrupted or altered, or the '
+      'checksum could not be fetched. Try again later; don\'t install it '
+      'another way.';
 
   /// Downloads [checksumUrl], extracts the expected digest, and compares it to
   /// the hash computed over [file] (streamed, so large files are not buffered).
@@ -498,7 +623,7 @@ class GitHubReleaseService {
             'Checksum', 'No matching digest for $assetFileName in checksum file.');
         return false;
       }
-      final algo = checksumUrl.endsWith('.sha256sum') ? sha256 : sha512;
+      final algo = checksumAlgorithmFor(checksumUrl);
       final digest = await algo.bind(file.openRead()).first;
       final actual = digest.toString().toLowerCase();
       if (actual != expected.toLowerCase()) {
@@ -513,7 +638,14 @@ class GitHubReleaseService {
     }
   }
 
-  /// Private helper that spawns OS subprocesses (tar, zstd) or uses Dart ZipDecoder
+  /// The hash algorithm for a checksum file, from its extension
+  /// (`.sha256sum`/`.sha256` → SHA-256, otherwise SHA-512). Pure + testable.
+  static Hash checksumAlgorithmFor(String checksumUrl) {
+    final u = checksumUrl.toLowerCase();
+    return (u.endsWith('.sha256sum') || u.endsWith('.sha256')) ? sha256 : sha512;
+  }
+
+  /// Private helper that runs `tar` (array-form arguments) or uses Dart ZipDecoder
   /// to extract compatibility tool archives into [installDir]. Returns true on
   /// success. For tar archives it lists and validates members first, refusing to
   /// extract if any member would escape [installDir] (defence-in-depth matching
@@ -534,25 +666,6 @@ class GitHubReleaseService {
       if (!await _validateTarMembers(path, ['-tJf'])) return false;
       final r = await Process.run('tar', ['-xJf', path, '-C', installDir]);
       return _tarOk(r, toolName);
-    } else if (path.endsWith('.tar.zst')) {
-      final safeTempDir = Directory.systemTemp.createTempSync('zst_extract_');
-      final safeTarPath = p.join(safeTempDir.path, 'tmp.tar');
-      try {
-        final zstdResult = await Process.run(
-            'zstd', ['-d', archiveFile.path, '-o', safeTarPath]);
-        if (zstdResult.exitCode != 0) {
-          LoggerService().logError('Zstd Extraction',
-              'Exit code ${zstdResult.exitCode}: ${zstdResult.stderr}');
-          return false;
-        }
-        if (!await _validateTarMembers(safeTarPath, ['-tf'])) return false;
-        final r = await Process.run('tar', ['-xf', safeTarPath, '-C', installDir]);
-        return _tarOk(r, toolName);
-      } finally {
-        try {
-          safeTempDir.deleteSync(recursive: true);
-        } catch (_) {}
-      }
     } else if (path.endsWith('.zip')) {
       final bytes = archiveFile.readAsBytesSync();
       final archive = ZipDecoder().decodeBytes(bytes);

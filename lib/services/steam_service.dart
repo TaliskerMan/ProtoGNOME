@@ -14,18 +14,24 @@ class SteamService {
   factory SteamService() => _instance;
   SteamService._internal();
 
-  static const List<String> _possibleSteamRoots = [
+  /// Where Steam keeps its data, relative to the home folder: the native
+  /// install first, then the Flatpak and Snap packages (same folders
+  /// ProtonUp-Qt checks). Compatibility tools go in `compatibilitytools.d`
+  /// under whichever is found.
+  static const List<String> possibleSteamRoots = [
     '.local/share/Steam',
     '.steam/root',
     '.steam/steam',
     '.steam/debian-installation',
+    '.var/app/com.valvesoftware.Steam/data/Steam', // Flatpak
+    'snap/steam/common/.local/share/Steam', // Snap
   ];
 
   /// Returns the absolute path of the detected Steam root directory, or null if not found.
   String? getSteamRoot() {
     final home = Platform.environment['HOME'] ?? '';
     final seen = <String>{};
-    for (final rel in _possibleSteamRoots) {
+    for (final rel in possibleSteamRoots) {
       final path = p.normalize(p.join(home, rel));
       final resolved = Directory(path).existsSync()
           ? File(path).resolveSymbolicLinksSync()

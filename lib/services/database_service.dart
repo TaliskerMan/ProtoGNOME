@@ -32,9 +32,20 @@ class DatabaseService {
 
     return openDatabase(
       dbPath,
-      version: 1,
+      version: 2,
       onCreate: _onCreate,
+      onUpgrade: _onUpgrade,
     );
+  }
+
+  /// Schema upgrades for existing installs.
+  /// v2: GitHub's per-asset digest (`asset_digest`) for download verification.
+  /// The release cache is cleared so every release is re-read with its digest.
+  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {
+      await db.execute('ALTER TABLE compat_tools ADD COLUMN asset_digest TEXT');
+      await db.delete('compat_tools');
+    }
   }
 
   /// Callback to execute the SQL table creation queries on new database instances.
@@ -49,6 +60,7 @@ class DatabaseService {
         download_url TEXT,
         download_size INTEGER,
         checksum TEXT,
+        asset_digest TEXT,
         is_installed INTEGER NOT NULL DEFAULT 0,
         cached_at INTEGER
       )

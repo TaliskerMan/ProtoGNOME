@@ -83,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(12),
-                      child: Image.asset('assets/icons/proto.png',
+                      child: Image.asset('assets/icons/protoGNOME.png',
                           width: 44, height: 44, fit: BoxFit.cover),
                     ),
                   ),
@@ -168,7 +168,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         const SizedBox(width: 8),
                         Text(
                           _steamRoot == null
-                              ? 'Steam installation not found. Please configure the install path in Settings.'
+                              ? 'Steam not found in its standard folders (native, Flatpak or Snap). Install Steam and run it once, then restart ProtoGNOME.'
                               : 'Steam installation found but may be incomplete.',
                           style: const TextStyle(
                               color: Color(0xFFFCA5A5), fontSize: 13),

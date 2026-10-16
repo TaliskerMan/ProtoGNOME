@@ -4,6 +4,56 @@ All notable changes to the ProtoGNOME project are documented in this file. This 
 
 ---
 
+## [Unreleased]
+
+### Security — verification is now required (2026-10-16 review)
+- **Unverifiable downloads are refused.** Previously a release without a
+  `.sha512sum`/`.sha256sum` file was installed anyway with only a log line,
+  although the README said it would be refused. Now every install must pass
+  every available check — the publisher's checksum file and GitHub's recorded
+  SHA-256 digest for the asset — and a release with neither is shown as
+  "Can't be verified" with no Install button.
+- **GitHub asset digests are checked** in addition to publisher checksum files.
+- **Luxtorpeda's checksums are used.** It publishes bare `.sha512` files, which
+  were not recognised.
+- **Right build, right checksum.** GE-Proton now ships `-aarch64` and `-x86_64`
+  archives; ProtoGNOME took whichever was listed last and any checksum file in
+  the release. It now picks the x86_64 build and that file's own checksum.
+- **Clear failure messages.** A failed install said "Check your internet
+  connection" even when verification failed; it now gives the real reason.
+
+### Removed
+- **Boxtron** and **SteamTinkerLaunch**: their releases publish no checksums
+  (SteamTinkerLaunch has no release files at all), so they can never be
+  verified.
+- **Proton-GE (tkg)**: wine-tkg-git's releases are 2021–22 Arch Linux Wine
+  packages (`.pkg.tar.zst`), not a Proton build Steam can use. `.tar.zst`
+  extraction (and the undeclared `zstd` dependency) went with it.
+- Previously installed copies keep working; remove them by deleting their
+  folder from the launcher's tools folder.
+
+### Fixed
+- **Steam on a fresh install is offered.** Steam was only listed as a target
+  once its `compatibilitytools.d` folder existed, which Steam doesn't create
+  until a tool is installed. It is now offered whenever Steam is found.
+- **Flatpak and Snap Steam are detected** (the same folders ProtonUp-Qt checks).
+- **"Steam not found" banner** no longer tells users to set a path in Settings,
+  which has no such option.
+- **Tools are only offered for launchers they work with:** GE-Proton for Steam
+  and Heroic, Luxtorpeda for Steam only. Lutris is no longer a target (it runs
+  Wine builds, which neither tool is), and ProtoGNOME no longer creates
+  `~/.local/share/lutris/runners/wine`.
+
+### Changed
+- **New application icon**: a square 512×512 icon replaces the 687×689 one
+  (which was installed as if it were 256×256). The package now installs it at
+  512, 256, 128, 64, 48 and 32 px, and the app's Home and About screens use it.
+- The package Homepage now points to github.com/TaliskerMan/ProtoGNOME.
+- Database schema v2 (adds `asset_digest`); the release cache is refreshed
+  once on upgrade.
+
+---
+
 ## [1.0.13] - 2026-09-26
 
 ### Fixed

@@ -107,9 +107,18 @@ cp "${SCRIPT_DIR}/share/applications/protognome.desktop" \
 sed -i 's/^StartupWMClass=.*/StartupWMClass=io.protognome.protognome/' \
    "${DEB_ROOT}/usr/share/applications/io.protognome.protognome.desktop"
 
-# Icon
-cp "${SCRIPT_DIR}/assets/icons/proto.png" \
-   "${DEB_ROOT}/usr/share/icons/hicolor/256x256/apps/protognome.png"
+# Icons: the square 512x512 master (assets/icons/protoGNOME.png) and its
+# pre-scaled copies live in share/icons/hicolor/<size>/apps/protognome.png.
+ICON_SIZES="512x512 256x256 128x128 64x64 48x48 32x32"
+for size in ${ICON_SIZES}; do
+    src="${SCRIPT_DIR}/share/icons/hicolor/${size}/apps/protognome.png"
+    if [ ! -f "${src}" ]; then
+        echo "ERROR: missing icon ${src}" >&2
+        exit 1
+    fi
+    mkdir -p "${DEB_ROOT}/usr/share/icons/hicolor/${size}/apps"
+    cp "${src}" "${DEB_ROOT}/usr/share/icons/hicolor/${size}/apps/protognome.png"
+done
 
 # Copyright
 cp "${SCRIPT_DIR}/LICENSE" \
@@ -127,7 +136,7 @@ Installed-Size: ${INSTALLED_SIZE}
 Depends: libgtk-3-0, libblkid1, liblzma5, libsecret-1-0, libsqlite3-0
 Recommends: steam
 Maintainer: Chuck Talk <chuck@nordheim.online>
-Homepage: https://github.com/ProtoGNOME/ProtoGNOME
+Homepage: https://github.com/TaliskerMan/ProtoGNOME
 Description: Native GNOME Proton compatibility tool manager
  ProtoGNOME is a native GNOME application for managing Proton
  compatibility tools for Steam on Linux. Fork of ProtonUp-Qt with

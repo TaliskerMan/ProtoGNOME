@@ -123,6 +123,27 @@ class ToolCard extends StatelessWidget {
                 style: IconButton.styleFrom(
                     backgroundColor: const Color(0xFF2A1A1A)),
               )
+            else if (!isInstalled && !tool.isVerifiable)
+              const Tooltip(
+                message: 'This release publishes no checksum, so ProtoGNOME '
+                    'can\'t verify it and won\'t install it.',
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.gpp_maybe_outlined,
+                          size: 15, color: Color(0xFF8888AA)),
+                      SizedBox(width: 4),
+                      Text(
+                        "Can't be verified",
+                        style:
+                            TextStyle(color: Color(0xFF8888AA), fontSize: 12),
+                      ),
+                    ],
+                  ),
+                ),
+              )
             else if (!isInstalled && onInstall != null)
               ElevatedButton.icon(
                 onPressed: onInstall,

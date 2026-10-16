@@ -66,7 +66,7 @@ class _AboutScreenState extends State<AboutScreen> {
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(24),
-                    child: Image.asset('assets/icons/proto.png',
+                    child: Image.asset('assets/icons/protoGNOME.png',
                         width: 96, height: 96, fit: BoxFit.cover),
                   ),
                 ),
