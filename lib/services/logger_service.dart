@@ -46,7 +46,7 @@ class LoggerService {
       try {
         final ts = DateTime.now().toIso8601String();
         _logFile!.writeAsStringSync('[$ts] $message\n', mode: FileMode.append);
-      } on Object catch (error) {
+      } on Object {
         // Silently fail if log cannot be appended
       }
     }

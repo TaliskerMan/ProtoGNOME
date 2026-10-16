@@ -293,7 +293,7 @@ class _ToolManagerScreenState extends State<ToolManagerScreen> {
           Padding(
             padding: const EdgeInsets.fromLTRB(24, 12, 24, 0),
             child: Text(
-              '$_selectedToolName works only with Steam, so it can\'t be '
+              "$_selectedToolName works only with Steam, so it can't be "
               'installed into ${_selectedLocation!.name}.',
               style: const TextStyle(color: Color(0xFFFCA5A5), fontSize: 13),
             ),
