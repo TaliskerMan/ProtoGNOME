@@ -10,7 +10,7 @@ import 'package:path/path.dart' as p;
 @immutable
 class InstallLocation {
   /// Creates a representation of a tool installation directory location.
-  InstallLocation({
+  const InstallLocation({
     required this.id,
     required this.name,
     required this.path,

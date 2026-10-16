@@ -9,12 +9,12 @@ void main() {
       () {
     // The Tools screen rebuilds its location list on every reload; the
     // launcher dropdown needs the earlier selection to match the new entry.
-    final before = InstallLocation(id: 'steam', name: 'Steam', path: '/s');
-    final after = InstallLocation(id: 'steam', name: 'Steam', path: '/s');
+    const before = InstallLocation(id: 'steam', name: 'Steam', path: '/s');
+    const after = InstallLocation(id: 'steam', name: 'Steam', path: '/s');
     expect(after, before);
     expect(after.hashCode, before.hashCode);
     expect(
-      InstallLocation(id: 'heroic', name: 'Heroic', path: '/h'),
+      const InstallLocation(id: 'heroic', name: 'Heroic', path: '/h'),
       isNot(before),
     );
   });
