@@ -53,17 +53,18 @@ class _ToolManagerScreenState extends State<ToolManagerScreen> {
       _availableLocations =
           InstallLocationService().getAvailableLocations(steamDir);
 
-      if (_selectedLocation == null && _availableLocations.isNotEmpty) {
-        _selectedLocation = _availableLocations.first;
-      }
-      // If the selected location became invalid or not in the list, default
-      // to the first one.
-      if (_selectedLocation != null &&
-          !_availableLocations
-              .any((loc) => loc.path == _selectedLocation!.path)) {
-        _selectedLocation =
-            _availableLocations.isNotEmpty ? _availableLocations.first : null;
-      }
+      // The list is rebuilt from scratch on every reload, so keep the
+      // selection by re-picking the NEW entry with the same path. (Keeping the
+      // old object left the dropdown with a value none of its items matched,
+      // which threw a "There should be exactly one item with [DropdownButton]'s
+      // value" assertion after an install or removal.) Falls back to the
+      // first location if the selected one is gone.
+      final previousPath = _selectedLocation?.path;
+      final matches =
+          _availableLocations.where((loc) => loc.path == previousPath);
+      _selectedLocation = matches.isNotEmpty
+          ? matches.first
+          : (_availableLocations.isNotEmpty ? _availableLocations.first : null);
 
       final tools = await widget.releaseService.fetchAvailableReleases(
         _selectedToolType,
