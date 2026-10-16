@@ -202,7 +202,10 @@ for target_dir in "${NOBUILDS_DIR}" "${NOBUILDS_PATTERN_DIR}"; do
     cp Audit/SBOM-Linux.json "${target_dir}/" || true
     cp Audit/SBOM-Linux "${target_dir}/" || true
     cp Audit/sbom.json "${target_dir}/" || true
+    ( cd "${target_dir}" && rm -f SHA512SUMS && sha512sum * > SHA512SUMS )
 done
+
+( cd "${ARTIFACTS}" && rm -f SHA512SUMS && sha512sum * > SHA512SUMS )
 
 echo ""
 echo "==================================="
