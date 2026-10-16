@@ -84,7 +84,7 @@ class _ToolManagerScreenState extends State<ToolManagerScreen> {
     final installDir = _selectedLocation!.path;
 
     // Show progress dialog
-    showDialog(
+    showDialog<void>(
       context: context,
       barrierDismissible: false,
       builder: (context) => _DownloadProgressDialog(
@@ -379,7 +379,7 @@ class _DownloadProgressDialogState extends State<_DownloadProgressDialog> {
     );
     if (mounted) {
       setState(() => _status = success ? 'Extracting...' : 'Failed!');
-      await Future.delayed(const Duration(milliseconds: 300));
+      await Future<void>.delayed(const Duration(milliseconds: 300));
       widget.onComplete(success);
     }
   }

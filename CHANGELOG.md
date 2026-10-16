@@ -33,6 +33,19 @@ All notable changes to the ProtoGNOME project are documented in this file. This 
   folder from the launcher's tools folder.
 
 ### Fixed
+- **App failed to start its database on most desktops** ("Failed to load
+  dynamic library 'libsqlite3.so'"). The 1.0.11 fix set a SQLite override in
+  `main()`, but `DatabaseService` then replaced the global database factory
+  with a plain one, so the override never applied. The database service now
+  uses its own factory that loads the system `libsqlite3.so.0` in sqflite's
+  background isolate.
+- **No more font download from Google.** `google_fonts` (with no bundled font
+  files) fetched Inter from fonts.gstatic.com at every start, although
+  ProtoGNOME says it contacts only GitHub; the late font swap also clipped the
+  tool-chip labels. The app now uses the desktop's own font.
+- **No layout errors at start-up.** The window is shown only after Flutter's
+  first frame (it was laid out at 1 pixel first), has a minimum size, and is
+  titled "ProtoGNOME".
 - **Steam on a fresh install is offered.** Steam was only listed as a target
   once its `compatibilitytools.d` folder existed, which Steam doesn't create
   until a tool is installed. It is now offered whenever Steam is found.

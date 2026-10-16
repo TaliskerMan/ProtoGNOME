@@ -1,48 +1,21 @@
-// Auto-incremented to version 1.0.13+6 for build release on 2026-09-26 (Rule_028 / CP-AutoIncrement: Fix parallel download chunk file isolation, HTTP 206 enforcement, CDN redirect handling, and tar error logging)
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2024 ProtoGNOME Contributors
 
-import 'dart:ffi';
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:sqlite3/open.dart';
-import 'screens/home_screen.dart';
-
-/// Top-level FFI initialization function for Linux sqlite3 dynamic library resolution.
-/// (CP-ChangeComments: Overrides Linux sqlite3 lookup to load libsqlite3.so.0 cleanly if libsqlite3.so is missing)
-void protognomeFfiInit() {
-  if (Platform.isLinux) {
-    open.overrideFor(OperatingSystem.linux, () {
-      try {
-        return DynamicLibrary.open('libsqlite3.so.0');
-      } catch (_) {
-        return DynamicLibrary.open('libsqlite3.so');
-      }
-    });
-  }
-}
+import 'package:protognome/screens/home_screen.dart';
 
 /// Main entry point for the ProtoGNOME application.
-/// Initializes Flutter bindings, sqflite FFI database handlers with Linux dynamic library fallback,
-/// and runs the root [ProtoGNOMEApp] widget.
-void main() async {
+///
+/// The SQLite setup lives in DatabaseService (see protognomeSqliteInit).
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  if (Platform.isLinux || Platform.isWindows || Platform.isMacOS) {
-    protognomeFfiInit();
-    sqfliteFfiInit();
-    databaseFactory = createDatabaseFactoryFfi(ffiInit: protognomeFfiInit);
-  } else {
-    sqfliteFfiInit();
-    databaseFactory = databaseFactoryFfi;
-  }
   runApp(const ProtoGNOMEApp());
 }
 
 /// The root application widget of ProtoGNOME.
-/// Configures MaterialApp with a dark violet custom color palette,
-/// custom Google Fonts Inter styling, button presets, and checks home navigation routes.
+/// Configures MaterialApp with a dark violet custom color palette, the
+/// desktop's own font (no fonts are downloaded at run time), button presets,
+/// and the home screen.
 class ProtoGNOMEApp extends StatelessWidget {
   const ProtoGNOMEApp({super.key});
 
@@ -61,11 +34,14 @@ class ProtoGNOMEApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color(0xFF0F0F1A),
         cardColor: const Color(0xFF1E1E3A),
         dividerColor: const Color(0xFF2A2A4A),
-        textTheme:
-            GoogleFonts.interTextTheme(Theme.of(context).textTheme).copyWith(
-          displayLarge: const TextStyle(color: Colors.white),
-          bodyLarge: const TextStyle(color: Colors.white),
-          bodyMedium: const TextStyle(color: Color(0xFFB0B0D0)),
+        // The desktop's own font. google_fonts was removed: with no bundled
+        // font files it downloaded Inter from fonts.gstatic.com at every
+        // start, contradicting "contacts only GitHub", and the late font swap
+        // clipped chip labels.
+        textTheme: const TextTheme(
+          displayLarge: TextStyle(color: Colors.white),
+          bodyLarge: TextStyle(color: Colors.white),
+          bodyMedium: TextStyle(color: Color(0xFFB0B0D0)),
         ),
         inputDecorationTheme: const InputDecorationTheme(
           filled: true,
