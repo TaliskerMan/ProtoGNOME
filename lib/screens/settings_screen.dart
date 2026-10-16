@@ -1,17 +1,23 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2024 ProtoGNOME Contributors
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import '../services/steam_service.dart';
-import '../services/github_release_service.dart';
-import '../services/secret_service.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:protognome/services/github_release_service.dart';
+import 'package:protognome/services/secret_service.dart';
+import 'package:protognome/services/steam_service.dart';
 
-/// Screen component displaying current configuration details, including detected Steam roots,
-/// config dirs, custom GitHub API authentication token forms, and basic version specs.
+/// Screen component displaying current configuration details, including
+/// detected Steam roots, config dirs, the GitHub API token form, and the
+/// installed version.
 class SettingsScreen extends StatefulWidget {
-  final SteamService steamService;
+  /// Creates the Settings screen, which shows Steam paths from [steamService].
+  const SettingsScreen({required this.steamService, super.key});
 
-  const SettingsScreen({super.key, required this.steamService});
+  /// Source of the detected Steam folders.
+  final SteamService steamService;
 
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();
@@ -21,17 +27,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
   final _tokenController = TextEditingController();
   bool _obscureToken = true;
   String? _detectedSteamRoot;
+  String _version = '…';
 
   @override
   void initState() {
     super.initState();
-    _loadSettings();
+    unawaited(_loadSettings());
   }
 
   Future<void> _loadSettings() async {
     // Read the token from the platform secret store, not the database.
     final token = await SecretService().getGithubToken() ?? '';
+    String version;
+    try {
+      version = (await PackageInfo.fromPlatform()).version;
+    } on Object catch (_) {
+      version = 'Unknown';
+    }
+    if (!mounted) return;
     setState(() {
+      _version = version;
       _tokenController.text = token;
       _detectedSteamRoot = widget.steamService.getSteamRoot();
     });
@@ -42,8 +57,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-          content: Text('GitHub token saved.'),
-          backgroundColor: Color(0xFF065F46)),
+        content: Text('GitHub token saved.'),
+        backgroundColor: Color(0xFF065F46),
+      ),
     );
   }
 
@@ -54,14 +70,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Settings',
-              style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white)),
+          const Text(
+            'Settings',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
           const SizedBox(height: 4),
-          const Text('Configure ProtoGNOME behaviour',
-              style: TextStyle(color: Color(0xFF8888AA), fontSize: 14)),
+          const Text(
+            'Configure ProtoGNOME behaviour',
+            style: TextStyle(color: Color(0xFF8888AA), fontSize: 14),
+          ),
           const SizedBox(height: 24),
           // Steam Installation Section
           _buildSection(
@@ -85,7 +106,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               _buildInfoTile(
                 label: 'Installation Valid',
-                value: widget.steamService.isValidSteamInstall() ? 'Yes ✓' : 'No ✗',
+                value: widget.steamService.isValidSteamInstall()
+                    ? 'Yes ✓'
+                    : 'No ✗',
                 valueColor: widget.steamService.isValidSteamInstall()
                     ? const Color(0xFF22C55E)
                     : const Color(0xFFEF4444),
@@ -99,8 +122,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
             title: 'GitHub API Token',
             children: [
               const Text(
-                'Optional: Add a GitHub Personal Access Token to avoid API rate limits when fetching release lists. '
-                'Without a token the GitHub API is limited to 60 requests/hour. The token is stored in your system keyring, not in plaintext.',
+                'Optional: Add a GitHub Personal Access Token to avoid API '
+                'rate limits when fetching release lists. Without a token the '
+                'GitHub API is limited to 60 requests/hour. The token is '
+                'stored in your system keyring, not in plaintext.',
                 style: TextStyle(color: Color(0xFF8888AA), fontSize: 13),
               ),
               const SizedBox(height: 12),
@@ -108,7 +133,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 controller: _tokenController,
                 obscureText: _obscureToken,
                 style: const TextStyle(
-                    color: Colors.white, fontFamily: 'monospace'),
+                  color: Colors.white,
+                  fontFamily: 'monospace',
+                ),
                 decoration: InputDecoration(
                   hintText: 'ghp_xxxxxxxxxxxxxxxxxxxx',
                   hintStyle:
@@ -124,16 +151,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     children: [
                       IconButton(
                         icon: Icon(
-                            _obscureToken
-                                ? Icons.visibility_outlined
-                                : Icons.visibility_off_outlined,
-                            color: const Color(0xFF8888AA)),
+                          _obscureToken
+                              ? Icons.visibility_outlined
+                              : Icons.visibility_off_outlined,
+                          color: const Color(0xFF8888AA),
+                        ),
                         onPressed: () =>
                             setState(() => _obscureToken = !_obscureToken),
                       ),
                       IconButton(
-                        icon: const Icon(Icons.save_outlined,
-                            color: Color(0xFF7C3AED)),
+                        icon: const Icon(
+                          Icons.save_outlined,
+                          color: Color(0xFF7C3AED),
+                        ),
                         onPressed: _saveToken,
                         tooltip: 'Save token',
                       ),
@@ -149,7 +179,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
             icon: Icons.info_outline_rounded,
             title: 'About ProtoGNOME',
             children: [
-              const _InfoRow(label: 'Version', value: '1.0.13'),
+              // Read from the installed package; this was hard-coded and
+              // went stale ('1.0.8' on master, '1.0.13' on main).
+              _InfoRow(label: 'Version', value: _version),
               const _InfoRow(label: 'License', value: 'GNU GPL v3'),
               const _InfoRow(label: 'Author', value: 'ProtoGNOME Contributors'),
             ],
@@ -178,11 +210,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
             children: [
               Icon(icon, color: const Color(0xFF7C3AED), size: 20),
               const SizedBox(width: 8),
-              Text(title,
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 15)),
+              Text(
+                title,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 15,
+                ),
+              ),
             ],
           ),
           const SizedBox(height: 12),
@@ -194,8 +229,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  Widget _buildInfoTile(
-      {required String label, required String value, Color? valueColor}) {
+  Widget _buildInfoTile({
+    required String label,
+    required String value,
+    Color? valueColor,
+  }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
@@ -203,17 +241,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
         children: [
           SizedBox(
             width: 200,
-            child: Text(label,
-                style: const TextStyle(
-                    color: Color(0xFF8888AA), fontSize: 13)),
+            child: Text(
+              label,
+              style: const TextStyle(
+                color: Color(0xFF8888AA),
+                fontSize: 13,
+              ),
+            ),
           ),
           Expanded(
             child: Text(
               value,
               style: TextStyle(
-                  color: valueColor ?? Colors.white,
-                  fontSize: 13,
-                  fontFamily: 'monospace'),
+                color: valueColor ?? Colors.white,
+                fontSize: 13,
+                fontFamily: 'monospace',
+              ),
             ),
           ),
         ],
@@ -224,10 +267,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
 /// Simple info row for version and license attributes.
 class _InfoRow extends StatelessWidget {
+  const _InfoRow({required this.label, required this.value});
   final String label;
   final String value;
-
-  const _InfoRow({required this.label, required this.value});
 
   @override
   Widget build(BuildContext context) {
@@ -237,12 +279,18 @@ class _InfoRow extends StatelessWidget {
         children: [
           SizedBox(
             width: 120,
-            child: Text(label,
-                style: const TextStyle(
-                    color: Color(0xFF8888AA), fontSize: 13)),
+            child: Text(
+              label,
+              style: const TextStyle(
+                color: Color(0xFF8888AA),
+                fontSize: 13,
+              ),
+            ),
           ),
-          Text(value,
-              style: const TextStyle(color: Colors.white, fontSize: 13)),
+          Text(
+            value,
+            style: const TextStyle(color: Colors.white, fontSize: 13),
+          ),
         ],
       ),
     );

@@ -7,9 +7,10 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 /// Service API via libsecret). Used to keep the optional GitHub PAT out of the
 /// app's plaintext SQLite database.
 class SecretService {
-  static final SecretService _instance = SecretService._internal();
+  /// Returns the shared SecretService instance.
   factory SecretService() => _instance;
   SecretService._internal();
+  static final SecretService _instance = SecretService._internal();
 
   static const _tokenKey = 'github_token';
   final FlutterSecureStorage _storage = const FlutterSecureStorage();

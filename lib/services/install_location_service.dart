@@ -17,17 +17,20 @@ class InstallLocation {
   /// The unique identifier of the installation target.
   final String id;
 
-  /// The descriptive name of the installation target (e.g. 'Heroic Games Launcher').
+  /// The descriptive name of the installation target (e.g. 'Heroic Games
+  /// Launcher').
   final String name;
 
   /// The absolute directory path where compatibility tools are installed.
   final String path;
 }
 
-/// Service that queries the local filesystem to discover compatible runner/wrapper targets.
-/// Detects Steam and Heroic. Lutris is not offered: it runs Wine builds, and
-/// neither tool ProtoGNOME installs (GE-Proton, Luxtorpeda) is one.
+/// Service that queries the local filesystem to discover compatible
+/// runner/wrapper targets. Detects Steam and Heroic. Lutris is not offered: it
+/// runs Wine builds, and neither tool ProtoGNOME installs (GE-Proton,
+/// Luxtorpeda) is one.
 class InstallLocationService {
+  /// Returns the shared InstallLocationService instance.
   factory InstallLocationService() => _instance;
   InstallLocationService._internal();
   static final InstallLocationService _instance =
@@ -35,7 +38,8 @@ class InstallLocationService {
 
   final String _home = Platform.environment['HOME'] ?? '';
 
-  /// Queries directories to return all active and placeholder [InstallLocation] entries.
+  /// Queries directories to return all active and placeholder [InstallLocation]
+  /// entries.
   List<InstallLocation> getAvailableLocations(String? steamCompatToolsDir) {
     final locations = <InstallLocation>[];
 

@@ -1,17 +1,21 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2024 ProtoGNOME Contributors
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import '../models/steam_game.dart';
-import '../services/steam_service.dart';
-import '../services/database_service.dart';
+import 'package:protognome/models/steam_game.dart';
+import 'package:protognome/services/database_service.dart';
+import 'package:protognome/services/steam_service.dart';
 
-/// Screen component displaying the list of Steam games, allowing users
-/// to view which Proton/compatibility tool is currently configured for each game.
+/// Screen component displaying the list of Steam games, allowing users to view
+/// which Proton/compatibility tool is currently configured for each game.
 class GameManagerScreen extends StatefulWidget {
-  final SteamService steamService;
+  /// Creates the Games screen, which reads games through [steamService].
+  const GameManagerScreen({required this.steamService, super.key});
 
-  const GameManagerScreen({super.key, required this.steamService});
+  /// Reads the Steam libraries and each game's compatibility tool.
+  final SteamService steamService;
 
   @override
   State<GameManagerScreen> createState() => _GameManagerScreenState();
@@ -28,7 +32,7 @@ class _GameManagerScreenState extends State<GameManagerScreen> {
   @override
   void initState() {
     super.initState();
-    _loadGames();
+    unawaited(_loadGames());
   }
 
   Future<void> _loadGames() async {
@@ -42,11 +46,13 @@ class _GameManagerScreenState extends State<GameManagerScreen> {
       // Cache to DB
       await _db.cacheGames(games);
 
+      if (!mounted) return;
       setState(() {
         _games = games;
         _loading = false;
       });
-    } catch (error) {
+    } on Object catch (error) {
+      if (!mounted) return;
       setState(() {
         _error = error.toString();
         _loading = false;
@@ -57,8 +63,9 @@ class _GameManagerScreenState extends State<GameManagerScreen> {
   List<SteamGame> get _filteredGames {
     if (_searchQuery.isEmpty) return _games;
     return _games
-        .where((g) =>
-            g.gameName.toLowerCase().contains(_searchQuery.toLowerCase()))
+        .where(
+          (g) => g.gameName.toLowerCase().contains(_searchQuery.toLowerCase()),
+        )
         .toList();
   }
 
@@ -79,9 +86,10 @@ class _GameManagerScreenState extends State<GameManagerScreen> {
                   const Text(
                     'Game Manager',
                     style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
                   ),
                   Text(
                     '${_games.length} games found',
@@ -107,8 +115,11 @@ class _GameManagerScreenState extends State<GameManagerScreen> {
             decoration: InputDecoration(
               hintText: 'Search games...',
               hintStyle: const TextStyle(color: Color(0xFF6666AA)),
-              prefixIcon: const Icon(Icons.search,
-                  color: Color(0xFF6666AA), size: 18),
+              prefixIcon: const Icon(
+                Icons.search,
+                color: Color(0xFF6666AA),
+                size: 18,
+              ),
               filled: true,
               fillColor: const Color(0xFF1E1E3A),
               contentPadding: const EdgeInsets.symmetric(vertical: 8),
@@ -125,22 +136,30 @@ class _GameManagerScreenState extends State<GameManagerScreen> {
         Expanded(
           child: _loading
               ? const Center(
-                  child: CircularProgressIndicator(color: Color(0xFF7C3AED)))
+                  child: CircularProgressIndicator(color: Color(0xFF7C3AED)),
+                )
               : _error != null
                   ? Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Icon(Icons.error_outline,
-                              color: Color(0xFF8888AA), size: 48),
+                          const Icon(
+                            Icons.error_outline,
+                            color: Color(0xFF8888AA),
+                            size: 48,
+                          ),
                           const SizedBox(height: 12),
-                          Text(_error!,
-                              style: const TextStyle(
-                                  color: Color(0xFF8888AA))),
+                          Text(
+                            _error!,
+                            style: const TextStyle(
+                              color: Color(0xFF8888AA),
+                            ),
+                          ),
                           const SizedBox(height: 12),
                           ElevatedButton(
-                              onPressed: _loadGames,
-                              child: const Text('Retry')),
+                            onPressed: _loadGames,
+                            child: const Text('Retry'),
+                          ),
                         ],
                       ),
                     )
@@ -149,18 +168,27 @@ class _GameManagerScreenState extends State<GameManagerScreen> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.sports_esports_outlined,
-                                  color: Color(0xFF8888AA), size: 64),
+                              Icon(
+                                Icons.sports_esports_outlined,
+                                color: Color(0xFF8888AA),
+                                size: 64,
+                              ),
                               SizedBox(height: 12),
-                              Text('No games found',
-                                  style: TextStyle(
-                                      color: Color(0xFF8888AA),
-                                      fontSize: 16)),
+                              Text(
+                                'No games found',
+                                style: TextStyle(
+                                  color: Color(0xFF8888AA),
+                                  fontSize: 16,
+                                ),
+                              ),
                               SizedBox(height: 4),
                               Text(
-                                'Make sure Steam is installed and you have games in your library.',
+                                'Make sure Steam is installed and you have '
+                                'games in your library.',
                                 style: TextStyle(
-                                    color: Color(0xFF6666AA), fontSize: 13),
+                                  color: Color(0xFF6666AA),
+                                  fontSize: 13,
+                                ),
                               ),
                             ],
                           ),
@@ -181,11 +209,10 @@ class _GameManagerScreenState extends State<GameManagerScreen> {
 
 /// Card tile item representing a single Steam game in the list.
 class _GameListTile extends StatelessWidget {
-  final SteamGame game;
-
   const _GameListTile({
     required this.game,
   });
+  final SteamGame game;
 
   @override
   Widget build(BuildContext context) {
@@ -205,7 +232,7 @@ class _GameListTile extends StatelessWidget {
                 padding: EdgeInsets.only(right: 12),
                 child: Tooltip(
                   message: 'Non-Steam game shortcut',
-                  child: Icon(Icons.link, color: Color(0xFF8888AA), size: 20)
+                  child: Icon(Icons.link, color: Color(0xFF8888AA), size: 20),
                 ),
               ),
             Expanded(
@@ -214,16 +241,21 @@ class _GameListTile extends StatelessWidget {
                 children: [
                   Text(
                     game.gameName,
-                    style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    game.compatTool != null && game.compatTool!.isNotEmpty 
-                        ? 'Current: ${game.compatTool}' 
+                    game.compatTool != null && game.compatTool!.isNotEmpty
+                        ? 'Current: ${game.compatTool}'
                         : 'Current: Default (Steam Runtime)',
-                    style: const TextStyle(color: Color(0xFF6666AA), fontSize: 11),
+                    style:
+                        const TextStyle(color: Color(0xFF6666AA), fontSize: 11),
                   ),
                 ],
               ),
@@ -234,4 +266,3 @@ class _GameListTile extends StatelessWidget {
     );
   }
 }
-

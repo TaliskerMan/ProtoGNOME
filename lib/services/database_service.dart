@@ -23,7 +23,7 @@ void protognomeSqliteInit() {
     open.overrideFor(OperatingSystem.linux, () {
       try {
         return DynamicLibrary.open('libsqlite3.so.0');
-      } on ArgumentError {
+      } on Object {
         return DynamicLibrary.open('libsqlite3.so');
       }
     });
@@ -31,11 +31,13 @@ void protognomeSqliteInit() {
 }
 
 /// Service managing SQLite local database caching using `sqflite_common_ffi`.
-/// Handles persistent application settings, compatibility tools caches, and detected Steam games.
+/// Handles persistent application settings, compatibility tools caches, and
+/// detected Steam games.
 class DatabaseService {
-  static final DatabaseService _instance = DatabaseService._internal();
+  /// Returns the shared DatabaseService instance.
   factory DatabaseService() => _instance;
   DatabaseService._internal();
+  static final DatabaseService _instance = DatabaseService._internal();
 
   Database? _db;
 
@@ -78,7 +80,8 @@ class DatabaseService {
     }
   }
 
-  /// Callback to execute the SQL table creation queries on new database instances.
+  /// Callback to execute the SQL table creation queries on new database
+  /// instances.
   Future<void> _onCreate(Database db, int version) async {
     await db.execute('''
       CREATE TABLE compat_tools (
@@ -149,7 +152,8 @@ class DatabaseService {
 
   // ---- Compat Tools ----
 
-  /// Retrieves a list of cached [CompatTool] entries for [toolType] if they are less than 1 hour old.
+  /// Retrieves a list of cached [CompatTool] entries for [toolType] if they are
+  /// less than 1 hour old.
   Future<List<CompatTool>> getCachedTools(String toolType) async {
     final database = await db;
     // Only use cache if it's < 1 hour old
@@ -159,7 +163,7 @@ class DatabaseService {
       where: 'tool_type = ? AND (cached_at IS NULL OR cached_at > ?)',
       whereArgs: [toolType, oneHourAgo],
     );
-    return maps.map((m) => CompatTool.fromMap(m)).toList();
+    return maps.map(CompatTool.fromMap).toList();
   }
 
   /// Caches a batch list of [CompatTool] instances in the local SQLite tables.
@@ -170,8 +174,11 @@ class DatabaseService {
     for (final tool in tools) {
       final map = tool.toMap();
       map['cached_at'] = now;
-      batch.insert('compat_tools', map,
-          conflictAlgorithm: ConflictAlgorithm.replace);
+      batch.insert(
+        'compat_tools',
+        map,
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
     }
     await batch.commit(noResult: true);
   }
@@ -182,8 +189,11 @@ class DatabaseService {
     final now = DateTime.now().millisecondsSinceEpoch;
     final map = tool.toMap();
     map['cached_at'] = now;
-    await database.insert('compat_tools', map,
-        conflictAlgorithm: ConflictAlgorithm.replace);
+    await database.insert(
+      'compat_tools',
+      map,
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
   }
 
   /// Deletes the cached compatibility tool entry matching the given [name].
@@ -202,8 +212,11 @@ class DatabaseService {
     for (final game in games) {
       final map = game.toMap();
       map['cached_at'] = now;
-      batch.insert('steam_games', map,
-          conflictAlgorithm: ConflictAlgorithm.replace);
+      batch.insert(
+        'steam_games',
+        map,
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
     }
     await batch.commit(noResult: true);
   }
@@ -212,6 +225,6 @@ class DatabaseService {
   Future<List<SteamGame>> getAllCachedGames() async {
     final database = await db;
     final maps = await database.query('steam_games', orderBy: 'game_name ASC');
-    return maps.map((m) => SteamGame.fromMap(m)).toList();
+    return maps.map(SteamGame.fromMap).toList();
   }
 }

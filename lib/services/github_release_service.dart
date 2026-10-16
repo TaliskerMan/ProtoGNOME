@@ -1,17 +1,19 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2024 ProtoGNOME Contributors
 
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:http/http.dart' as http;
+
 import 'package:archive/archive.dart';
 import 'package:crypto/crypto.dart';
+import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as p;
-import '../models/compat_tool.dart';
-import 'database_service.dart';
-import 'secret_service.dart';
-import 'logger_service.dart';
-import 'steam_service.dart';
+import 'package:protognome/models/compat_tool.dart';
+import 'package:protognome/services/database_service.dart';
+import 'package:protognome/services/logger_service.dart';
+import 'package:protognome/services/secret_service.dart';
+import 'package:protognome/services/steam_service.dart';
 
 /// Tool source definitions ported from ProtonUp-Qt's ctloader.py / ctmods.
 ///
@@ -37,7 +39,8 @@ const List<Map<String, dynamic>> kToolSources = [
     'asset_suffix': '.tar.xz',
     'launchers': ['steam'],
     'description':
-        'Steam Play compatibility tool for specific games using native Linux engines',
+        'Steam Play compatibility tool for specific games using native Linux '
+        'engines',
   },
 ];
 
@@ -53,15 +56,21 @@ bool toolSupportsLauncher(String toolType, String launcherId) {
   return launchers.contains(launcherId);
 }
 
-/// Result of choosing the download + checksum assets from a release's asset list.
+/// Result of choosing the download + checksum assets from a release's asset
+/// list.
 class AssetSelection {
+  /// Creates a selection; every field is null when nothing usable was found.
   const AssetSelection({
     this.downloadUrl,
     this.downloadSize,
     this.checksumUrl,
     this.assetDigest,
   });
+
+  /// Download URL of the chosen archive, if any.
   final String? downloadUrl;
+
+  /// Size of the chosen archive in bytes, as reported by GitHub.
   final int? downloadSize;
 
   /// The publisher's checksum file for the chosen download, if any.
@@ -71,13 +80,15 @@ class AssetSelection {
   final String? assetDigest;
 }
 
-/// Service querying GitHub Releases APIs to list and download Steam compatibility tools.
-/// Features zip/tar.gz/tar.xz archive extraction routines and tool deletion operations.
+/// Service querying GitHub Releases APIs to list and download Steam
+/// compatibility tools. Features zip/tar.gz/tar.xz archive extraction routines
+/// and tool deletion operations.
 class GitHubReleaseService {
-  static final GitHubReleaseService _instance =
-      GitHubReleaseService._internal();
+  /// Returns the shared service instance.
   factory GitHubReleaseService() => _instance;
   GitHubReleaseService._internal();
+  static final GitHubReleaseService _instance =
+      GitHubReleaseService._internal();
 
   /// Hard sanity bound on a download. Proton runtimes are well under 1 GiB;
   /// this only exists to stop a malformed/oversized response filling the disk.
@@ -86,12 +97,13 @@ class GitHubReleaseService {
   final _db = DatabaseService();
   String _githubToken = '';
 
-  /// True if the last GitHub API call was rejected for rate-limiting. The UI can
-  /// read this to prompt the user to add a token instead of appearing to fail
-  /// silently.
+  /// True if the last GitHub API call was rejected for rate-limiting. The UI
+  /// can read this to prompt the user to add a token instead of appearing to
+  /// fail silently.
   bool isRateLimited = false;
 
-  /// Generates HTTP headers for GitHub API queries, including authorization tokens if present.
+  /// Generates HTTP headers for GitHub API queries, including authorization
+  /// tokens if present.
   Map<String, String> get _headers => {
         'Accept': 'application/vnd.github.v3+json',
         if (_githubToken.isNotEmpty) 'Authorization': 'token $_githubToken',
@@ -115,11 +127,13 @@ class GitHubReleaseService {
       await SecretService().setGithubToken(legacy);
       await _db.setSetting('github_token', ''); // scrub plaintext copy
       _githubToken = legacy;
-      LoggerService().log('Migrated GitHub token from database to secret store.');
+      LoggerService()
+          .log('Migrated GitHub token from database to secret store.');
     }
   }
 
-  /// Sets a new GitHub API [token] and persists it in the platform secret store.
+  /// Sets a new GitHub API [token] and persists it in the platform secret
+  /// store.
   Future<void> setGithubToken(String token) async {
     _githubToken = token;
     await SecretService().setGithubToken(token);
@@ -208,12 +222,12 @@ class GitHubReleaseService {
   }
 
   /// Extracts the expected hex digest for [assetFileName] from the body of a
-  /// `shaNNNsum` file. Such files contain `<hex>␠␠<filename>` lines. Returns the
-  /// digest matching the asset, or — if the file has a single entry — that
+  /// `shaNNNsum` file. Such files contain `<hex>␠␠<filename>` lines. Returns
+  /// the digest matching the asset, or — if the file has a single entry — that
   /// entry's digest. Returns null if nothing matches (caller refuses install).
   static String? parseChecksumDigest(String content, String assetFileName) {
     String? onlyDigest;
-    int entries = 0;
+    var entries = 0;
     for (final raw in content.split('\n')) {
       final line = raw.trim();
       if (line.isEmpty) continue;
@@ -221,8 +235,10 @@ class GitHubReleaseService {
       final parts = line.split(RegExp(r'\s+'));
       final digest = parts.first;
       if (parts.length >= 2) {
-        // The filename may be path-prefixed and/or marked with '*' (binary mode).
-        final fname = p.basename(parts.sublist(1).join(' ')).replaceFirst('*', '');
+        // The filename may be path-prefixed and/or marked with '*' (binary
+        // mode).
+        final fname =
+            p.basename(parts.sublist(1).join(' ')).replaceFirst('*', '');
         if (fname == assetFileName) return digest;
       }
       onlyDigest ??= digest;
@@ -233,7 +249,7 @@ class GitHubReleaseService {
   /// Returns false for archive members that would escape the extraction root:
   /// absolute paths or any path containing a `..` segment. Pure + testable.
   static bool isSafeArchiveMember(String member) {
-    final m = member.trim().replaceAll('\\', '/');
+    final m = member.trim().replaceAll(r'\', '/');
     if (m.isEmpty) return true;
     if (m.startsWith('/')) return false;
     for (final seg in m.split('/')) {
@@ -242,10 +258,13 @@ class GitHubReleaseService {
     return true;
   }
 
-  /// Fetches available releases for a specific [toolType] (e.g. 'ge-proton') from GitHub.
-  /// Falls back to local database caches on request limits or network issues.
-  Future<List<CompatTool>> fetchAvailableReleases(String toolType,
-      {bool forceRefresh = false}) async {
+  /// Fetches available releases for a specific [toolType] (e.g. 'ge-proton')
+  /// from GitHub. Falls back to local database caches on request limits or
+  /// network issues.
+  Future<List<CompatTool>> fetchAvailableReleases(
+    String toolType, {
+    bool forceRefresh = false,
+  }) async {
     if (!forceRefresh) {
       final cached = await _db.getCachedTools(toolType);
       if (cached.isNotEmpty) return cached;
@@ -267,7 +286,9 @@ class GitHubReleaseService {
       if (response.statusCode == 403 || response.statusCode == 429) {
         isRateLimited = true;
         LoggerService().log(
-            'Warning: GitHub API rate limit exceeded for $repo. Add a token in Settings to raise the limit.');
+          'Warning: GitHub API rate limit exceeded for $repo. Add a token in '
+          'Settings to raise the limit.',
+        );
         return await _db.getCachedTools(toolType); // Fall back to cache
       }
       if (response.statusCode != 200) return [];
@@ -276,51 +297,60 @@ class GitHubReleaseService {
       final releases = jsonDecode(response.body) as List<dynamic>;
       final tools = <CompatTool>[];
 
-      for (final release in releases) {
+      for (final release in releases.whereType<Map<String, dynamic>>()) {
         final tag = release['tag_name'] as String? ?? '';
-        final date = (release['published_at'] as String? ?? '').split('T').first;
+        final date =
+            (release['published_at'] as String? ?? '').split('T').first;
 
         final assets = release['assets'] as List<dynamic>? ?? [];
         final selection = selectAsset(assets, assetSuffix);
 
         final downloadUrl = selection.downloadUrl;
 
-        tools.add(CompatTool(
-          name: tag,
-          version: tag,
-          toolType: toolType,
-          releaseDate: date,
-          downloadUrl: downloadUrl,
-          downloadSize: selection.downloadSize,
-          checksum: selection.checksumUrl,
-          assetDigest: selection.assetDigest,
-        ));
+        tools.add(
+          CompatTool(
+            name: tag,
+            version: tag,
+            toolType: toolType,
+            releaseDate: date,
+            downloadUrl: downloadUrl,
+            downloadSize: selection.downloadSize,
+            checksum: selection.checksumUrl,
+            assetDigest: selection.assetDigest,
+          ),
+        );
       }
 
       await _db.cacheTools(tools);
       return tools;
-    } catch (error) {
+    } on Object catch (error) {
       LoggerService().logError('Fetching releases for $toolType', error);
-      return await _db.getCachedTools(toolType);
+      return _db.getCachedTools(toolType);
     }
   }
 
   /// Queries GitHub releases for all configured compat tool sources.
-  Future<Map<String, List<CompatTool>>> fetchAllReleases(
-      {bool forceRefresh = false}) async {
+  Future<Map<String, List<CompatTool>>> fetchAllReleases({
+    bool forceRefresh = false,
+  }) async {
     final result = <String, List<CompatTool>>{};
     for (final source in kToolSources) {
       final toolType = source['type'] as String;
-      result[toolType] = await fetchAvailableReleases(toolType,
-          forceRefresh: forceRefresh);
+      result[toolType] = await fetchAvailableReleases(
+        toolType,
+        forceRefresh: forceRefresh,
+      );
     }
     return result;
   }
 
   /// Pure function calculating byte ranges for parallel multi-stream downloads.
-  /// (CP-ChangeComments: Utility to divide file size into N balanced range chunks for download speed optimization)
+  /// (CP-ChangeComments: Utility to divide file size into N balanced range
+  /// chunks for download speed optimization)
   static List<Map<String, int>> calculateChunkRanges(
-      int totalBytes, {int numChunks = 6}) {
+    int totalBytes, {
+    int numChunks = 6,
+  }) {
     if (totalBytes <= 0) return [];
     final ranges = <Map<String, int>>[];
     final chunkSize = (totalBytes / numChunks).ceil();
@@ -357,7 +387,9 @@ class GitHubReleaseService {
     // file, which would corrupt the assembly; only 206 is acceptable here.
     if (response.statusCode != 206) {
       await response.stream.drain<void>();
-      throw Exception('Chunk $start-$end: expected HTTP 206, got ${response.statusCode}');
+      throw Exception(
+        'Chunk $start-$end: expected HTTP 206, got ${response.statusCode}',
+      );
     }
 
     final expected = end - start + 1;
@@ -367,7 +399,9 @@ class GitHubReleaseService {
       await for (final data in response.stream) {
         written += data.length;
         if (written > expected) {
-          throw Exception('Chunk $start-$end: received more than $expected bytes');
+          throw Exception(
+            'Chunk $start-$end: received more than $expected bytes',
+          );
         }
         sink.add(data);
         onChunkRead(data.length);
@@ -376,12 +410,15 @@ class GitHubReleaseService {
       await sink.close();
     }
     if (written != expected) {
-      throw Exception('Chunk $start-$end: received $written of $expected bytes');
+      throw Exception(
+        'Chunk $start-$end: received $written of $expected bytes',
+      );
     }
   }
 
-  /// High-performance multi-connection parallel downloader for release archives.
-  /// (CP-ChangeComments: Resolves 302 redirects to edge CDN and runs parallel chunk workers for 3x-6x faster downloads)
+  /// High-performance multi-connection parallel downloader for release
+  /// archives. (CP-ChangeComments: Resolves 302 redirects to edge CDN and runs
+  /// parallel chunk workers for 3x-6x faster downloads)
   Future<bool> _downloadParallel(
     String url,
     File tempFile,
@@ -390,8 +427,9 @@ class GitHubReleaseService {
   }) async {
     final partFiles = <File>[];
     try {
-      // Pre-resolve the HTTP 302 redirect to the CDN URL. followRedirects must be
-      // off, otherwise the client follows it and 'location' is never present.
+      // Pre-resolve the HTTP 302 redirect to the CDN URL. followRedirects must
+      // be off, otherwise the client follows it and 'location' is never
+      // present.
       var finalUrl = url;
       final headReq = http.Request('HEAD', Uri.parse(url))
         ..followRedirects = false;
@@ -415,16 +453,18 @@ class GitHubReleaseService {
       var totalReceived = 0;
       final futures = <Future<void>>[];
       for (var i = 0; i < ranges.length; i++) {
-        futures.add(_downloadChunk(
-          url: finalUrl,
-          partFile: partFiles[i],
-          start: ranges[i]['start']!,
-          end: ranges[i]['end']!,
-          onChunkRead: (read) {
-            totalReceived += read;
-            onProgress?.call((totalReceived / totalBytes).clamp(0.0, 1.0));
-          },
-        ));
+        futures.add(
+          _downloadChunk(
+            url: finalUrl,
+            partFile: partFiles[i],
+            start: ranges[i]['start']!,
+            end: ranges[i]['end']!,
+            onChunkRead: (read) {
+              totalReceived += read;
+              onProgress?.call((totalReceived / totalBytes).clamp(0.0, 1.0));
+            },
+          ),
+        );
       }
       await Future.wait(futures, eagerError: true);
 
@@ -441,17 +481,20 @@ class GitHubReleaseService {
       final ok = tempFile.lengthSync() == totalBytes;
       if (!ok) {
         LoggerService().log(
-            'Parallel download size mismatch (${tempFile.lengthSync()} != $totalBytes); falling back to single stream.');
+          'Parallel download size mismatch (${tempFile.lengthSync()} != '
+          '$totalBytes); falling back to single stream.',
+        );
       }
       return ok;
-    } catch (error) {
-      LoggerService().log('Parallel download fallback to single stream: $error');
+    } on Object catch (error) {
+      LoggerService()
+          .log('Parallel download fallback to single stream: $error');
       return false;
     } finally {
       for (final part in partFiles) {
         try {
           if (part.existsSync()) part.deleteSync();
-        } catch (_) {}
+        } on Object catch (_) {}
       }
     }
   }
@@ -481,8 +524,8 @@ class GitHubReleaseService {
     }
     if (!tool.isVerifiable) {
       lastInstallError =
-          'This release can\'t be verified (it publishes no checksum), so '
-          'ProtoGNOME won\'t install it.';
+          "This release can't be verified (it publishes no checksum), so "
+          "ProtoGNOME won't install it.";
       LoggerService().logError(
         'Install',
         'No checksum or GitHub digest for ${tool.name}; refusing to install.',
@@ -496,7 +539,8 @@ class GitHubReleaseService {
       final uri = Uri.parse(tool.downloadUrl!);
       final tempFile = File(p.join(tempDir.path, p.basename(uri.path)));
 
-      // 1. Attempt high-speed parallel multi-connection HTTP range download for files > 10 MB
+      // 1. Attempt high-speed parallel multi-connection HTTP range download for
+      // files > 10 MB
       final totalSize = tool.downloadSize ?? 0;
       var downloaded = false;
       if (totalSize > 10 * 1024 * 1024 && totalSize <= kMaxDownloadBytes) {
@@ -508,7 +552,8 @@ class GitHubReleaseService {
         );
       }
 
-      // 2. Fall back to standard single-connection streaming download if parallel download was skipped or failed
+      // 2. Fall back to standard single-connection streaming download if
+      // parallel download was skipped or failed
       if (!downloaded) {
         final request = http.Request('GET', uri);
         request.headers.addAll(_headers);
@@ -523,8 +568,11 @@ class GitHubReleaseService {
 
         final total = streamed.contentLength ?? totalSize;
         if (total > kMaxDownloadBytes) {
-          LoggerService().logError('Download',
-              'Asset for ${tool.name} reports $total bytes, exceeding the ${kMaxDownloadBytes} byte cap. Aborting.');
+          LoggerService().logError(
+            'Download',
+            'Asset for ${tool.name} reports $total bytes, exceeding the '
+            '$kMaxDownloadBytes byte cap. Aborting.',
+          );
           lastInstallError = 'The download is larger than ProtoGNOME allows.';
           return false;
         }
@@ -535,8 +583,11 @@ class GitHubReleaseService {
           received += chunk.length;
           if (received > kMaxDownloadBytes) {
             await sink.close();
-            LoggerService().logError('Download',
-                'Download for ${tool.name} exceeded the ${kMaxDownloadBytes} byte cap mid-stream. Aborting.');
+            LoggerService().logError(
+              'Download',
+              'Download for ${tool.name} exceeded the $kMaxDownloadBytes byte '
+              'cap mid-stream. Aborting.',
+            );
             lastInstallError = 'The download is larger than ProtoGNOME allows.';
             return false;
           }
@@ -557,7 +608,8 @@ class GitHubReleaseService {
         if (!ok) {
           LoggerService().logError(
             'Install',
-            'Publisher checksum verification failed for ${tool.name}; refusing to install.',
+            'Publisher checksum verification failed for ${tool.name}; refusing '
+            'to install.',
           );
           lastInstallError = _verificationFailedMessage;
           return false;
@@ -571,7 +623,8 @@ class GitHubReleaseService {
         if (actual != githubHex) {
           LoggerService().logError(
             'Install',
-            'GitHub digest mismatch for $fileName: expected $githubHex, got $actual; refusing to install.',
+            'GitHub digest mismatch for $fileName: expected $githubHex, got '
+            '$actual; refusing to install.',
           );
           lastInstallError = _verificationFailedMessage;
           return false;
@@ -579,15 +632,14 @@ class GitHubReleaseService {
         LoggerService().log('GitHub SHA-256 digest verified for ${tool.name}.');
       }
 
-      final extracted =
-          await _extractArchive(tempFile, installDir, tool.name);
+      final extracted = await _extractArchive(tempFile, installDir, tool.name);
       if (!extracted) {
         lastInstallError =
             'The download was verified but could not be unpacked. See the log '
             'for details.';
       }
       return extracted;
-    } catch (error) {
+    } on Object catch (error) {
       LoggerService().logError('Downloading ${tool.name}', error);
       lastInstallError ??=
           'The download failed. Check your internet connection and try again.';
@@ -595,44 +647,53 @@ class GitHubReleaseService {
     } finally {
       try {
         tempDir.deleteSync(recursive: true);
-      } catch (_) {}
+      } on Object catch (_) {}
     }
   }
 
   static const String _verificationFailedMessage =
       'The download could not be verified against its published checksum, '
       'so it was not installed. It may have been corrupted or altered, or the '
-      'checksum could not be fetched. Try again later; don\'t install it '
+      "checksum could not be fetched. Try again later; don't install it "
       'another way.';
 
   /// Downloads [checksumUrl], extracts the expected digest, and compares it to
   /// the hash computed over [file] (streamed, so large files are not buffered).
   /// The algorithm is chosen from the checksum asset's extension.
   Future<bool> _verifyChecksum(
-      File file, String checksumUrl, String assetFileName) async {
+    File file,
+    String checksumUrl,
+    String assetFileName,
+  ) async {
     try {
       final resp = await http.get(Uri.parse(checksumUrl), headers: _headers);
       if (resp.statusCode != 200) {
         LoggerService().logError(
-            'Checksum', 'Could not fetch checksum (HTTP ${resp.statusCode}).');
+          'Checksum',
+          'Could not fetch checksum (HTTP ${resp.statusCode}).',
+        );
         return false;
       }
       final expected = parseChecksumDigest(resp.body, assetFileName);
       if (expected == null) {
         LoggerService().logError(
-            'Checksum', 'No matching digest for $assetFileName in checksum file.');
+          'Checksum',
+          'No matching digest for $assetFileName in checksum file.',
+        );
         return false;
       }
       final algo = checksumAlgorithmFor(checksumUrl);
       final digest = await algo.bind(file.openRead()).first;
       final actual = digest.toString().toLowerCase();
       if (actual != expected.toLowerCase()) {
-        LoggerService().logError('Checksum',
-            'Mismatch for $assetFileName: expected $expected, got $actual.');
+        LoggerService().logError(
+          'Checksum',
+          'Mismatch for $assetFileName: expected $expected, got $actual.',
+        );
         return false;
       }
       return true;
-    } catch (error) {
+    } on Object catch (error) {
       LoggerService().logError('Checksum verification', error);
       return false;
     }
@@ -642,16 +703,22 @@ class GitHubReleaseService {
   /// (`.sha256sum`/`.sha256` → SHA-256, otherwise SHA-512). Pure + testable.
   static Hash checksumAlgorithmFor(String checksumUrl) {
     final u = checksumUrl.toLowerCase();
-    return (u.endsWith('.sha256sum') || u.endsWith('.sha256')) ? sha256 : sha512;
+    return (u.endsWith('.sha256sum') || u.endsWith('.sha256'))
+        ? sha256
+        : sha512;
   }
 
-  /// Private helper that runs `tar` (array-form arguments) or uses Dart ZipDecoder
-  /// to extract compatibility tool archives into [installDir]. Returns true on
-  /// success. For tar archives it lists and validates members first, refusing to
-  /// extract if any member would escape [installDir] (defence-in-depth matching
-  /// the ZIP branch rather than trusting the system tar).
+  /// Private helper that runs `tar` (array-form arguments) or uses Dart
+  /// ZipDecoder to extract compatibility tool archives into [installDir].
+  /// Returns true on success. For tar archives it lists and validates members
+  /// first, refusing to extract if any member would escape [installDir]
+  /// (defence-in-depth matching the ZIP branch rather than trusting the system
+  /// tar).
   Future<bool> _extractArchive(
-      File archiveFile, String installDir, String toolName) async {
+    File archiveFile,
+    String installDir,
+    String toolName,
+  ) async {
     final path = archiveFile.path;
     final installDirEntity = Directory(installDir);
     if (!installDirEntity.existsSync()) {
@@ -673,7 +740,9 @@ class GitHubReleaseService {
         final outPath = p.normalize(p.join(installDir, file.name));
         if (!p.isWithin(p.normalize(installDir), outPath)) {
           LoggerService().logError(
-              'Zip Extraction', 'Path traversal attempt blocked: ${file.name}');
+            'Zip Extraction',
+            'Path traversal attempt blocked: ${file.name}',
+          );
           continue;
         }
         if (file.isFile) {
@@ -694,7 +763,9 @@ class GitHubReleaseService {
   bool _tarOk(ProcessResult r, String toolName) {
     if (r.exitCode != 0) {
       LoggerService().logError(
-          'Extracting $toolName', 'tar exit ${r.exitCode}: ${r.stderr}');
+        'Extracting $toolName',
+        'tar exit ${r.exitCode}: ${r.stderr}',
+      );
     }
     return r.exitCode == 0;
   }
@@ -702,7 +773,10 @@ class GitHubReleaseService {
   /// Lists a tar archive's members (without extracting) and validates that none
   /// would escape the destination. Returns false if listing fails or any member
   /// is unsafe.
-  Future<bool> _validateTarMembers(String tarPath, List<String> listFlags) async {
+  Future<bool> _validateTarMembers(
+    String tarPath,
+    List<String> listFlags,
+  ) async {
     final res = await Process.run('tar', [...listFlags, tarPath]);
     if (res.exitCode != 0) {
       LoggerService()
@@ -714,7 +788,9 @@ class GitHubReleaseService {
       if (member.isEmpty) continue;
       if (!isSafeArchiveMember(member)) {
         LoggerService().logError(
-            'Tar Extraction', 'Unsafe member blocked (path traversal): $member');
+          'Tar Extraction',
+          'Unsafe member blocked (path traversal): $member',
+        );
         return false;
       }
     }
@@ -722,7 +798,8 @@ class GitHubReleaseService {
   }
 
   /// Removes a compatibility tool matching [toolName] from the [installDir].
-  /// Implements path traversal checks to ensure deletions are constrained within [installDir].
+  /// Implements path traversal checks to ensure deletions are constrained
+  /// within [installDir].
   bool removeTool(String toolName, String installDir) {
     final targetDirName =
         SteamService().findInstalledToolDir(toolName, customDir: installDir) ??
@@ -737,10 +814,11 @@ class GitHubReleaseService {
     if (!toolPath.existsSync()) return false;
     try {
       toolPath.deleteSync(recursive: true);
-      _db.deleteTool(toolName);
-      _db.deleteTool(targetDirName);
+      // Cache clean-up only; the folder is already gone.
+      unawaited(_db.deleteTool(toolName));
+      unawaited(_db.deleteTool(targetDirName));
       return true;
-    } catch (error) {
+    } on Object catch (error) {
       LoggerService().logError('Removing $toolName', error);
       return false;
     }

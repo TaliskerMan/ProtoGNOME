@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2024 ProtoGNOME Contributors
 
+// Prints mirror log lines to stdout so they show in a terminal and in
+// `flutter run`; the log file is the record.
 // ignore_for_file: avoid_print
 
 import 'dart:io';
@@ -9,29 +11,30 @@ import 'package:path/path.dart' as p;
 /// Service mapping local application diagnostic logs to standard console output
 /// and appending them to ~/.local/state/protognome/app.log.
 class LoggerService {
-  static final LoggerService _instance = LoggerService._internal();
+  /// Returns the shared LoggerService instance.
   factory LoggerService() => _instance;
-
-  File? _logFile;
 
   LoggerService._internal() {
     _initLogFile();
   }
+  static final LoggerService _instance = LoggerService._internal();
+
+  File? _logFile;
 
   /// Initializes the log file configuration under XDG state directories.
   void _initLogFile() {
     try {
       final stateHome = Platform.environment['XDG_STATE_HOME'] ??
           p.join(Platform.environment['HOME'] ?? '', '.local', 'state');
-      
+
       final logDir = Directory(p.join(stateHome, 'protognome'));
       if (!logDir.existsSync()) {
         logDir.createSync(recursive: true);
       }
-      
+
       _logFile = File(p.join(logDir.path, 'app.log'));
       log('--- ProtoGNOME Session Started ---');
-    } catch (error) {
+    } on Object catch (error) {
       print('Failed to initialize local LoggerService: $error');
     }
   }
@@ -43,13 +46,14 @@ class LoggerService {
       try {
         final ts = DateTime.now().toIso8601String();
         _logFile!.writeAsStringSync('[$ts] $message\n', mode: FileMode.append);
-      } catch (error) {
+      } on Object catch (error) {
         // Silently fail if log cannot be appended
       }
     }
   }
 
-  /// Formats and logs an [error] with a descriptive [prefix] and optional [stack] trace.
+  /// Formats and logs an [error] with a descriptive [prefix] and optional
+  /// [stack] trace.
   void logError(String prefix, Object error, [StackTrace? stack]) {
     final msg = '[ERROR] $prefix: $error';
     log(msg);

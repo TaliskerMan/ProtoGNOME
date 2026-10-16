@@ -17,7 +17,7 @@ void main() {
     tearDown(() {
       try {
         tempDir.deleteSync(recursive: true);
-      } catch (_) {}
+      } on Object catch (_) {}
     });
 
     test('matches tool with exact folder name', () {
@@ -49,8 +49,10 @@ void main() {
     });
 
     test('matches tool using internal version file', () {
-      final toolDir = Directory(p.join(tempDir.path, 'Custom-Proton-Build'))..createSync();
-      File(p.join(toolDir.path, 'version')).writeAsStringSync('1786437966 GE-Proton11-5');
+      final toolDir = Directory(p.join(tempDir.path, 'Custom-Proton-Build'))
+        ..createSync();
+      File(p.join(toolDir.path, 'version'))
+          .writeAsStringSync('1786437966 GE-Proton11-5');
 
       final service = SteamService();
       expect(

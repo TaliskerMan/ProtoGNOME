@@ -2,23 +2,31 @@
 // Copyright (C) 2024 ProtoGNOME Contributors
 
 import 'package:flutter/material.dart';
-import '../models/compat_tool.dart';
+import 'package:protognome/models/compat_tool.dart';
 
-/// A custom Card widget that displays a compatibility tool's name, install state,
-/// release date, download size, and provides install/remove actions.
+/// A custom Card widget that displays a compatibility tool's name, install
+/// state, release date, download size, and provides install/remove actions.
 class ToolCard extends StatelessWidget {
-  final CompatTool tool;
-  final bool isInstalled;
-  final VoidCallback? onInstall;
-  final VoidCallback? onRemove;
-
+  /// Creates a card for [tool]. A null [onInstall] hides the Install button.
   const ToolCard({
-    super.key,
     required this.tool,
     required this.isInstalled,
+    super.key,
     this.onInstall,
     this.onRemove,
   });
+
+  /// The release shown on this card.
+  final CompatTool tool;
+
+  /// Whether this release is installed in the selected launcher.
+  final bool isInstalled;
+
+  /// Installs the release; null when it can't be installed here.
+  final VoidCallback? onInstall;
+
+  /// Removes the installed release; null when it isn't installed.
+  final VoidCallback? onRemove;
 
   String _formatSize(int? bytes) {
     if (bytes == null) return '';
@@ -37,7 +45,6 @@ class ToolCard extends StatelessWidget {
           color: isInstalled
               ? const Color(0xFF7C3AED).withValues(alpha: 0.4)
               : Colors.transparent,
-          width: 1,
         ),
       ),
       child: Padding(
@@ -66,24 +73,31 @@ class ToolCard extends StatelessWidget {
                       Text(
                         tool.name,
                         style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 14),
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 14,
+                        ),
                       ),
                       if (isInstalled) ...[
                         const SizedBox(width: 6),
                         Container(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 6, vertical: 2),
+                            horizontal: 6,
+                            vertical: 2,
+                          ),
                           decoration: BoxDecoration(
-                            color: const Color(0xFF7C3AED).withValues(alpha: 0.2),
+                            color:
+                                const Color(0xFF7C3AED).withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(4),
                           ),
-                          child: const Text('Installed',
-                              style: TextStyle(
-                                  color: Color(0xFFA78BFA),
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w600)),
+                          child: const Text(
+                            'Installed',
+                            style: TextStyle(
+                              color: Color(0xFFA78BFA),
+                              fontSize: 10,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
                         ),
                       ],
                     ],
@@ -92,21 +106,35 @@ class ToolCard extends StatelessWidget {
                   Row(
                     children: [
                       if (tool.releaseDate != null) ...[
-                        const Icon(Icons.calendar_today_outlined,
-                            size: 11, color: Color(0xFF6666AA)),
+                        const Icon(
+                          Icons.calendar_today_outlined,
+                          size: 11,
+                          color: Color(0xFF6666AA),
+                        ),
                         const SizedBox(width: 3),
-                        Text(tool.releaseDate!,
-                            style: const TextStyle(
-                                color: Color(0xFF6666AA), fontSize: 11)),
+                        Text(
+                          tool.releaseDate!,
+                          style: const TextStyle(
+                            color: Color(0xFF6666AA),
+                            fontSize: 11,
+                          ),
+                        ),
                         const SizedBox(width: 10),
                       ],
                       if (tool.downloadSize != null) ...[
-                        const Icon(Icons.download_outlined,
-                            size: 11, color: Color(0xFF6666AA)),
+                        const Icon(
+                          Icons.download_outlined,
+                          size: 11,
+                          color: Color(0xFF6666AA),
+                        ),
                         const SizedBox(width: 3),
-                        Text(_formatSize(tool.downloadSize),
-                            style: const TextStyle(
-                                color: Color(0xFF6666AA), fontSize: 11)),
+                        Text(
+                          _formatSize(tool.downloadSize),
+                          style: const TextStyle(
+                            color: Color(0xFF6666AA),
+                            fontSize: 11,
+                          ),
+                        ),
                       ],
                     ],
                   ),
@@ -121,19 +149,23 @@ class ToolCard extends StatelessWidget {
                 color: const Color(0xFFEF4444),
                 tooltip: 'Remove',
                 style: IconButton.styleFrom(
-                    backgroundColor: const Color(0xFF2A1A1A)),
+                  backgroundColor: const Color(0xFF2A1A1A),
+                ),
               )
             else if (!isInstalled && !tool.isVerifiable)
               const Tooltip(
                 message: 'This release publishes no checksum, so ProtoGNOME '
-                    'can\'t verify it and won\'t install it.',
+                    "can't verify it and won't install it.",
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.gpp_maybe_outlined,
-                          size: 15, color: Color(0xFF8888AA)),
+                      Icon(
+                        Icons.gpp_maybe_outlined,
+                        size: 15,
+                        color: Color(0xFF8888AA),
+                      ),
                       SizedBox(width: 4),
                       Text(
                         "Can't be verified",
@@ -150,13 +182,18 @@ class ToolCard extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF7C3AED),
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 12, vertical: 8),
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
                 ),
                 icon: const Icon(Icons.download_outlined, size: 15),
-                label: const Text('Install',
-                    style: TextStyle(fontSize: 13)),
+                label: const Text(
+                  'Install',
+                  style: TextStyle(fontSize: 13),
+                ),
               ),
           ],
         ),

@@ -2,17 +2,19 @@
 // Copyright (C) 2024 ProtoGNOME Contributors
 
 import 'dart:io';
-import 'package:path/path.dart' as p;
-import '../models/steam_game.dart';
-import 'vdf_parser.dart';
-import 'logger_service.dart';
 
-/// Handles Steam config file scanning, VDF parsing, and compatibility tool lookup.
-/// Ports key utilities of ProtonUp-Qt's steamutil.py to Dart/Flutter.
+import 'package:path/path.dart' as p;
+import 'package:protognome/models/steam_game.dart';
+import 'package:protognome/services/logger_service.dart';
+import 'package:protognome/services/vdf_parser.dart';
+
+/// Handles Steam config file scanning, VDF parsing, and compatibility tool
+/// lookup. Ports key utilities of ProtonUp-Qt's steamutil.py to Dart/Flutter.
 class SteamService {
-  static final SteamService _instance = SteamService._internal();
+  /// Returns the shared SteamService instance.
   factory SteamService() => _instance;
   SteamService._internal();
+  static final SteamService _instance = SteamService._internal();
 
   /// Where Steam keeps its data, relative to the home folder: the native
   /// install first, then the Flatpak and Snap packages (same folders
@@ -27,7 +29,8 @@ class SteamService {
     'snap/steam/common/.local/share/Steam', // Snap
   ];
 
-  /// Returns the absolute path of the detected Steam root directory, or null if not found.
+  /// Returns the absolute path of the detected Steam root directory, or null if
+  /// not found.
   String? getSteamRoot() {
     final home = Platform.environment['HOME'] ?? '';
     final seen = <String>{};
@@ -43,21 +46,24 @@ class SteamService {
     return null;
   }
 
-  /// Returns the directory path where Steam's configuration files reside (e.g. config.vdf).
+  /// Returns the directory path where Steam's configuration files reside (e.g.
+  /// config.vdf).
   String? getSteamConfigDir() {
     final root = getSteamRoot();
     if (root == null) return null;
     return p.join(root, 'config');
   }
 
-  /// Returns the path to the Steam compatibilitytools.d folder containing custom wrappers.
+  /// Returns the path to the Steam compatibilitytools.d folder containing
+  /// custom wrappers.
   String? getCompatToolsDir() {
     final root = getSteamRoot();
     if (root == null) return null;
     return p.join(root, 'compatibilitytools.d');
   }
 
-  /// Checks if both config.vdf and libraryfolders.vdf exist under the config directory.
+  /// Checks if both config.vdf and libraryfolders.vdf exist under the config
+  /// directory.
   bool isValidSteamInstall() {
     final cfgDir = getSteamConfigDir();
     if (cfgDir == null) return false;
@@ -65,7 +71,8 @@ class SteamService {
         File(p.join(cfgDir, 'libraryfolders.vdf')).existsSync();
   }
 
-  /// Searches the OS proc directory to verify if a steam executable process is currently running.
+  /// Searches the OS proc directory to verify if a steam executable process is
+  /// currently running.
   bool isSteamRunning() {
     try {
       final procDir = Directory('/proc');
@@ -76,11 +83,11 @@ class SteamService {
             try {
               final target = exeLink.resolveSymbolicLinksSync();
               if (target.toLowerCase().contains('steam')) return true;
-            } catch (_) {}
+            } on Object catch (_) {}
           }
         }
       }
-    } catch (_) {}
+    } on Object catch (_) {}
     return false;
   }
 
@@ -98,17 +105,19 @@ class SteamService {
       if (store == null) return null;
       final software = store['Software'] as Map<String, dynamic>?;
       if (software == null) return null;
-      final valve = (software['Valve'] ?? software['valve']) as Map<String, dynamic>?;
+      final valve =
+          (software['Valve'] ?? software['valve']) as Map<String, dynamic>?;
       if (valve == null) return null;
       return (valve['Steam'] as Map<String, dynamic>?)?['CompatToolMapping']
           as Map<String, dynamic>?;
-    } catch (error) {
+    } on Object catch (error) {
       LoggerService().logError('Reading config.vdf', error);
       return null;
     }
   }
 
-  /// Scans libraryfolders.vdf and manifest files to compile a list of all locally installed [SteamGame]s.
+  /// Scans libraryfolders.vdf and manifest files to compile a list of all
+  /// locally installed [SteamGame]s.
   Future<List<SteamGame>> getInstalledGames() async {
     final cfgDir = getSteamConfigDir();
     if (cfgDir == null) return [];
@@ -140,7 +149,7 @@ class SteamService {
           // Check if the game is actually installed
           if (!File(manifestPath).existsSync()) continue;
 
-          String gameName = appId;
+          var gameName = appId;
           try {
             final manifestContent = File(manifestPath).readAsStringSync();
             final manifest = VdfParser.parse(manifestContent);
@@ -148,30 +157,34 @@ class SteamService {
             final installDir = appState?['installdir'] as String? ?? '';
             gameName = appState?['name'] as String? ?? appId;
             // Skip if not installed to common
-            if (!Directory(p.join(steamappsPath, 'common', installDir)).existsSync()) {
+            if (!Directory(p.join(steamappsPath, 'common', installDir))
+                .existsSync()) {
               continue;
             }
-          } catch (_) {}
+          } on Object catch (_) {}
 
           final ctMapping = compatMap[appId] as Map<String, dynamic>?;
           final compatTool = ctMapping?['name'] as String?;
 
-          games.add(SteamGame(
-            appId: int.tryParse(appId) ?? 0,
-            gameName: gameName,
-            compatTool: compatTool,
-            libraryPath: folderPath,
-          ));
+          games.add(
+            SteamGame(
+              appId: int.tryParse(appId) ?? 0,
+              gameName: gameName,
+              compatTool: compatTool,
+              libraryPath: folderPath,
+            ),
+          );
         }
       }
-    } catch (error) {
+    } on Object catch (error) {
       LoggerService().logError('Getting installed games', error);
     }
 
     return games;
   }
 
-  /// Lists compatibility tool subdirectory names found in Steam's compatibilitytools.d or a custom [customDir].
+  /// Lists compatibility tool subdirectory names found in Steam's
+  /// compatibilitytools.d or a custom [customDir].
   List<String> getInstalledCompatTools({String? customDir}) {
     final ctDir = customDir ?? getCompatToolsDir();
     if (ctDir == null) return [];
@@ -196,13 +209,15 @@ class SteamService {
     return tools;
   }
 
-  /// Checks if a compatibility tool matching [toolName] is installed in [customDir] or default dir.
+  /// Checks if a compatibility tool matching [toolName] is installed in
+  /// [customDir] or default dir.
   bool isToolInstalled(String toolName, {String? customDir}) {
     return findInstalledToolDir(toolName, customDir: customDir) != null;
   }
 
-  /// Finds the directory name of an installed tool matching [toolName] (e.g. 'GE-Proton11-5'),
-  /// handling arch suffixes like '-x86_64' or internal 'version' file content.
+  /// Finds the directory name of an installed tool matching [toolName] (e.g.
+  /// 'GE-Proton11-5'), handling arch suffixes like '-x86_64' or internal
+  /// 'version' file content.
   String? findInstalledToolDir(String toolName, {String? customDir}) {
     final ctDir = customDir ?? getCompatToolsDir();
     if (ctDir == null) return null;
@@ -227,9 +242,12 @@ class SteamService {
 
     // 2. Normalized folder name match (stripping arch/platform suffixes)
     final normalizedDir = dirName.replaceAll(
-        RegExp(r'[-_.]?(x86_64|amd64|i686|x86)$', caseSensitive: false), '');
+      RegExp(r'[-_.]?(x86_64|amd64|i686|x86)$', caseSensitive: false),
+      '',
+    );
     if (normalizedDir == toolName) return true;
-    if (dirName.startsWith('$toolName-') || dirName.startsWith('${toolName}_')) {
+    if (dirName.startsWith('$toolName-') ||
+        dirName.startsWith('${toolName}_')) {
       return true;
     }
 
@@ -242,7 +260,7 @@ class SteamService {
         if (tokens.contains(toolName) || content.endsWith(toolName)) {
           return true;
         }
-      } catch (_) {}
+      } on Object catch (_) {}
     }
 
     return false;

@@ -6,7 +6,8 @@
 /// This is a simplified implementation focused on the keys ProtoGNOME needs.
 library;
 
-/// Deserializer and serializer utility class for Valve Data Format (VDF) text streams.
+/// Deserializer and serializer utility class for Valve Data Format (VDF) text
+/// streams.
 class VdfParser {
   /// Parse text VDF content into a nested Map structure.
   static Map<String, dynamic> parse(String content) {
@@ -22,24 +23,26 @@ class VdfParser {
 
     for (final entry in data.entries) {
       if (entry.value is Map) {
-        sb.writeln('$tab"${_escape(entry.key)}"');
-        sb.writeln('$tab{');
-        sb.write(dump(entry.value as Map<String, dynamic>, indent: indent + 1));
-        sb.writeln('$tab}');
+        sb
+          ..writeln('$tab"${_escape(entry.key)}"')
+          ..writeln('$tab{')
+          ..write(dump(entry.value as Map<String, dynamic>, indent: indent + 1))
+          ..writeln('$tab}');
       } else {
         sb.writeln(
-            '$tab"${_escape(entry.key)}"\t\t"${_escape(entry.value.toString())}"');
+          '$tab"${_escape(entry.key)}"\t\t"${_escape(entry.value.toString())}"',
+        );
       }
     }
     return sb.toString();
   }
 
   static String _escape(String s) =>
-      s.replaceAll('"', '\\"').replaceAll('\\', '\\\\');
+      s.replaceAll('"', r'\"').replaceAll(r'\', r'\\');
 
   static List<String> _tokenize(String content) {
     final tokens = <String>[];
-    int index = 0;
+    var index = 0;
     while (index < content.length) {
       final char = content[index];
       if (char == '"') {
@@ -47,7 +50,7 @@ class VdfParser {
         index++;
         final buf = StringBuffer();
         while (index < content.length && content[index] != '"') {
-          if (content[index] == '\\' && index + 1 < content.length) {
+          if (content[index] == r'\' && index + 1 < content.length) {
             index++;
             buf.write(content[index]);
           } else {
@@ -63,7 +66,9 @@ class VdfParser {
       } else if (char == '}') {
         tokens.add('}');
         index++;
-      } else if (char == '/' && index + 1 < content.length && content[index + 1] == '/') {
+      } else if (char == '/' &&
+          index + 1 < content.length &&
+          content[index + 1] == '/') {
         // Line comment
         while (index < content.length && content[index] != '\n') {
           index++;
@@ -93,10 +98,9 @@ class VdfParser {
 
 /// Parser state tracker traversing a token stream.
 class _VdfTokenParser {
+  _VdfTokenParser(this.tokens);
   final List<String> tokens;
   int pos = 0;
-
-  _VdfTokenParser(this.tokens);
 
   Map<String, dynamic> parseBlock() {
     final result = <String, dynamic>{};

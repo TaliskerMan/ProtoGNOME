@@ -17,6 +17,7 @@ void main() {
 /// desktop's own font (no fonts are downloaded at run time), button presets,
 /// and the home screen.
 class ProtoGNOMEApp extends StatelessWidget {
+  /// Creates the root application widget.
   const ProtoGNOMEApp({super.key});
 
   @override
@@ -29,7 +30,6 @@ class ProtoGNOMEApp extends StatelessWidget {
           primary: Color(0xFF7C3AED),
           secondary: Color(0xFF4F46E5),
           surface: Color(0xFF1A1A2E),
-          onSurface: Colors.white,
         ),
         scaffoldBackgroundColor: const Color(0xFF0F0F1A),
         cardColor: const Color(0xFF1E1E3A),
@@ -57,10 +57,11 @@ class ProtoGNOMEApp extends StatelessWidget {
           ),
         ),
         checkboxTheme: CheckboxThemeData(
-          fillColor: WidgetStateProperty.resolveWith((states) =>
-              states.contains(WidgetState.selected)
-                  ? const Color(0xFF7C3AED)
-                  : null),
+          fillColor: WidgetStateProperty.resolveWith(
+            (states) => states.contains(WidgetState.selected)
+                ? const Color(0xFF7C3AED)
+                : null,
+          ),
         ),
         useMaterial3: true,
       ),

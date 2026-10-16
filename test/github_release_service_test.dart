@@ -36,7 +36,9 @@ void main() {
       expect(sel.checksumUrl, 'https://example/GE-Proton9-1.sha512sum');
     });
 
-    test('picks the x86_64 build and ITS checksum when aarch64 is also published',
+    test(
+        'picks the x86_64 build and ITS checksum when aarch64 is also '
+        'published',
         () {
       // Real asset names from GE-Proton11-9 (Oct 2026), aarch64 listed first.
       Map<String, Object> asset(String name, {String? digest}) => {
@@ -59,7 +61,9 @@ void main() {
 
       // Same result whatever order GitHub lists them in.
       final reversed = GitHubReleaseService.selectAsset(
-          assets.reversed.toList(), '.tar.gz');
+        assets.reversed.toList(),
+        '.tar.gz',
+      );
       expect(reversed.downloadUrl, sel.downloadUrl);
       expect(reversed.checksumUrl, sel.checksumUrl);
     });
@@ -92,8 +96,10 @@ void main() {
         },
       ];
       final sel = GitHubReleaseService.selectAsset(assets, '.tar.xz');
-      expect(sel.checksumUrl,
-          'https://example/luxtorpeda-v76.3.0.tar.xz.sha512');
+      expect(
+        sel.checksumUrl,
+        'https://example/luxtorpeda-v76.3.0.tar.xz.sha512',
+      );
       expect(sel.assetDigest, 'sha256:${'c' * 64}');
     });
 
@@ -131,7 +137,8 @@ void main() {
   group('parseChecksumDigest', () {
     test('matches the digest for the requested filename', () {
       const body =
-          'aaaa  other.tar.gz\nbbbb1234  GE-Proton9-1.tar.gz\ncccc  more.tar.gz\n';
+          'aaaa  other.tar.gz\nbbbb1234  GE-Proton9-1.tar.gz\ncccc  '
+          'more.tar.gz\n';
       expect(
         GitHubReleaseService.parseChecksumDigest(body, 'GE-Proton9-1.tar.gz'),
         'bbbb1234',
@@ -148,36 +155,45 @@ void main() {
 
     test('handles binary-mode (*) filename markers', () {
       const body = 'abc123 *tool.tar.zst\n';
-      expect(GitHubReleaseService.parseChecksumDigest(body, 'tool.tar.zst'),
-          'abc123');
+      expect(
+        GitHubReleaseService.parseChecksumDigest(body, 'tool.tar.zst'),
+        'abc123',
+      );
     });
 
     test('returns null when multiple entries and none match', () {
       const body = 'aaaa  one.tar.gz\nbbbb  two.tar.gz\n';
       expect(
-          GitHubReleaseService.parseChecksumDigest(body, 'three.tar.gz'), isNull);
+        GitHubReleaseService.parseChecksumDigest(body, 'three.tar.gz'),
+        isNull,
+      );
     });
   });
 
   group('GitHub digest', () {
     test('parses sha256 digests and rejects anything else', () {
       final hex = 'AB' * 32;
-      expect(GitHubReleaseService.parseGithubDigest('sha256:$hex'),
-          hex.toLowerCase());
+      expect(
+        GitHubReleaseService.parseGithubDigest('sha256:$hex'),
+        hex.toLowerCase(),
+      );
       expect(GitHubReleaseService.parseGithubDigest(null), isNull);
       expect(GitHubReleaseService.parseGithubDigest('sha256:abc'), isNull);
       expect(GitHubReleaseService.parseGithubDigest('md5:${'a' * 32}'), isNull);
     });
 
     test('selectAsset drops a malformed digest', () {
-      final sel = GitHubReleaseService.selectAsset([
-        {
-          'name': 'tool.tar.xz',
-          'browser_download_url': 'https://example/tool.tar.xz',
-          'size': 1,
-          'digest': 'sha256:not-hex',
-        },
-      ], '.tar.xz');
+      final sel = GitHubReleaseService.selectAsset(
+        [
+          {
+            'name': 'tool.tar.xz',
+            'browser_download_url': 'https://example/tool.tar.xz',
+            'size': 1,
+            'digest': 'sha256:not-hex',
+          },
+        ],
+        '.tar.xz',
+      );
       expect(sel.assetDigest, isNull);
     });
   });
@@ -203,12 +219,16 @@ void main() {
 
     test('needs a checksum file or a GitHub digest', () {
       expect(tool().isVerifiable, isFalse);
-      expect(tool(checksum: 'https://example/t.sha512sum').isVerifiable, isTrue);
+      expect(
+        tool(checksum: 'https://example/t.sha512sum').isVerifiable,
+        isTrue,
+      );
       expect(tool(digest: 'sha256:${'a' * 64}').isVerifiable, isTrue);
       expect(tool(checksum: '').isVerifiable, isFalse);
     });
 
-    test('downloadAndInstall refuses an unverifiable release before downloading',
+    test(
+        'downloadAndInstall refuses an unverifiable release before downloading',
         () async {
       final service = GitHubReleaseService();
       final ok = await service.downloadAndInstall(tool(), '/nonexistent');
@@ -235,9 +255,14 @@ void main() {
 
   group('isSafeArchiveMember', () {
     test('accepts normal relative members', () {
-      expect(GitHubReleaseService.isSafeArchiveMember('GE-Proton9-1/proton'),
-          isTrue);
-      expect(GitHubReleaseService.isSafeArchiveMember('files/data.bin'), isTrue);
+      expect(
+        GitHubReleaseService.isSafeArchiveMember('GE-Proton9-1/proton'),
+        isTrue,
+      );
+      expect(
+        GitHubReleaseService.isSafeArchiveMember('files/data.bin'),
+        isTrue,
+      );
     });
 
     test('rejects absolute paths and parent traversal', () {
@@ -260,9 +285,8 @@ void main() {
     });
 
     test('splits large file (>100MB) into 6 chunks correctly', () {
-      final totalBytes = 150 * 1024 * 1024;
-      final ranges =
-          GitHubReleaseService.calculateChunkRanges(totalBytes, numChunks: 6);
+      const totalBytes = 150 * 1024 * 1024;
+      final ranges = GitHubReleaseService.calculateChunkRanges(totalBytes);
       expect(ranges.length, 6);
       expect(ranges.first['start'], 0);
       expect(ranges.last['end'], totalBytes - 1);
@@ -277,4 +301,3 @@ void main() {
     });
   });
 }
-

@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2024 ProtoGNOME Contributors
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:protognome/models/compat_tool.dart';
 import 'package:protognome/services/github_release_service.dart';
@@ -11,12 +13,16 @@ import 'package:protognome/widgets/tool_card.dart';
 /// Screen component displaying the list of available releases from GitHub
 /// and allowing user tool installations, removals, or type queries.
 class ToolManagerScreen extends StatefulWidget {
+  /// Creates the Tools screen.
   const ToolManagerScreen({
     required this.steamService,
     required this.releaseService,
     super.key,
   });
+  /// Finds the Steam install and which tools are installed.
   final SteamService steamService;
+
+  /// Lists, downloads, verifies and installs releases.
   final GitHubReleaseService releaseService;
 
   @override
@@ -34,7 +40,7 @@ class _ToolManagerScreenState extends State<ToolManagerScreen> {
   @override
   void initState() {
     super.initState();
-    _loadData();
+    unawaited(_loadData());
   }
 
   Future<void> _loadData({bool forceRefresh = false}) async {
@@ -50,7 +56,8 @@ class _ToolManagerScreenState extends State<ToolManagerScreen> {
       if (_selectedLocation == null && _availableLocations.isNotEmpty) {
         _selectedLocation = _availableLocations.first;
       }
-      // If selected location became invalid or not in the list, default to first
+      // If the selected location became invalid or not in the list, default
+      // to the first one.
       if (_selectedLocation != null &&
           !_availableLocations
               .any((loc) => loc.path == _selectedLocation!.path)) {
@@ -67,7 +74,8 @@ class _ToolManagerScreenState extends State<ToolManagerScreen> {
         _availableTools = tools;
         _loading = false;
       });
-    } catch (error) {
+    } on Object catch (error) {
+      if (!mounted) return;
       setState(() {
         _error = error.toString();
         _loading = false;
@@ -84,30 +92,32 @@ class _ToolManagerScreenState extends State<ToolManagerScreen> {
     final installDir = _selectedLocation!.path;
 
     // Show progress dialog
-    showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => _DownloadProgressDialog(
-        tool: tool,
-        installDir: installDir,
-        releaseService: widget.releaseService,
-        onComplete: (success) {
-          if (!mounted) return;
-          Navigator.of(context).pop();
-          if (success) {
-            _loadData();
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('${tool.name} installed successfully!'),
-                backgroundColor: const Color(0xFF065F46),
-              ),
-            );
-          } else {
-            final reason = widget.releaseService.lastInstallError ??
-                'Check the log for details.';
-            _showError('${tool.name} was not installed. $reason');
-          }
-        },
+    unawaited(
+      showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => _DownloadProgressDialog(
+          tool: tool,
+          installDir: installDir,
+          releaseService: widget.releaseService,
+          onComplete: ({required success}) {
+            if (!mounted) return;
+            Navigator.of(context).pop();
+            if (success) {
+              unawaited(_loadData());
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('${tool.name} installed successfully!'),
+                  backgroundColor: const Color(0xFF065F46),
+                ),
+              );
+            } else {
+              final reason = widget.releaseService.lastInstallError ??
+                  'Check the log for details.';
+              _showError('${tool.name} was not installed. $reason');
+            }
+          },
+        ),
       ),
     );
   }
@@ -123,10 +133,13 @@ class _ToolManagerScreenState extends State<ToolManagerScreen> {
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: const Color(0xFF1E1E3A),
-        title: const Text('Confirm Removal',
-            style: TextStyle(color: Colors.white)),
+        title: const Text(
+          'Confirm Removal',
+          style: TextStyle(color: Colors.white),
+        ),
         content: Text(
-          'Are you sure you want to completely remove $toolName from your system?',
+          'Are you sure you want to completely remove $toolName from your '
+          'system?',
           style: const TextStyle(color: Color(0xFFB0B0D0)),
         ),
         actions: [
@@ -148,7 +161,7 @@ class _ToolManagerScreenState extends State<ToolManagerScreen> {
     if (confirmed == true) {
       final success = widget.releaseService.removeTool(toolName, installDir);
       if (success) {
-        _loadData();
+        unawaited(_loadData());
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -159,6 +172,11 @@ class _ToolManagerScreenState extends State<ToolManagerScreen> {
       }
     }
   }
+
+  /// Display name of the selected tool type.
+  String get _selectedToolName =>
+      kToolSources.firstWhere((s) => s['type'] == _selectedToolType)['name']
+          as String;
 
   /// True if the selected tool works with the selected launcher.
   bool get _launcherSupported =>
@@ -221,7 +239,8 @@ class _ToolManagerScreenState extends State<ToolManagerScreen> {
                       if (newLoc != null &&
                           !newLoc.name.contains('(Not Installed)')) {
                         setState(() => _selectedLocation = newLoc);
-                        _loadData(); // reload installed tools for the new selection
+                        // Reload installed tools for the new selection.
+                        unawaited(_loadData());
                       }
                     },
                   ),
@@ -253,7 +272,7 @@ class _ToolManagerScreenState extends State<ToolManagerScreen> {
                     label: Text(name),
                     onSelected: (_) {
                       setState(() => _selectedToolType = type);
-                      _loadData();
+                      unawaited(_loadData());
                     },
                     selectedColor: const Color(0xFF7C3AED),
                     backgroundColor: const Color(0xFF2A2A4A),
@@ -274,9 +293,8 @@ class _ToolManagerScreenState extends State<ToolManagerScreen> {
           Padding(
             padding: const EdgeInsets.fromLTRB(24, 12, 24, 0),
             child: Text(
-              '${kToolSources.firstWhere((s) => s['type'] == _selectedToolType)['name']} '
-              "works only with Steam, so it can't be installed into "
-              '${_selectedLocation!.name}.',
+              '$_selectedToolName works only with Steam, so it can\'t be '
+              'installed into ${_selectedLocation!.name}.',
               style: const TextStyle(color: Color(0xFFFCA5A5), fontSize: 13),
             ),
           ),
@@ -340,7 +358,8 @@ class _ToolManagerScreenState extends State<ToolManagerScreen> {
   }
 }
 
-/// Modal dialog tracking the background download progress and extraction status.
+/// Modal dialog tracking the background download progress and extraction
+/// status.
 class _DownloadProgressDialog extends StatefulWidget {
   const _DownloadProgressDialog({
     required this.tool,
@@ -351,7 +370,7 @@ class _DownloadProgressDialog extends StatefulWidget {
   final CompatTool tool;
   final String installDir;
   final GitHubReleaseService releaseService;
-  final void Function(bool success) onComplete;
+  final void Function({required bool success}) onComplete;
 
   @override
   State<_DownloadProgressDialog> createState() =>
@@ -365,7 +384,7 @@ class _DownloadProgressDialogState extends State<_DownloadProgressDialog> {
   @override
   void initState() {
     super.initState();
-    _startDownload();
+    unawaited(_startDownload());
   }
 
   Future<void> _startDownload() async {
@@ -380,7 +399,7 @@ class _DownloadProgressDialogState extends State<_DownloadProgressDialog> {
     if (mounted) {
       setState(() => _status = success ? 'Extracting...' : 'Failed!');
       await Future<void>.delayed(const Duration(milliseconds: 300));
-      widget.onComplete(success);
+      widget.onComplete(success: success);
     }
   }
 
