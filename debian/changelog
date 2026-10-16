@@ -1,3 +1,22 @@
+protognome (1.0.14+7) unstable; urgency=medium
+
+  * Require download verification: publisher checksum and GitHub's SHA-256
+    digest must match; releases that can't be verified are refused.
+  * Remove Boxtron, SteamTinkerLaunch (no checksums) and Proton-GE (tkg)
+    (Arch Linux Wine packages, unusable in Steam).
+  * Pick the x86_64 GE-Proton build and its own checksum; recognise
+    Luxtorpeda's .sha512 files.
+  * Fix database start-up on systems without libsqlite3-dev.
+  * Stop downloading a font from Google at start-up; use the desktop font.
+  * Detect Flatpak and Snap Steam; offer Steam on fresh installs; tools only
+    for launchers they work with (Lutris removed).
+  * Fix crash after installing or removing a tool (launcher dropdown).
+  * Settings shows the installed version; new 512x512 application icon.
+  * Release checksum files name the .deb by file name.
+  * Package description corrected (no removed tools, no bulk-apply claim).
+
+ -- Chuck Talk <chuck@nordheim.online>  Fri, 16 Oct 2026 09:00:00 -0500
+
 protognome (1.0.13+6) unstable; urgency=medium
 
   * Fix parallel multi-stream HTTP range downloader chunk file isolation using discrete part files.

@@ -1,6 +1,6 @@
 title: ProtoGNOME
 subtitle: Installation and User Guide
-version: 1.0.13 (with the October 2026 fixes)
+version: 1.0.14
 platforms: Linux (GNOME)
 ## About ProtoGNOME
 
@@ -157,7 +157,7 @@ ProtoGNOME contacts only GitHub (to list and download releases). It has no telem
 
 **A release shows "Can't be verified".** Its authors published no checksum and GitHub has no digest for it, so ProtoGNOME won't install it.
 
-**"Failed to load dynamic library 'libsqlite3.so'" (version 1.0.13 and earlier).** Fixed in this release: ProtoGNOME now loads the system SQLite library (`libsqlite3-0`). Update ProtoGNOME.
+**"Failed to load dynamic library 'libsqlite3.so'" (versions up to 1.0.13).** Fixed in 1.0.14: ProtoGNOME now loads the system SQLite library (`libsqlite3-0`). Update ProtoGNOME.
 
 **Something else went wrong.** Check `~/.local/state/protognome/app.log`.
 

@@ -4,7 +4,7 @@ All notable changes to the ProtoGNOME project are documented in this file. This 
 
 ---
 
-## [Unreleased]
+## [1.0.14] - 2026-10-16
 
 ### Security — verification is now required (2026-10-16 review)
 - **Unverifiable downloads are refused.** Previously a release without a
