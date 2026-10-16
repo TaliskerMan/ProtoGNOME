@@ -33,6 +33,19 @@ All notable changes to the ProtoGNOME project are documented in this file. This 
   folder from the launcher's tools folder.
 
 ### Fixed
+- **Crash after installing or removing a tool** ("There should be exactly one
+  item with [DropdownButton]'s value"). The launcher list is rebuilt on every
+  reload; the dropdown kept the old entry. The selection is now re-picked by
+  folder, and launcher entries compare by id and folder.
+- **Settings showed a hard-coded version** ("1.0.13", earlier "1.0.8"); it
+  now shows the installed version, like About.
+- **Release checksum files couldn't be verified.** `build_release.sh` wrote
+  the `.deb`'s full build path into `.sha256`/`.sha512`, so `sha256sum -c`
+  failed on users' machines (and published the build folder). They now hold
+  the bare file name.
+- **Package description** (debian/control) no longer lists removed tools or
+  claims ProtoGNOME can apply a Proton version to all games (the Games view is
+  read-only); Homepage and the SQLite dependency corrected.
 - **App failed to start its database on most desktops** ("Failed to load
   dynamic library 'libsqlite3.so'"). The 1.0.11 fix set a SQLite override in
   `main()`, but `DatabaseService` then replaced the global database factory
@@ -58,6 +71,8 @@ All notable changes to the ProtoGNOME project are documented in this file. This 
   `~/.local/share/lutris/runners/wine`.
 
 ### Changed
+- Code cleaned up for the project's `very_good_analysis` lint rules
+  (`flutter analyze`: no issues).
 - **New application icon**: a square 512×512 icon replaces the 687×689 one
   (which was installed as if it were 256×256). The package now installs it at
   512, 256, 128, 64, 48 and 32 px, and the app's Home and About screens use it.

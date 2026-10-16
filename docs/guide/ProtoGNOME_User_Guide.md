@@ -1,6 +1,6 @@
 title: ProtoGNOME
 subtitle: Installation and User Guide
-version: 1.0.10 (with the October 2026 fixes)
+version: 1.0.13 (with the October 2026 fixes)
 platforms: Linux (GNOME)
 ## About ProtoGNOME
 
@@ -28,7 +28,7 @@ ProtoGNOME offers only tools whose releases it can verify. Earlier versions also
 
 | Launcher | Where tools are installed |
 |---|---|
-| Steam (native) | Steam's `compatibilitytools.d` folder, for example `~/.local/share/Steam/compatibilitytools.d` |
+| Steam | Steam's `compatibilitytools.d` folder, for example `~/.local/share/Steam/compatibilitytools.d` (created on the first install) |
 | Heroic Games Launcher | `~/.config/heroic/tools/proton` |
 
 ProtoGNOME finds Steam in `~/.local/share/Steam`, `~/.steam/root`, `~/.steam/steam` and `~/.steam/debian-installation`, and also the **Flatpak** (`~/.var/app/com.valvesoftware.Steam/data/Steam`) and **Snap** (`~/snap/steam/common/.local/share/Steam`) versions. It uses the first one it finds, in that order.
@@ -40,7 +40,7 @@ GE-Proton works with Steam and Heroic; **Luxtorpeda works only with Steam**, so 
 | | |
 |---|---|
 | Operating system | 64-bit (amd64) Debian, Ubuntu, Pop!_OS or a derivative |
-| Libraries | GTK 3, libsecret (installed with the package) |
+| Libraries | GTK 3, libsecret and SQLite (`libsqlite3-0`), installed with the package |
 | Also needed | `tar` and `xz-utils` (normally already installed) |
 | Network | Internet connection to reach GitHub |
 | Disk space | Several hundred MB per Proton version |
@@ -91,7 +91,7 @@ The side rail has four sections: **Tools**, **Games**, **Settings** and **About*
 | Launcher list | Where to install: Steam or Heroic. A launcher that isn't installed is marked "(Not Installed)". |
 | Tool chips | Switch between GE-Proton and Luxtorpeda |
 | Release list | Recent releases, with date and download size |
-| Install | Downloads, verifies and installs that release. A release that can't be verified shows **Can't be verified** instead. |
+| Install | Downloads, verifies and installs that release. Downloads over 10 MB use several parallel connections; the finished file is verified the same way. A release that can't be verified shows **Can't be verified** instead. |
 | Remove | Deletes an installed release after you confirm |
 | Refresh release list | Fetches the latest releases from GitHub |
 
@@ -105,6 +105,7 @@ Lists the games in your Steam libraries, with the compatibility tool each one us
 |---|---|
 | Steam Installation | The detected Steam folder, compatibility-tools folder and config folder, and whether the installation looks valid |
 | GitHub API Token | Optional personal access token to raise GitHub's rate limit (see below) |
+| About ProtoGNOME | The installed version, license and author |
 
 ### About
 
@@ -134,7 +135,7 @@ The token is stored in your desktop's keyring (libsecret), not in a plain file.
 
 ## Privacy and files
 
-ProtoGNOME contacts only GitHub (to list and download releases). It has no telemetry.
+ProtoGNOME contacts only GitHub (to list and download releases). It has no telemetry, and it uses your desktop's own font rather than downloading one.
 
 | Item | Location |
 |---|---|
@@ -155,6 +156,8 @@ ProtoGNOME contacts only GitHub (to list and download releases). It has no telem
 **"could not be verified against its published checksum".** The download was corrupted or altered, or the checksum couldn't be fetched. Try again later; don't install it another way.
 
 **A release shows "Can't be verified".** Its authors published no checksum and GitHub has no digest for it, so ProtoGNOME won't install it.
+
+**"Failed to load dynamic library 'libsqlite3.so'" (version 1.0.13 and earlier).** Fixed in this release: ProtoGNOME now loads the system SQLite library (`libsqlite3-0`). Update ProtoGNOME.
 
 **Something else went wrong.** Check `~/.local/state/protognome/app.log`.
 

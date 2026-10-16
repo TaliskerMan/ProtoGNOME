@@ -161,8 +161,14 @@ DEB_FILE="${ARTIFACTS}/${PKG_NAME}_${VERSION}-1_${ARCH}.deb"
 dpkg-deb --build --root-owner-group "${DEB_ROOT}" "${DEB_FILE}"
 
 echo "==> Generating SHA256 and SHA512 hashes..."
-sha256sum "${DEB_FILE}" > "${DEB_FILE}.sha256"
-sha512sum "${DEB_FILE}" > "${DEB_FILE}.sha512"
+# Checksum files must name the .deb by its bare file name so users can run
+# `sha256sum -c` next to the download (a full path made it fail everywhere
+# but the build machine, and published the builder's home folder).
+(
+  cd "${ARTIFACTS}"
+  sha256sum "$(basename "${DEB_FILE}")" > "$(basename "${DEB_FILE}").sha256"
+  sha512sum "$(basename "${DEB_FILE}")" > "$(basename "${DEB_FILE}").sha512"
+)
 
 echo "==> Signing .deb with GPG..."
 if command -v gpg > /dev/null 2>&1; then

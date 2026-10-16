@@ -26,6 +26,7 @@ ProtoGNOME downloads and installs executable Proton runtimes, so the download/in
 - **Read-only Steam integration:** ProtoGNOME parses `config.vdf`/`libraryfolders.vdf` but never writes them.
 - **Token storage:** the optional GitHub PAT is stored in the system keyring (libsecret), not in plaintext.
 - **Audit log:** activity is traced to `~/.local/state/protognome/app.log`.
+- **Network:** ProtoGNOME contacts only GitHub. It has no telemetry and uses the desktop's own font (nothing is downloaded at start-up).
 
 ## Installation
 
@@ -34,7 +35,8 @@ Download the latest `.deb` from [Releases](https://github.com/TaliskerMan/ProtoG
 ```bash
 # Verify the package
 sha256sum -c protognome_*.deb.sha256
-gpg --verify protognome_*.deb.asc
+gpg --import pubkey.asc
+gpg --verify protognome_*.deb.asc protognome_*.deb
 
 # Install
 sudo dpkg -i protognome_*.deb
