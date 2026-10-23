@@ -73,6 +73,8 @@ if command -v "${SYFT_BIN}" &> /dev/null; then
         --exclude ./dist \
         --exclude ./plan \
         --exclude ./.dart_tool \
+        --exclude ./artifacts \
+        --exclude ./deb_pkg \
         -o cyclonedx-json > Audit/SBOM-Linux.json
     cp Audit/SBOM-Linux.json Audit/SBOM-Linux
     cp Audit/SBOM-Linux.json Audit/sbom.json
@@ -172,8 +174,10 @@ echo "==> Generating SHA256 and SHA512 hashes..."
 
 echo "==> Signing .deb with GPG..."
 if command -v gpg > /dev/null 2>&1; then
-    gpg --batch --yes --local-user chuck@nordheim.online --detach-sign --armor "${DEB_FILE}"
-    gpg --export -a chuck@nordheim.online > "${ARTIFACTS}/pubkey.asc"
+    # Use non-interactive flags for headless automation per CP-HumanInLoop (CP-ChangeComments)
+    gpg --batch --no-tty --yes --local-user chuck@nordheim.online --detach-sign --armor "${DEB_FILE}"
+    gpg --batch --no-tty --export -a chuck@nordheim.online > "${ARTIFACTS}/pubkey.asc"
+    cp "${ARTIFACTS}/pubkey.asc" "${ARTIFACTS}/chuck_pubkey.asc"
     echo "    Signed: ${DEB_FILE}.asc"
 else
     echo "    WARNING: gpg not found - package NOT signed!"
@@ -196,12 +200,21 @@ for target_dir in "${NOBUILDS_DIR}" "${NOBUILDS_PATTERN_DIR}"; do
     cp "${DEB_FILE}.sha256" "${target_dir}/" || true
     cp "${DEB_FILE}.sha512" "${target_dir}/" || true
     cp "${ARTIFACTS}/pubkey.asc" "${target_dir}/" || true
+    cp "${ARTIFACTS}/chuck_pubkey.asc" "${target_dir}/" || true
     cp "${ARTIFACTS}/protognome_source.tar.gz" "${target_dir}/" || true
     cp LICENSE "${target_dir}/"
     cp README.md "${target_dir}/"
+    if [ -f docs/ProtoGNOME_User_Guide.pdf ]; then
+        cp docs/ProtoGNOME_User_Guide.pdf "${target_dir}/" || true
+        cp docs/ProtoGNOME_User_Guide.pdf "${ARTIFACTS}/" || true
+    fi
     cp Audit/SBOM-Linux.json "${target_dir}/" || true
     cp Audit/SBOM-Linux "${target_dir}/" || true
     cp Audit/sbom.json "${target_dir}/" || true
+    if [ -f Audit/security_report.md ]; then
+        cp Audit/security_report.md "${target_dir}/" || true
+        cp Audit/security_report.md "${ARTIFACTS}/" || true
+    fi
     ( cd "${target_dir}" && rm -f SHA512SUMS && sha512sum * > SHA512SUMS )
 done
 

@@ -1,3 +1,11 @@
+protognome (1.0.15+8) unstable; urgency=medium
+
+  * Official Linux release v1.0.15.
+  * Supply chain security audit: Syft CycloneDX SBOM and Grype vulnerability scans.
+  * GPG detached signed release package and SHA-512 verification.
+
+ -- Chuck Talk <chuck@nordheim.online>  Fri, 23 Oct 2026 15:55:00 -0500
+
 protognome (1.0.14+7) unstable; urgency=medium
 
   * Require download verification: publisher checksum and GitHub's SHA-256
