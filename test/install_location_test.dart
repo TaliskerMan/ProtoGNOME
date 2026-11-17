@@ -3,6 +3,7 @@
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:protognome/services/install_location_service.dart';
+import 'package:protognome/services/logger_service.dart';
 
 void main() {
   test('a rebuilt location equals the earlier one with the same id and path',
@@ -16,6 +17,13 @@ void main() {
     expect(
       const InstallLocation(id: 'heroic', name: 'Heroic', path: '/h'),
       isNot(before),
+    );
+  });
+
+  test('LoggerService.sanitize strips CR and LF characters', () {
+    expect(
+      LoggerService.sanitize('install\r\nproton\nforged'),
+      'install  proton forged',
     );
   });
 }

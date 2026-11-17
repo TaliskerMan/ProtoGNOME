@@ -20,6 +20,12 @@ class LoggerService {
   static final LoggerService _instance = LoggerService._internal();
 
   File? _logFile;
+  static const int _maxLogBytes = 5 * 1024 * 1024;
+
+  /// Sanitizes a log [message] by replacing CR/LF control characters.
+  static String sanitize(String message) {
+    return message.replaceAll('\r', ' ').replaceAll('\n', ' ');
+  }
 
   /// Initializes the log file configuration under XDG state directories.
   void _initLogFile() {
@@ -33,6 +39,12 @@ class LoggerService {
       }
 
       _logFile = File(p.join(logDir.path, 'app.log'));
+      if (!_logFile!.existsSync()) {
+        _logFile!.createSync(recursive: true);
+      }
+      if (!Platform.isWindows) {
+        Process.runSync('chmod', ['600', _logFile!.path]);
+      }
       log('--- ProtoGNOME Session Started ---');
     } on Object catch (error) {
       print('Failed to initialize local LoggerService: $error');
@@ -41,11 +53,18 @@ class LoggerService {
 
   /// Appends [message] with a timestamp to the log file and prints to stdout.
   void log(String message) {
-    print(message);
+    final safeMessage = sanitize(message);
+    print(safeMessage);
     if (_logFile != null) {
       try {
+        if (_logFile!.existsSync() && _logFile!.lengthSync() > _maxLogBytes) {
+          _logFile!.renameSync('${_logFile!.path}.1');
+        }
         final ts = DateTime.now().toIso8601String();
-        _logFile!.writeAsStringSync('[$ts] $message\n', mode: FileMode.append);
+        _logFile!.writeAsStringSync(
+          '[$ts] $safeMessage\n',
+          mode: FileMode.append,
+        );
       } on Object {
         // Silently fail if log cannot be appended
       }

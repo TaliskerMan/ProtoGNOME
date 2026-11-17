@@ -4,6 +4,14 @@ All notable changes to the ProtoGNOME project are documented in this file. This 
 
 ---
 
+## [1.0.15+9] - 2026-11-16
+
+### Security & Quality
+- **SonarQube Cloud & Snyk Remediation**: Resolved all 24 SonarQube Cloud findings (including 2 security vulnerabilities and 22 code smells) across `docs/guide/build_guide.js`, `linux/my_application.cc`, and `build_release.sh`.
+- **Agentic CLI Path Traversal Hardening (`jssecurity:S8707`)**: Added `safePath()` and `safeOutputPath()` canonical base-directory confinement in `docs/guide/build_guide.js`.
+- **Linux GTK Runner & Build Script Modernization**: Upgraded `linux/CMakeLists.txt` to C++17, resolved `cpp:S5827`, `cpp:S6004`, `cpp:S125`, `cpp:S1172`, and `cpp:S1186` in `linux/my_application.cc`, and fixed `shell:S7688`, `shell:S1066`, and `shell:S6573` in `build_release.sh`.
+- **Log Hardening (`CP-Logging`)**: Added CR/LF log injection sanitization (`LoggerService.sanitize`), `0600` file permissions, and 5 MiB log rotation in `lib/services/logger_service.dart`.
+
 ## [1.0.14] - 2026-10-16
 
 ### Security — verification is now required (2026-10-16 review)

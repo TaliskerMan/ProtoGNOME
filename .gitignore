@@ -20,6 +20,6 @@ artifacts/
 *.asc
 
 .DS_Store
-sonar-project.properties
 patch/
 .scannerwork/
+coverage/

@@ -6,8 +6,27 @@ const path = require('node:path');
 const { marked } = require('marked');
 const { chromium } = require('playwright');
 
+function safePath(filePath) {
+  const resolved = fs.realpathSync(filePath);
+  const baseDir = fs.realpathSync(process.cwd());
+  if (resolved !== baseDir && !resolved.startsWith(baseDir + path.sep)) {
+    throw new Error(`path '${filePath}' is outside the allowed directory`);
+  }
+  return resolved;
+}
+
+function safeOutputPath(filePath) {
+  const resolvedDir = fs.realpathSync(path.dirname(path.resolve(filePath)));
+  const resolved = path.join(resolvedDir, path.basename(filePath));
+  const baseDir = fs.realpathSync(process.cwd());
+  if (resolved !== baseDir && !resolved.startsWith(baseDir + path.sep)) {
+    throw new Error(`output path '${filePath}' is outside the allowed directory`);
+  }
+  return resolved;
+}
+
 const [, , MD, ICON, OUT] = process.argv;
-let src = fs.readFileSync(MD, 'utf8');
+let src = fs.readFileSync(safePath(MD), 'utf8');
 const meta = {};
 // Parse front matter linearly without regex backtracking (Sonar S8786)
 const lines = src.split(/\r?\n/);
@@ -24,7 +43,7 @@ for (const line of lines) {
   }
 }
 src = lines.slice(headerLines).join('\n');
-const iconB64 = fs.readFileSync(ICON).toString('base64');
+const iconB64 = fs.readFileSync(safePath(ICON)).toString('base64');
 const logoB64 = fs.readFileSync(path.join(__dirname, 'logo.png')).toString('base64');
 
 // Callouts: lines starting with "> **Note:**" etc. render as styled blockquotes.
@@ -106,14 +125,15 @@ async function renderPdf() {
     if (end === -1) break;
     cleanTitle = cleanTitle.slice(0, start) + cleanTitle.slice(end + 1);
   }
+  const safeOut = safeOutputPath(OUT);
   await page.pdf({
-    path: OUT, format: 'Letter', printBackground: true, displayHeaderFooter: true,
+    path: safeOut, format: 'Letter', printBackground: true, displayHeaderFooter: true,
     headerTemplate: '<div></div>',
     footerTemplate: `<div style="font-family:Arial;font-size:8px;color:#6a7385;width:100%;padding:0 0.85in;display:flex;justify-content:space-between;"><span>${cleanTitle} · ${meta.version}</span><span class="pageNumber"></span></div>`,
     margin: { top: '0.8in', bottom: '0.9in', left: '0.85in', right: '0.85in' },
   });
   await browser.close();
-  console.log('wrote', OUT);
+  console.log('wrote', safeOut);
 }
 
 try {

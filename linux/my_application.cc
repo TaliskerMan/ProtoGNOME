@@ -24,7 +24,7 @@ static void first_frame_cb(MyApplication* self, FlView* view) {
 // Implements GApplication::activate.
 static void my_application_activate(GApplication* application) {
   MyApplication* self = MY_APPLICATION(application);
-  GtkWindow* window =
+  auto* window =
       GTK_WINDOW(gtk_application_window_new(GTK_APPLICATION(application)));
 
   // Use a header bar when running in GNOME as this is the common style used
@@ -45,7 +45,7 @@ static void my_application_activate(GApplication* application) {
   }
 #endif
   if (use_header_bar) {
-    GtkHeaderBar* header_bar = GTK_HEADER_BAR(gtk_header_bar_new());
+    auto* header_bar = GTK_HEADER_BAR(gtk_header_bar_new());
     gtk_widget_show(GTK_WIDGET(header_bar));
     gtk_header_bar_set_title(header_bar, "ProtoGNOME");
     gtk_header_bar_set_show_close_button(header_bar, TRUE);
@@ -82,8 +82,7 @@ static gboolean my_application_local_command_line(GApplication* application, gch
   // Strip out the first argument as it is the binary name.
   self->dart_entrypoint_arguments = g_strdupv(*arguments + 1);
 
-  g_autoptr(GError) error = nullptr;
-  if (!g_application_register(application, nullptr, &error)) {
+  if (g_autoptr(GError) error = nullptr; !g_application_register(application, nullptr, &error)) {
      g_warning("Failed to register: %s", error->message);
      *exit_status = 1;
      return TRUE;
@@ -97,8 +96,6 @@ static gboolean my_application_local_command_line(GApplication* application, gch
 
 // Implements GApplication::startup.
 static void my_application_startup(GApplication* application) {
-  //MyApplication* self = MY_APPLICATION(object);
-
   // Perform any actions required at application startup.
 
   G_APPLICATION_CLASS(my_application_parent_class)->startup(application);
@@ -106,8 +103,6 @@ static void my_application_startup(GApplication* application) {
 
 // Implements GApplication::shutdown.
 static void my_application_shutdown(GApplication* application) {
-  //MyApplication* self = MY_APPLICATION(object);
-
   // Perform any actions required at application shutdown.
 
   G_APPLICATION_CLASS(my_application_parent_class)->shutdown(application);
@@ -128,7 +123,9 @@ static void my_application_class_init(MyApplicationClass* klass) {
   G_OBJECT_CLASS(klass)->dispose = my_application_dispose;
 }
 
-static void my_application_init(MyApplication* self) {}
+static void my_application_init(MyApplication* /*self*/) {
+  // Intentionally empty: per-instance initialization is handled in activate/local_command_line.
+}
 
 MyApplication* my_application_new() {
   return MY_APPLICATION(g_object_new(my_application_get_type(),

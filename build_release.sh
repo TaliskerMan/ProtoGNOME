@@ -8,7 +8,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # Version is single-sourced from pubspec.yaml (no auto-increment) to avoid the
 # drift between pubspec, debian/changelog, the git tag, and the built .deb.
 VERSION="$(grep '^version:' "${SCRIPT_DIR}/pubspec.yaml" | awk '{print $2}' | cut -d'+' -f1)"
-if [ -z "${VERSION}" ]; then
+if [[ -z "${VERSION}" ]]; then
   echo "ERROR: could not read version from pubspec.yaml" >&2
   exit 1
 fi
@@ -16,25 +16,23 @@ PKG_NAME="protognome"
 
 # Check for flutter bin
 FLUTTER="flutter"
-if [ ! -x "$(which flutter 2>/dev/null)" ]; then
-    if [ -f "${HOME}/flutter/bin/flutter" ]; then
-        FLUTTER="${HOME}/flutter/bin/flutter"
-    fi
+if [[ ! -x "$(command -v flutter 2>/dev/null || true)" ]] && [[ -f "${HOME}/flutter/bin/flutter" ]]; then
+    FLUTTER="${HOME}/flutter/bin/flutter"
 fi
 
 # Fix clang++ linker issue on some arm64/Linux environments
-if [ -d "/usr/lib/gcc/aarch64-linux-gnu/13" ]; then
+if [[ -d "/usr/lib/gcc/aarch64-linux-gnu/13" ]]; then
     export LIBRARY_PATH="/usr/lib/gcc/aarch64-linux-gnu/13:${LIBRARY_PATH:-}"
 fi
-if [ -d "/usr/include/c++/13" ]; then
+if [[ -d "/usr/include/c++/13" ]]; then
     export CPLUS_INCLUDE_PATH="/usr/include/c++/13:/usr/include/aarch64-linux-gnu/c++/13:${CPLUS_INCLUDE_PATH:-}"
 fi
 
 ARCH=$(dpkg --print-architecture)
 UNAME_M=$(uname -m)
-if [ "$UNAME_M" = "x86_64" ]; then
+if [[ "$UNAME_M" = "x86_64" ]]; then
     FLUTTER_ARCH="x64"
-elif [ "$UNAME_M" = "aarch64" ]; then
+elif [[ "$UNAME_M" = "aarch64" ]]; then
     FLUTTER_ARCH="arm64"
 else
     FLUTTER_ARCH="$UNAME_M"
@@ -54,9 +52,9 @@ cd "${SCRIPT_DIR}"
 echo "==> Generating SBOM via Syft..."
 SYFT_BIN="syft"
 if ! command -v syft &> /dev/null; then
-    if [ -f "${HOME}/.local/bin/syft" ]; then
+    if [[ -f "${HOME}/.local/bin/syft" ]]; then
         SYFT_BIN="${HOME}/.local/bin/syft"
-    elif [ -f "./syft" ]; then
+    elif [[ -f "./syft" ]]; then
         SYFT_BIN="./syft"
     fi
 fi
@@ -114,7 +112,7 @@ sed -i 's/^StartupWMClass=.*/StartupWMClass=io.protognome.protognome/' \
 ICON_SIZES="512x512 256x256 128x128 64x64 48x48 32x32"
 for size in ${ICON_SIZES}; do
     src="${SCRIPT_DIR}/share/icons/hicolor/${size}/apps/protognome.png"
-    if [ ! -f "${src}" ]; then
+    if [[ ! -f "${src}" ]]; then
         echo "ERROR: missing icon ${src}" >&2
         exit 1
     fi
@@ -204,21 +202,21 @@ for target_dir in "${NOBUILDS_DIR}" "${NOBUILDS_PATTERN_DIR}"; do
     cp "${ARTIFACTS}/protognome_source.tar.gz" "${target_dir}/" || true
     cp LICENSE "${target_dir}/"
     cp README.md "${target_dir}/"
-    if [ -f docs/ProtoGNOME_User_Guide.pdf ]; then
+    if [[ -f docs/ProtoGNOME_User_Guide.pdf ]]; then
         cp docs/ProtoGNOME_User_Guide.pdf "${target_dir}/" || true
         cp docs/ProtoGNOME_User_Guide.pdf "${ARTIFACTS}/" || true
     fi
     cp Audit/SBOM-Linux.json "${target_dir}/" || true
     cp Audit/SBOM-Linux "${target_dir}/" || true
     cp Audit/sbom.json "${target_dir}/" || true
-    if [ -f Audit/security_report.md ]; then
+    if [[ -f Audit/security_report.md ]]; then
         cp Audit/security_report.md "${target_dir}/" || true
         cp Audit/security_report.md "${ARTIFACTS}/" || true
     fi
-    ( cd "${target_dir}" && rm -f SHA512SUMS && sha512sum * > SHA512SUMS )
+    ( cd "${target_dir}" && rm -f SHA512SUMS && sha512sum -- ./* > SHA512SUMS )
 done
 
-( cd "${ARTIFACTS}" && rm -f SHA512SUMS && sha512sum * > SHA512SUMS )
+( cd "${ARTIFACTS}" && rm -f SHA512SUMS && sha512sum -- ./* > SHA512SUMS )
 
 echo ""
 echo "==================================="

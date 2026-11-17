@@ -1,0 +1,6 @@
+build/
+.dart_tool/
+Audit/
+artifacts/
+deb_pkg/
+test/

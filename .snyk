@@ -1,0 +1,12 @@
+# Snyk (https://snyk.io) policy file
+version: v1.25.0
+ignore: {}
+patch: {}
+exclude:
+  global:
+    - build/**
+    - .dart_tool/**
+    - Audit/**
+    - artifacts/**
+    - deb_pkg/**
+    - test/**
