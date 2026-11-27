@@ -1,6 +1,6 @@
 title: ProtoGNOME
 subtitle: Installation and User Guide
-version: 1.0.14
+version: 1.0.16+10
 platforms: Linux (GNOME)
 ## About ProtoGNOME
 
@@ -47,13 +47,13 @@ GE-Proton works with Steam and Heroic; **Luxtorpeda works only with Steam**, so 
 
 ## Installing ProtoGNOME
 
-Each release includes `protognome_<version>_amd64.deb`, SHA-256 and SHA-512 checksums, a detached GPG signature and the Nordheim Online public key (`pubkey.asc`).
+Each release includes `protognome_1.0.16-1_amd64.deb`, SHA-512 and SHA-256 checksums, detached GPG signatures, and the Nordheim Online public key (`chuck_pubkey.asc` / `pubkey.asc`).
 
 ```
-sha256sum -c protognome_<version>_amd64.deb.sha256
-gpg --import pubkey.asc
-gpg --verify protognome_<version>_amd64.deb.asc protognome_<version>_amd64.deb
-sudo apt install ./protognome_<version>_amd64.deb
+sha512sum -c protognome_1.0.16-1_amd64.deb.sha512
+gpg --import chuck_pubkey.asc
+gpg --verify protognome_1.0.16-1_amd64.deb.asc protognome_1.0.16-1_amd64.deb
+sudo apt install ./protognome_1.0.16-1_amd64.deb
 ```
 
 Open **ProtoGNOME** from your applications menu.
@@ -61,10 +61,10 @@ Open **ProtoGNOME** from your applications menu.
 ### Building from source
 
 ```
-# Requires Flutter 3.24+, cmake, ninja-build, libgtk-3-dev and g++
+# Requires Flutter 3.41+, cmake, ninja-build, libgtk-3-dev, libsecret-1-dev and g++
 git clone https://github.com/TaliskerMan/ProtoGNOME.git
 cd ProtoGNOME
-flutter pub get
+flutter pub get --enforce-lockfile
 bash build_release.sh
 ```
 
@@ -140,8 +140,8 @@ ProtoGNOME contacts only GitHub (to list and download releases). It has no telem
 | Item | Location |
 |---|---|
 | Release cache and preferences | `~/.local/share/io.protognome.protognome/protognome.db` |
-| Activity log | `~/.local/state/protognome/app.log` |
-| GitHub token | Your desktop keyring |
+| Activity log | `~/.local/state/protognome/app.log` (sanitized, `0600` owner-only, 5 MiB rotated) |
+| GitHub token | Your desktop keyring (`libsecret`) |
 
 ## Troubleshooting
 

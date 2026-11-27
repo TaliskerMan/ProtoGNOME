@@ -1,5 +1,12 @@
 # Plan for ProtoGNOME
 
+## Release v1.0.16: Official Linux Release, Quality Gates & Website Sync (2026-11-27)
+- [x] Audit `TaliskerMan/ProtoGNOME` repository, `~/sarules`, GitHub docs (`README.md`, `ProtoGNOME_User_Guide.md`), and live `https://nordheim.online/protognome/` (`Page 546`).
+- [x] Bump version to `1.0.16+10` (`protognome_1.0.16-1_amd64.deb`), align `AboutScreen` & `SettingsScreen` (`CP-AboutPage`, `CP-NordheimLogo`, `CP-AutoIncrement`), harden `docs/guide/build_guide.js` + `build_release.sh`, and regenerate `docs/ProtoGNOME_User_Guide.pdf`.
+- [x] Run `flutter analyze`, `flutter test`, `shellcheck`, Snyk Code (`snyk code test`), OSV-Scanner, Grype/Trivy, and verify SonarQube Cloud (`TaliskerMan_ProtoGNOME`) Quality Gate `OK`.
+- [x] Execute `build_release.sh` to compile 64-bit Flutter Linux release, build GPG-signed `protognome_1.0.16-1_amd64.deb`, generate CycloneDX SBOM & SHA-512/SHA-256 manifests, stage in `~/NOBuilds/ProtoGNOME-11-27-2026-1.0.16/`, and publish GitHub Release `v1.0.16`.
+- [x] Update `https://nordheim.online/protognome/` (`Page 546`) to remove the YouTube placeholder mockup & shop link and resolve all documentation discrepancies.
+
 ## Release v1.0.14: Security Hardening & Strict Verification
 - [x] Download Verification:
   - [x] Enforce mandatory download verification: publisher checksum and GitHub SHA-256 asset digest.

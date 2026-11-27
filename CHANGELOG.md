@@ -4,6 +4,13 @@ All notable changes to the ProtoGNOME project are documented in this file. This 
 
 ---
 
+## [1.0.16+10] - 2026-11-27
+
+### Added & Changed
+- **Official Linux Release (`v1.0.16` / `protognome_1.0.16-1_amd64.deb`)**: Rolled up all `1.0.15+9` SonarQube Cloud and Snyk security/quality fixes into a signed official Linux release with ASCII/binary GPG signatures, SHA-512/SHA-256 manifests, and path-sanitized CycloneDX SBOMs.
+- **About & Settings Attribution (`CP-AboutPage`, `CP-NordheimLogo`, `CP-AutoIncrement`)**: Added full `+build` version display in `About` and `Settings`, hyperlinked Nordheim Online badge (`https://nordheim.online`), and explicit original (`ProtonUp-Qt © 2021–2024 DavidoTek`) + fork (`© 2026 Chuck Talk <chuck@nordheim.online>, Nordheim Online, LLC`) GPL-3.0 attribution.
+- **Documentation & User Guide Refresh**: Migrated `docs/guide/build_guide.js` to hardened ES module syntax (`node:` imports, linear-time $O(n)$ parsers, canonical `REPO_ROOT` containment), regenerated `docs/ProtoGNOME_User_Guide.pdf` (`v1.0.16+10`), and aligned `README.md` and `https://nordheim.online/protognome/`.
+
 ## [1.0.15+9] - 2026-11-16
 
 ### Security & Quality

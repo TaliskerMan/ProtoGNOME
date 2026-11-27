@@ -1,23 +1,30 @@
 #!/usr/bin/env bash
 # ProtoGNOME Release Builder
 # SPDX-License-Identifier: GPL-3.0-or-later
+# CP-ChangeComments (2026-11-27, v1.0.16+10): Added ~/.local/flutter lookup,
+# lockfile enforcement, path-sanitized CycloneDX SBOM, binary/hash GPG signatures,
+# and sorted basename SHA512SUMS/SHA256SUMS manifests.
 
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-# Version is single-sourced from pubspec.yaml (no auto-increment) to avoid the
-# drift between pubspec, debian/changelog, the git tag, and the built .deb.
 VERSION="$(grep '^version:' "${SCRIPT_DIR}/pubspec.yaml" | awk '{print $2}' | cut -d'+' -f1)"
 if [[ -z "${VERSION}" ]]; then
-  echo "ERROR: could not read version from pubspec.yaml" >&2
-  exit 1
+    echo "ERROR: could not read version from pubspec.yaml" >&2
+    exit 1
 fi
-PKG_NAME="protognome"
+readonly PKG_NAME="protognome"
+readonly SBOM_JSON="Audit/SBOM-Linux.json"
+readonly GPG_KEY="chuck@nordheim.online"
 
-# Check for flutter bin
+# Resolve Flutter SDK binary across PATH, ~/.local/flutter, and ~/flutter
 FLUTTER="flutter"
-if [[ ! -x "$(command -v flutter 2>/dev/null || true)" ]] && [[ -f "${HOME}/flutter/bin/flutter" ]]; then
-    FLUTTER="${HOME}/flutter/bin/flutter"
+if ! command -v "${FLUTTER}" >/dev/null 2>&1; then
+    if [[ -x "${HOME}/.local/flutter/bin/flutter" ]]; then
+        FLUTTER="${HOME}/.local/flutter/bin/flutter"
+    elif [[ -x "${HOME}/flutter/bin/flutter" ]]; then
+        FLUTTER="${HOME}/flutter/bin/flutter"
+    fi
 fi
 
 # Fix clang++ linker issue on some arm64/Linux environments
@@ -43,10 +50,12 @@ BUILD_DIR="${SCRIPT_DIR}/build/linux/${FLUTTER_ARCH}/release/bundle"
 DEB_ROOT="${SCRIPT_DIR}/deb_pkg"
 
 echo "==> ProtoGNOME Release Builder v${VERSION}"
+rm -rf "${ARTIFACTS}"
 mkdir -p "${ARTIFACTS}"
 
 echo "==> Building Flutter Linux release..."
 cd "${SCRIPT_DIR}"
+"${FLUTTER}" pub get --enforce-lockfile
 "${FLUTTER}" build linux --release
 
 echo "==> Generating SBOM via Syft..."
@@ -61,6 +70,8 @@ fi
 if command -v "${SYFT_BIN}" &> /dev/null; then
     mkdir -p Audit
     "${SYFT_BIN}" dir:. \
+        --source-name "${PKG_NAME}" \
+        --source-version "${VERSION}-1" \
         --exclude ./venv \
         --exclude ./android \
         --exclude ./ios \
@@ -68,14 +79,17 @@ if command -v "${SYFT_BIN}" &> /dev/null; then
         --exclude ./windows \
         --exclude ./build \
         --exclude ./packaging_output \
+        --exclude ./Audit \
         --exclude ./dist \
         --exclude ./plan \
         --exclude ./.dart_tool \
         --exclude ./artifacts \
         --exclude ./deb_pkg \
-        -o cyclonedx-json > Audit/SBOM-Linux.json
-    cp Audit/SBOM-Linux.json Audit/SBOM-Linux
-    cp Audit/SBOM-Linux.json Audit/sbom.json
+        --exclude './**/node_modules' \
+        -o cyclonedx-json > "${SBOM_JSON}"
+    sed -i "s|${SCRIPT_DIR}/\?||g" "${SBOM_JSON}"
+    cp "${SBOM_JSON}" Audit/SBOM-Linux
+    cp "${SBOM_JSON}" Audit/sbom.json
 fi
 
 echo "==> Preparing DEB package structure..."
@@ -88,29 +102,23 @@ mkdir -p "${DEB_ROOT}/usr/share/icons/hicolor/256x256/apps"
 mkdir -p "${DEB_ROOT}/usr/share/doc/protognome"
 
 echo "==> Copying build artifacts..."
-# Copy the main binary
 cp "${BUILD_DIR}/protognome" "${DEB_ROOT}/usr/lib/protognome/"
-# Copy shared data (Flutter libs and data dir)
 cp -r "${BUILD_DIR}/lib/." "${DEB_ROOT}/usr/lib/protognome/lib/"
 cp -r "${BUILD_DIR}/data/." "${DEB_ROOT}/usr/lib/protognome/data/"
 
-# Wrapper script (so /usr/bin/protognome works)
 cat > "${DEB_ROOT}/usr/bin/protognome" << 'WRAPPER'
 #!/bin/bash
 exec /usr/lib/protognome/protognome "$@"
 WRAPPER
 chmod +x "${DEB_ROOT}/usr/bin/protognome"
 
-# Desktop file
 cp "${SCRIPT_DIR}/share/applications/protognome.desktop" \
    "${DEB_ROOT}/usr/share/applications/io.protognome.protognome.desktop"
 sed -i 's/^StartupWMClass=.*/StartupWMClass=io.protognome.protognome/' \
    "${DEB_ROOT}/usr/share/applications/io.protognome.protognome.desktop"
 
-# Icons: the square 512x512 master (assets/icons/protoGNOME.png) and its
-# pre-scaled copies live in share/icons/hicolor/<size>/apps/protognome.png.
-ICON_SIZES="512x512 256x256 128x128 64x64 48x48 32x32"
-for size in ${ICON_SIZES}; do
+readonly -a ICON_SIZES=(512x512 256x256 128x128 64x64 48x48 32x32)
+for size in "${ICON_SIZES[@]}"; do
     src="${SCRIPT_DIR}/share/icons/hicolor/${size}/apps/protognome.png"
     if [[ ! -f "${src}" ]]; then
         echo "ERROR: missing icon ${src}" >&2
@@ -120,7 +128,6 @@ for size in ${ICON_SIZES}; do
     cp "${src}" "${DEB_ROOT}/usr/share/icons/hicolor/${size}/apps/protognome.png"
 done
 
-# Copyright
 cp "${SCRIPT_DIR}/LICENSE" \
    "${DEB_ROOT}/usr/share/doc/protognome/copyright"
 
@@ -139,8 +146,9 @@ Maintainer: Chuck Talk <chuck@nordheim.online>
 Homepage: https://github.com/TaliskerMan/ProtoGNOME
 Description: Native GNOME Proton compatibility tool manager
  ProtoGNOME is a native GNOME application for managing Proton
- compatibility tools for Steam on Linux. Fork of ProtonUp-Qt with
- no KDE/Qt dependencies. Safe read-only viewer for game settings.
+ compatibility tools for Steam and Heroic on Linux. Fork of
+ ProtonUp-Qt with no KDE/Qt dependencies and mandatory checksum
+ and GitHub digest verification.
 CONTROL
 
 echo "==> Writing DEBIAN/postinst..."
@@ -161,62 +169,62 @@ DEB_FILE="${ARTIFACTS}/${PKG_NAME}_${VERSION}-1_${ARCH}.deb"
 dpkg-deb --build --root-owner-group "${DEB_ROOT}" "${DEB_FILE}"
 
 echo "==> Generating SHA256 and SHA512 hashes..."
-# Checksum files must name the .deb by its bare file name so users can run
-# `sha256sum -c` next to the download (a full path made it fail everywhere
-# but the build machine, and published the builder's home folder).
 (
-  cd "${ARTIFACTS}"
-  sha256sum "$(basename "${DEB_FILE}")" > "$(basename "${DEB_FILE}").sha256"
-  sha512sum "$(basename "${DEB_FILE}")" > "$(basename "${DEB_FILE}").sha512"
+    cd "${ARTIFACTS}"
+    sha256sum "$(basename "${DEB_FILE}")" > "$(basename "${DEB_FILE}").sha256"
+    sha512sum "$(basename "${DEB_FILE}")" > "$(basename "${DEB_FILE}").sha512"
 )
 
 echo "==> Signing .deb with GPG..."
 if command -v gpg > /dev/null 2>&1; then
-    # Use non-interactive flags for headless automation per CP-HumanInLoop (CP-ChangeComments)
-    gpg --batch --no-tty --yes --local-user chuck@nordheim.online --detach-sign --armor "${DEB_FILE}"
-    gpg --batch --no-tty --export -a chuck@nordheim.online > "${ARTIFACTS}/pubkey.asc"
+    gpg --batch --no-tty --yes --pinentry-mode loopback --local-user "${GPG_KEY}" --detach-sign --armor --output "${DEB_FILE}.asc" "${DEB_FILE}"
+    gpg --batch --no-tty --yes --pinentry-mode loopback --local-user "${GPG_KEY}" --detach-sign --output "${DEB_FILE}.sig" "${DEB_FILE}"
+    gpg --batch --no-tty --yes --pinentry-mode loopback --local-user "${GPG_KEY}" --detach-sign --armor --output "${DEB_FILE}.sha512.asc" "${DEB_FILE}.sha512"
+    gpg --batch --no-tty --export -a "${GPG_KEY}" > "${ARTIFACTS}/pubkey.asc"
     cp "${ARTIFACTS}/pubkey.asc" "${ARTIFACTS}/chuck_pubkey.asc"
-    echo "    Signed: ${DEB_FILE}.asc"
+    echo "    Signed: ${DEB_FILE}.asc / .sig / .sha512.asc"
 else
-    echo "    WARNING: gpg not found - package NOT signed!"
+    echo "    WARNING: gpg not found - package NOT signed!" >&2
 fi
 
-# Copy to NOBuilds directory
+# write_directory_checksums computes sorted basename SHA512SUMS and SHA256SUMS manifests inside target_dir.
+write_directory_checksums() {
+    local target_dir="$1"
+    (
+        cd "${target_dir}"
+        rm -f -- SHA512SUMS SHA256SUMS
+        find . -maxdepth 1 -type f ! -name 'SHA512SUMS' ! -name 'SHA256SUMS' -printf '%P\n' | LC_ALL=C sort | xargs sha512sum > SHA512SUMS
+        find . -maxdepth 1 -type f ! -name 'SHA512SUMS' ! -name 'SHA256SUMS' -printf '%P\n' | LC_ALL=C sort | xargs sha256sum > SHA256SUMS
+    )
+}
+
 echo "==> Copying to NOBuilds directory..."
 DATE_STR="$(date +%m-%d-%Y)"
 NOBUILDS_DIR="${HOME}/NOBuilds/ProtoGNOME/v${VERSION}"
 NOBUILDS_PATTERN_DIR="${HOME}/NOBuilds/ProtoGNOME-${DATE_STR}-${VERSION}"
 mkdir -p "${NOBUILDS_DIR}" "${NOBUILDS_PATTERN_DIR}"
 
-# Generate source code archive
 echo "Generating source tarball..."
-tar --exclude=build --exclude=.dart_tool --exclude=.git --exclude=artifacts --exclude=deb_pkg -czf "${ARTIFACTS}/protognome_source.tar.gz" .
+tar --exclude=build --exclude=.dart_tool --exclude=.git --exclude=artifacts --exclude=deb_pkg --exclude=Audit --exclude=.scannerwork --exclude=.sonarlint --exclude='**/node_modules' -czf "${ARTIFACTS}/protognome_source.tar.gz" .
+
+if [[ -f docs/ProtoGNOME_User_Guide.pdf ]]; then
+    cp docs/ProtoGNOME_User_Guide.pdf "${ARTIFACTS}/"
+fi
+if [[ -f Audit/security_report.md ]]; then
+    cp Audit/security_report.md "${ARTIFACTS}/"
+fi
+cp "${SBOM_JSON}" "${ARTIFACTS}/SBOM-Linux.json" || true
+cp Audit/sbom.json "${ARTIFACTS}/sbom.json" || true
+
+write_directory_checksums "${ARTIFACTS}"
 
 for target_dir in "${NOBUILDS_DIR}" "${NOBUILDS_PATTERN_DIR}"; do
-    cp "${DEB_FILE}" "${target_dir}/"
-    cp "${DEB_FILE}.asc" "${target_dir}/" || true
-    cp "${DEB_FILE}.sha256" "${target_dir}/" || true
-    cp "${DEB_FILE}.sha512" "${target_dir}/" || true
-    cp "${ARTIFACTS}/pubkey.asc" "${target_dir}/" || true
-    cp "${ARTIFACTS}/chuck_pubkey.asc" "${target_dir}/" || true
-    cp "${ARTIFACTS}/protognome_source.tar.gz" "${target_dir}/" || true
+    cp -- "${ARTIFACTS}/"* "${target_dir}/"
     cp LICENSE "${target_dir}/"
     cp README.md "${target_dir}/"
-    if [[ -f docs/ProtoGNOME_User_Guide.pdf ]]; then
-        cp docs/ProtoGNOME_User_Guide.pdf "${target_dir}/" || true
-        cp docs/ProtoGNOME_User_Guide.pdf "${ARTIFACTS}/" || true
-    fi
-    cp Audit/SBOM-Linux.json "${target_dir}/" || true
     cp Audit/SBOM-Linux "${target_dir}/" || true
-    cp Audit/sbom.json "${target_dir}/" || true
-    if [[ -f Audit/security_report.md ]]; then
-        cp Audit/security_report.md "${target_dir}/" || true
-        cp Audit/security_report.md "${ARTIFACTS}/" || true
-    fi
-    ( cd "${target_dir}" && rm -f SHA512SUMS && sha512sum -- ./* > SHA512SUMS )
+    write_directory_checksums "${target_dir}"
 done
-
-( cd "${ARTIFACTS}" && rm -f SHA512SUMS && sha512sum -- ./* > SHA512SUMS )
 
 echo ""
 echo "==================================="
@@ -224,6 +232,6 @@ echo "  Build complete!"
 echo "  Package : ${DEB_FILE}"
 echo "  SHA256  : ${DEB_FILE}.sha256"
 echo "  SHA512  : ${DEB_FILE}.sha512"
-echo "  GPG sig : ${DEB_FILE}.asc"
-echo "  Local   : ${NOBUILDS_DIR}"
+echo "  GPG sig : ${DEB_FILE}.asc / .sig"
+echo "  Local   : ${NOBUILDS_PATTERN_DIR}"
 echo "==================================="

@@ -1,7 +1,12 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-// Copyright (C) 2024 ProtoGNOME Contributors
+// Copyright (C) 2021-2024 DavidoTek (ProtonUp-Qt)
+// Copyright (C) 2026 Chuck Talk <chuck@nordheim.online>, Nordheim Online, LLC
+// CP-ChangeComments (2026-11-27, v1.0.16+10): Added buildNumber display
+// (CP-AutoIncrement), hyperlinked Nordheim Online logo (CP-NordheimLogo),
+// and explicit upstream + fork copyright attribution (CP-AboutPage).
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -17,6 +22,7 @@ class AboutScreen extends StatefulWidget {
 }
 
 class _AboutScreenState extends State<AboutScreen> {
+  static const String _nordheimUrl = 'https://nordheim.online';
   String _version = 'Loading...';
 
   @override
@@ -25,18 +31,31 @@ class _AboutScreenState extends State<AboutScreen> {
     unawaited(_loadVersion());
   }
 
+  /// Loads the installed semantic version and build number from PackageInfo.
   Future<void> _loadVersion() async {
     try {
       final info = await PackageInfo.fromPlatform();
       if (!mounted) return;
+      final suffix = info.buildNumber.isNotEmpty ? '+${info.buildNumber}' : '';
       setState(() {
-        _version = 'Version ${info.version}';
+        _version = 'Version ${info.version}$suffix';
       });
     } on Object catch (_) {
       if (!mounted) return;
       setState(() {
         _version = 'Version Unknown';
       });
+    }
+  }
+
+  /// Opens https://nordheim.online in the user's default desktop browser.
+  Future<void> _openNordheimWebsite() async {
+    try {
+      if (Platform.isLinux) {
+        await Process.run('xdg-open', const [_nordheimUrl]);
+      }
+    } on Object catch (_) {
+      // Ignore browser launch errors on headless environments.
     }
   }
 
@@ -104,33 +123,52 @@ class _AboutScreenState extends State<AboutScreen> {
                   textAlign: TextAlign.center,
                   style: TextStyle(color: Color(0xFFB0B0D0), fontSize: 14),
                 ),
+                const SizedBox(height: 16),
+                Tooltip(
+                  message: _nordheimUrl,
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(8),
+                    onTap: _openNordheimWebsite,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 6,
+                      ),
+                      child: Image.asset(
+                        'assets/icons/noln.png',
+                        height: 36,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
-          const SizedBox(height: 32),
+          const SizedBox(height: 24),
           _buildCard(
-            children: [
-              const _AboutRow(
+            children: const [
+              _AboutRow(
                 icon: Icons.code,
                 label: 'Based on',
-                value: 'ProtonUp-Qt by DavidoTek (GPL v3)',
+                value: 'ProtonUp-Qt by DavidoTek (GPL v3.0)',
               ),
-              const _AboutRow(
+              _AboutRow(
                 icon: Icons.flutter_dash,
                 label: 'Built with',
-                value: 'Flutter 3.24 + Dart',
+                value: 'Flutter + Dart (GTK 3 Linux)',
               ),
-              const _AboutRow(
+              _AboutRow(
                 icon: Icons.storage_outlined,
                 label: 'Backend',
                 value: 'SQLite via sqflite_common_ffi',
               ),
-              const _AboutRow(
+              _AboutRow(
                 icon: Icons.gavel_outlined,
                 label: 'License',
                 value: 'GNU General Public License v3.0',
               ),
-              const _AboutRow(
+              _AboutRow(
                 icon: Icons.people_outline,
                 label: 'Maintainer',
                 value: 'Chuck Talk <chuck@nordheim.online>',
@@ -139,8 +177,8 @@ class _AboutScreenState extends State<AboutScreen> {
           ),
           const SizedBox(height: 16),
           _buildCard(
-            children: [
-              const Text(
+            children: const [
+              Text(
                 'Copyright & Acknowledgements',
                 style: TextStyle(
                   color: Colors.white,
@@ -148,17 +186,23 @@ class _AboutScreenState extends State<AboutScreen> {
                   fontSize: 15,
                 ),
               ),
-              const SizedBox(height: 12),
-              const Text(
-                'ProtoGNOME is a fork of ProtonUp-Qt © 2021-2024 DavidoTek, '
-                'licensed under the GNU General Public License v3.\n\n'
+              SizedBox(height: 12),
+              Text(
+                'Original work: ProtonUp-Qt © 2021-2024 DavidoTek, '
+                'licensed under the GNU General Public License v3.0.\n\n'
+                'ProtoGNOME fork: © 2026 Chuck Talk (chuck@nordheim.online), '
+                'Nordheim Online, LLC, licensed under the GNU General Public '
+                'License v3.0.\n\n'
+                'Original contributors: DavidoTek and the ProtonUp-Qt '
+                'contributors.\n\n'
                 'This program is free software: you can redistribute it '
                 'and/or modify it under the terms of the GNU General Public '
                 'License as published by the Free Software Foundation, either '
-                'version 3 of the License, or '
-                '(at your option) any later version.\n\n'
-                'GE-Proton is © GloriousEggroll. Steam is © Valve Corporation. '
-                'This project is not affiliated with or endorsed by Valve.',
+                'version 3 of the License, or (at your option) any later '
+                'version.\n\n'
+                'GE-Proton is © GloriousEggroll. Luxtorpeda is © '
+                'luxtorpeda-dev. Steam is © Valve Corporation. This project '
+                'is not affiliated with or endorsed by Valve.',
                 style: TextStyle(
                   color: Color(0xFF8888AA),
                   fontSize: 13,

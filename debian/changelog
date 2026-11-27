@@ -1,3 +1,12 @@
+protognome (1.0.16+10) unstable; urgency=medium
+
+  * Official Linux release v1.0.16 (build 1.0.16+10).
+  * Roll up SonarQube Cloud & Snyk security/quality remediations across GTK C++17 runner, guide builder, LoggerService (0600 5 MiB sanitized logs), and release packaging.
+  * Align About & Settings screens with full fork attribution (DavidoTek ProtonUp-Qt + Chuck Talk Nordheim Online), build-number display, and Nordheim Online link.
+  * Regenerate ProtoGNOME_User_Guide.pdf, CycloneDX SBOM, SHA-512/SHA-256 manifests, and GPG detached signatures.
+
+ -- Chuck Talk <chuck@nordheim.online>  Fri, 27 Nov 2026 17:12:00 -0600
+
 protognome (1.0.15+8) unstable; urgency=medium
 
   * Official Linux release v1.0.15.

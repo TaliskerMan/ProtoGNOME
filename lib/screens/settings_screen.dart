@@ -40,7 +40,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final token = await SecretService().getGithubToken() ?? '';
     String version;
     try {
-      version = (await PackageInfo.fromPlatform()).version;
+      // CP-ChangeComments (2026-11-27, v1.0.16+10): Include buildNumber in
+      // Settings version display per CP-AutoIncrement.
+      final info = await PackageInfo.fromPlatform();
+      final suffix = info.buildNumber.isNotEmpty ? '+${info.buildNumber}' : '';
+      version = '${info.version}$suffix';
     } on Object catch (_) {
       version = 'Unknown';
     }
@@ -182,8 +186,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
               // Read from the installed package; this was hard-coded and
               // went stale ('1.0.8' on master, '1.0.13' on main).
               _InfoRow(label: 'Version', value: _version),
-              const _InfoRow(label: 'License', value: 'GNU GPL v3'),
-              const _InfoRow(label: 'Author', value: 'ProtoGNOME Contributors'),
+              const _InfoRow(label: 'License', value: 'GNU GPL v3.0'),
+              const _InfoRow(
+                label: 'Maintainer',
+                value: 'Chuck Talk <chuck@nordheim.online>',
+              ),
+              const _InfoRow(
+                label: 'Based on',
+                value: 'ProtonUp-Qt by DavidoTek (GPL v3.0)',
+              ),
             ],
           ),
         ],

@@ -10,3 +10,4 @@ exclude:
     - artifacts/**
     - deb_pkg/**
     - test/**
+    - "**/node_modules/**"

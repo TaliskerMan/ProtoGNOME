@@ -4,3 +4,5 @@ Audit/
 artifacts/
 deb_pkg/
 test/
+node_modules/
+docs/guide/node_modules/
