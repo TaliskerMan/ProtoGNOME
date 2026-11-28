@@ -2,6 +2,13 @@
 
 A native GNOME application for managing Proton compatibility tools for Steam on Linux.
 
+<p align="center">
+  <a href="https://sonarcloud.io/summary/new_code?id=TaliskerMan_ProtoGNOME"><img src="https://sonarcloud.io/api/project_badges/measure?project=TaliskerMan_ProtoGNOME&metric=alert_status" alt="Quality Gate Status"></a>
+  <a href="https://sonarcloud.io/summary/new_code?id=TaliskerMan_ProtoGNOME"><img src="https://sonarcloud.io/api/project_badges/measure?project=TaliskerMan_ProtoGNOME&metric=security_rating" alt="Security Rating"></a>
+  <a href="https://sonarcloud.io/summary/new_code?id=TaliskerMan_ProtoGNOME"><img src="https://sonarcloud.io/api/project_badges/measure?project=TaliskerMan_ProtoGNOME&metric=reliability_rating" alt="Reliability Rating"></a>
+  <a href="https://sonarcloud.io/summary/new_code?id=TaliskerMan_ProtoGNOME"><img src="https://sonarcloud.io/api/project_badges/measure?project=TaliskerMan_ProtoGNOME&metric=sqale_rating" alt="Maintainability Rating"></a>
+</p>
+
 ProtoGNOME is a **fork of [ProtonUp-Qt](https://github.com/DavidoTek/ProtonUp-Qt)** rebuilt with Flutter for a native GNOME experience. It requires no KDE or Qt dependencies.
 
 ## Features
